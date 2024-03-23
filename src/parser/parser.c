@@ -33,6 +33,7 @@ FILE *ast_output = NULL;
 FILE *nodes_output = NULL;
 FILE *stack_contents = NULL;
 
+int success = true;
 void updateDerivation(char **derivation, const char *nonTerminal,
                       const char *expansion) {
   if (strcmp(expansion, "") == 0) {
@@ -196,6 +197,7 @@ int match(const char *type) {
     snprintf(msg, sizeof(msg), "%s is the expected token.", type);
     syntax_error(msg);
 
+    success = false;
     if (lookahead->lexeme && strcmp(lookahead->lexeme, "eof"))
       free(lookahead->lexeme);
     if (lookahead)
@@ -284,8 +286,6 @@ int SkipErrors(const char *first[], const char *follow[], int first_len,
     return true;
   }
 }
-
-int success = true;
 
 // Functions below are all related to the parsing functions.
 // This is the parse function  user should call returns -1 if there is problem 0
