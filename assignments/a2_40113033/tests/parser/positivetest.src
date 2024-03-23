@@ -1,0 +1,276 @@
+//Functions and member variables
+struct foo inherits X,Y,Z {
+private let x: integer;
+private let y: float;
+private let z: id;
+private let id: mytype;
+
+public let x: integer;
+public let x: float;
+public let z: id;
+public let x: mytype[123];
+public let x: mytype[];
+
+
+private func foo(x:integer[][], x: float[123][123], id: mytype[123][])->mytype;
+public func foo(x:integer[123][123][123] , y: float, id: mytype[][]) ->mytype;
+
+
+private func foo()->type;
+private func foo() -> id;
+private func foo() -> integer;
+private func foo() -> float;
+private func foo() -> id;
+
+};
+
+
+
+//Empty struct
+struct foo {};
+
+
+//Only data members.
+struct foo {
+private let x: foo;
+private let x: integer;
+private let x: float;
+private let y: id;
+
+};
+
+//only function members.
+struct foo{
+private func foo(x: integer, y:float, z: identifier[][][123]) -> void;
+private func foo(x:integer, y:float, z:type) -> integer;
+private func foo(x: integer[666], y:float[666], z: identifier[666]) -> type;
+private func foo() -> float;
+};
+//Function testing
+//function head with array parameters and multiple paramers
+
+func foo(x:integer, y:integer[][][][][][] , x: float[123], x: integer[][123][]) -> void{
+doStuff();
+f(g(h(x))).a[123][123][123].b=(1-2-3+(x*y*z)); //nesting identifiers ending with an assignment to a variable.
+a.b.c.d.e.f.g.h.i.j.k.l.m.n.o.p.q.r.s.t.u.w.v.x.y.z.f(x); //nesting identifiers ending with a funciton call.
+
+while(x<y){
+while(x>y){
+if(x > y) then {
+if(x <> y) then {
+doStuff();
+}else{
+  doStuff();
+  };
+doStuff();
+}else{
+  doStuff();
+};
+};
+};
+
+
+
+//An empty if-then-else
+if(x<=y) then {
+
+} else{
+
+};
+
+if((x|y)==(x&y)) then{}else{};
+//Empty else
+if(x>=y) then{
+
+doStuff();
+
+}else{
+
+};
+if(x>y) then {
+}else{
+    do_stuff();
+  };
+return (x-(y*z));
+}
+
+//Empty function , takes no parameters and has no body.
+func foo()->float{}
+
+
+func foo()->void{
+write(heloo);
+read(x[123].x.y.f(g(h(x))).c);
+
+
+if((x*y+z)>=(a*(b+c))) then {
+    do();
+  }else{
+
+    };
+while(x>y){
+
+if((x&y)<y) then {
+print(sup_dawg);
+} else{
+by_bye();
+};
+x.a[123].f(g(x)).y = 10;
+print(x+y*z);
+};
+return (x+y+z*a-(133+1234124123123)/(4*5+(6*7)));
+}
+
+
+//Tests for impl
+
+impl foo{
+func fo(x:integer[], y:float[], z: id[][][123], x:mytpe[123][123][123])->void{
+do_stuff();
+}
+}
+
+impl foo{
+func foo()->void{
+do_stuff();
+}
+}
+//Test an empty implication
+impl bar{}
+
+
+
+
+
+/*
+classes
+--------------------------------------
+|X| no class declaration
+|X| class declaration
+|X| multiple class declarations
+|X| no data member declaration
+|X| data member declaration
+|X| multiple data member declaration
+|X| no member function declaration
+|X| member function declaration
+|X| multiple member function declaration
+|X| no member
+|X| no inherited class
+|X| one inherited class
+|X| multiple inherited classes
+|X| private member specifier
+|X| public member specifier
+
+functions: definitions
+--------------------------------------
+| | no main function definition
+|X| main function definition
+|X| no free function definition
+|X| free function definition
+|X| multiple free function definitions
+|X| no member function definition
+|X| member function definition
+|X| multiple member function definitions
+|X| return type: void
+|X| return type: integer
+|X| return type: float
+|X| return type: id
+| | return type: array (not allowed)
+
+functions: formal parameters
+--------------------------------------
+|X| type: integer
+|X| type: float
+|X| type: id
+|X| type: 1-dim array 
+|X| type: n-dim array
+|X| type: array (with size)
+|X| type: array (without size)
+
+functions: calls
+--------------------------------------
+| | free function call //Not allowed function calls must be within the definition of a function.
+|X| member function call
+|X| parameters:0
+|X| parameters:1
+|X| parameters:n
+|X| array parameter - 1-dim
+|X| array parameter - n-dim
+|X| array parameter - with size
+| | array parameter - without size //Not allowed
+|X| function call as statement
+|X| function call as expression factor
+|X| expression as parameter
+
+variable declaration
+--------------------------------------
+|X| type: integer
+|X| type: float
+|X| type: string
+|X| type: id
+|X| type: 1-dim array 
+|X| type: n-dim array
+|X| type: array (with size)
+|X| type: array (without size)
+
+function body: local variable declarations
+--------------------------------------
+|X| no local variable declarations
+|X| local variable declarations
+|X| intertwined statements and variable declarations
+
+function body: statements
+--------------------------------------
+|X| no statement
+|X| 1 statement
+|X| n statements
+|X| if statement
+|X| if: empty then or else blocks
+|X| if: 1-statement then or else blocks
+|X| if: n-statements then or else blocks
+|X| while statement
+|X| while: empty block
+|X| while: 1-statement block
+|X| while: n-statement block
+|X| read(<variable>) statement
+|X| write(<expr>) statement
+|X| return(<expr>) statement
+|X| assignment statement
+
+variable + idnest
+--------------------------------------
+|X| id
+|X| id.id
+|X| id.id(id)
+|X| id(id).id
+|X| id(id).id()
+|X| id.id[id]
+|X| id[id].id
+|X| id[id].id[id]
+|X| id.id[id][id]
+|X| id[id][id].id
+|X| id[id][id].id[id][id]
+|X| id(id).id[id]
+|X| id(id).id[id][id]
+|X| expression as array index
+
+expressions
+--------------------------------------
+|X| single variable
+|X| involving addop
+|X| involving multop
+|X| involving relop
+|X| involving addop + multop
+|X| involving multop + relop
+|X| involving addop + multop + relop
+|X| involving parentheses
+|X| involving nested parenhteses
+|X| involving not
+|X| involving sign
+|X| involving literals
+|X| involving variable + idnest
+|X| involving function calls
+|X| involving all the above in one expression
+
+
+*/

@@ -1,0 +1,44 @@
+BEGINNING OF TABLE FOR:  global scope "Global"
+
+Table Entry 1 of "Global":func main -> void : 
+
+	BEGINNING OF TABLE FOR:  function scope "main"
+
+	Table Entry 1 of "main":var arr integer[7]
+
+	END OF TABLE FOR SCOPE function scope "main"
+
+Table Entry 2 of "Global":func printArray -> void : arr integer[],size integer
+
+	BEGINNING OF TABLE FOR:  function scope "printArray"
+
+	Table Entry 1 of "printArray":fparam arr integer[]
+
+	Table Entry 2 of "printArray":fparam size integer
+
+	Table Entry 3 of "printArray":var n integer
+
+	Table Entry 4 of "printArray":var i integer
+
+	END OF TABLE FOR SCOPE function scope "printArray"
+
+Table Entry 3 of "Global":func bubbleSort -> void : arr integer[],size integer
+
+	BEGINNING OF TABLE FOR:  function scope "bubbleSort"
+
+	Table Entry 1 of "bubbleSort":fparam arr integer[]
+
+	Table Entry 2 of "bubbleSort":fparam size integer
+
+	Table Entry 3 of "bubbleSort":var j integer
+
+	Table Entry 4 of "bubbleSort":var n integer
+
+	Table Entry 5 of "bubbleSort":var i integer
+
+	Table Entry 6 of "bubbleSort":var temp integer
+
+	END OF TABLE FOR SCOPE function scope "bubbleSort"
+
+END OF TABLE FOR SCOPE global scope "Global"
+

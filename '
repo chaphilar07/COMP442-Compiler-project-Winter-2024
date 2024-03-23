@@ -1,0 +1,36 @@
+/*
+ * This file includes the logic for parseing the file, the main functionality
+ * will be in the parse_file() function which performs the task of parseing and
+ * printing the derivation to a file.
+ */
+
+#include "../lexer/Lexer.h"
+#include "../utils/utils.h"
+#include <stdio.h>
+#include <stdlib.h>
+
+token *lookahead = NULL;
+
+// This function initializes the lookahead token, returns -1 if the lookahead is
+// already allocated, 0 if we cannot allocate memory and 1 if successfull.
+int initLookahead(FILE *src, int *line) {
+  if (lookahead != NULL) {
+    error("ERROR - initLookahead: lookahead already allocated.");
+    return -1;
+  }
+
+  if (src == NULL) {
+    error("ERROR - initLookahead: source file not open.");
+  }
+  lookahead = malloc(sizeof(token));
+  lookahead = get_next_token(lookahead, src, line);
+
+  if (!lookahead) {
+    error("ERROR - initLookahead: cannot allocate memory for the token");
+    return 0;
+  } else
+    return 1;
+}
+
+// This function parses the start token.
+int parseStart() {}

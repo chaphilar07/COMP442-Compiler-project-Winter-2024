@@ -1,0 +1,29 @@
+struct A inherits x,y,z{
+  public let x:integer;
+  };
+
+struct foo inherits A{
+  };
+
+struct bar inherits foo {
+   
+    private let y: nonexistent;
+    private func do()->void;
+  };
+
+  impl bar{
+      func do()->void{
+          x=3;
+        }
+        func nope()->void{
+            return(0);
+          }
+    }
+
+    impl none{
+
+      }
+
+func foo(x: type1)->node{
+    return(1);
+  }

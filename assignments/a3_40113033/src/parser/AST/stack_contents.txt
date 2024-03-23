@@ -1,0 +1,6 @@
+[child node 1, 1], 
+[child node 2, 2], [child node 1, 1], 
+[child node 3, 3], [child node 2, 2], [child node 1, 1], 
+[child node 4, 4], [child node 3, 3], [child node 2, 2], [child node 1, 1], 
+[child node 5, 5], [child node 4, 4], [child node 3, 3], [child node 2, 2], [child node 1, 1], 
+[child node 6, 6], [child node 5, 5], [child node 4, 4], [child node 3, 3], [child node 2, 2], [child node 1, 1], 

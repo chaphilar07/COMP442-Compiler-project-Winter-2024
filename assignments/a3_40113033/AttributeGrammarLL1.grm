@@ -1,0 +1,617 @@
+START -> PROG eof {Y`}  .  
+
+ADDOP -> plus {S`}
+        |minus {T`}
+        |or {U`} .
+
+APARAMS -> {D} EXPR REPTAPARAMS1 {V`}
+          |.
+
+APARAMSTAIL -> comma EXPR . 
+
+ARITHEXPR -> TERM RIGHTRECARITHEXPR . 
+
+ARRAYSIZE -> lsqbr Flsqbr . 
+
+Flsqbr -> intlit {B} rsqbr  
+         |rsqbr {H}.
+
+ASSIGNOP -> equal . 
+
+
+EXPR -> ARITHEXPR OPTRELEXPR . 
+
+OPTRELEXPR -> RELOP ARITHEXPR {U} | .  
+
+FACTOR -> id {A} FACTOR2 REPTVARIABLEORFUNCTIONCALL 
+         |intlit {B} 
+         |floatlit {C}
+         |lpar ARITHEXPR rpar 
+         |not FACTOR {S}
+         |SIGN FACTOR {T}.
+
+FACTOR2 -> lpar {D} APARAMS {I} rpar {G} | {D} REPTIDNEST1 {E} {F}   . 
+
+FPARAMS -> {D} id {A} colon TYPE {D} REPTFPARAMS3 {P`} REPTFPARAMS4 {Q`}
+          |{D} {Q`}.
+
+FPARAMSTAIL -> comma id {A} colon TYPE {D} REPTFPARAMSTAIL4 {P`} . 
+
+FUNCBODY -> lcurbr {D} REPTFUNCBODY1 rcurbr {L‘}. 
+
+FUNCDECL -> FUNCHEAD semi . 
+
+FUNCDEF -> FUNCHEAD FUNCBODY . 
+
+FUNCHEAD -> func id {A} lpar FPARAMS rpar arrow RETURNTYPE .  
+
+REPTVARIABLEORFUNCTIONCALL -> IDNEST REPTVARIABLEORFUNCTIONCALL {X} | . 
+
+IDNEST -> dot id {A} IDNEST2 .  
+
+IDNEST2 ->lpar {D} APARAMS {I} rpar {G} | {D} REPTIDNEST1 {E} {F} .  
+
+IMPLDEF -> {D} impl id {A} lcurbr REPTIMPLDEF3 rcurbr {O}. 
+
+INDICE -> lsqbr ARITHEXPR rsqbr . 
+
+MEMBERDECL -> FUNCDECL {P}
+             |VARDECL {Q} .
+
+MULTOP -> mult {M`}
+         |div {N`}
+         |and {O`} .
+
+OPTSTRUCTDECL2 -> {D} inherits id {A} {B} REPTOPTSTRUCTDECL22 :
+                 |.
+
+PROG -> REPTPROG0 . 
+
+RELEXPR -> ARITHEXPR RELOP ARITHEXPR {U} .
+
+RELOP -> eq  {E`}
+        |neq {F`}
+        |lt {G`}
+        |gt {H`}
+        |leq {I`}
+        |geq . {J`}
+
+REPTAPARAMS1 -> APARAMSTAIL REPTAPARAMS1 
+               |.
+
+REPTFPARAMS3 -> ARRAYSIZE REPTFPARAMS3 
+               |.
+
+REPTFPARAMS4 -> FPARAMSTAIL {R`} REPTFPARAMS4 
+               |.
+
+REPTFPARAMSTAIL4 -> ARRAYSIZE REPTFPARAMSTAIL4  
+                   |.
+
+REPTFUNCBODY1 -> VARDECLORSTAT REPTFUNCBODY1 
+                |.
+
+
+REPTIDNEST1 -> INDICE REPTIDNEST1 
+              |.
+
+REPTIMPLDEF3 -> FUNCDEF REPTIMPLDEF3 
+               |.
+
+REPTOPTSTRUCTDECL22 -> comma id {A} REPTOPTSTRUCTDECL22 
+                      |.
+
+REPTPROG0 -> STRUCTORIMPLORFUNC REPTPROG0  
+            |.
+
+REPTSTATBLOCK1 -> STATEMENT REPTSTATBLOCK1  
+                 |.
+
+REPTSTRUCTDECL4 -> VISIBILITY MEMBERDECL REPTSTRUCTDECL4 
+                  |.
+
+REPTVARDECL4 -> ARRAYSIZE REPTVARDECL4 
+               |.
+
+
+
+RETURNTYPE -> TYPE  
+             |void {X`} .
+
+RIGHTRECARITHEXPR -> 
+                    |ADDOP {W`} TERM RIGHTRECARITHEXPR . 
+
+RIGHTRECTERM -> 
+               | MULTOP {W`} FACTOR RIGHTRECTERM .
+
+SIGN -> plus {A`}
+      |minus {B`} . 
+ 
+STATBLOCK -> {D} lcurbr REPTSTATBLOCK1 rcurbr {G``} 
+            |STATEMENT {F``}
+            | {H``} . 
+
+STATEMENT -> id {A} STATEMENTBODY 
+            |if lpar RELEXPR rpar then STATBLOCK else STATBLOCK semi {Z`}
+            |while lpar RELEXPR rpar STATBLOCK semi {A``}
+            |read lpar VARIABLE rpar semi {B``}
+            |write lpar EXPR rpar semi {C``}
+            |return lpar EXPR rpar semi . {D``}
+
+
+STATEMENTBODY -> {D} REPTIDNEST1 {E} {F} CHECKFORENDVAR 
+                | lpar {D} APARAMS {I} rpar {G} CHECKFORENDFUNC .
+
+VARFUNCSTATENEST -> dot id {A} VARFUNCSTATENEST2 .
+
+VARFUNCSTATENEST2 -> lpar {D} APARAMS {I} rpar {G} CHECKFORENDFUNC 
+                    | {D} REPTIDNEST1 {E} {F}  CHECKFORENDVAR .
+
+CHECKFORENDFUNC -> {Y} semi
+            | {Z} VARFUNCSTATENEST .
+
+CHECKFORENDVAR -> {Y} ASSIGNOP EXPR  semi {E``}
+                | {Z} VARFUNCSTATENEST  .
+
+
+STRUCTDECL -> {D} struct id {A} OPTSTRUCTDECL2 lcurbr REPTSTRUCTDECL4 rcurbr semi {R} . 
+
+STRUCTORIMPLORFUNC -> STRUCTDECL 
+                     |IMPLDEF 
+                     |FUNCDEF .
+
+TERM -> FACTOR RIGHTRECTERM .
+
+TYPE -> integer {J} 
+       |float  {K}
+       |id .  {L} 
+
+VARDECL -> let id {A} colon TYPE {B} REPTVARDECL4 {V}  semi .
+
+VARDECLORSTAT -> VARDECL {W}
+                |STATEMENT .
+
+VARIABLE -> id {A} VARIABLE2 .
+
+
+VARIABLE2 ->  {D} REPTIDNEST1 {E} {F} REPTVARIABLE    .
+VARIABLE2 ->  lpar {D} APARAMS {I} rpar {G} dot id {A} VARIABLE2 {X} .
+
+REPTVARIABLE -> dot id {A} VARIABLE2 {X}| .
+
+VISIBILITY -> public {C`}
+             |private {D`} .
+
+------------------- END OF GRAMMAR ---------------------------
+
+
+
+
+--------------- Semantic Actions ----------------------------
+
+//This creates a leaf node of type id and value of id
+
+ A{
+   push_node(create_leaf_node(id));
+ }
+
+ //This creates a leaf token for an intlit
+ 
+ B{
+     push_node(create_leaf_node(intlit),stack);
+ }
+
+ //This creates a leaf token a floatlit
+ 
+ C{
+  push_node(create_lead_node(floalit),stack);
+ }
+
+ //This creates a sentinel token for us to later call create_subtree_pop_until(), provides //convenience.
+ D{
+  push_node(create_leaf_node($));
+  }
+
+//This creates a dimlist, this is the actual values that will be passed different from an arraydims //node.
+
+ E{
+  push_node(create_subtree_pop_until(dimlist,$));
+ }
+
+ //This creates a var node, var node will have 
+ //two children an id node with the name and an dimlist node.
+ 
+ F{
+  push_node(create_subtree_n_nodes(var, 2));
+ }
+
+//This creates a funccall node, will have two 
+//children an id node with the name of the function and an aparams list
+//a list of arguments passed to the function.
+
+ G{
+  push_node(create_subtree_n_nodes(funccall, 2));
+ }
+
+//This is a leaf node for an emptydim 
+
+ H{
+  push_node(create_leaf_node(emptydim));
+ }
+
+
+ //This creates the aparams list node that will be a child of a funccall node.
+ 
+ I{
+  push_node(create_subtree_pop_until(aparams list, $));
+ }
+
+ //This creates a node of type integer, note that this is different from intlit.
+ 
+J{
+ push_node(create_leaf_node(integer));
+}
+
+//This creates a node of type float 
+K{
+push_node(create_leaf_node(float));
+}
+
+//Note that this creates a different kind of 
+leaf token that has a type of type and the correct id for the lexeme.
+//This is a node that signifies a type, not a variable or function name.
+
+L{
+ push_node(create_leaf_node(id,type));
+}
+
+//This creates an inherits node which will be a child of a struct node.
+
+N{
+push_node(create_node_pop_nuntil(inherits,$));
+}
+
+
+//This will create the impl node, we have any number of 
+//funcdef nodes that can be a child of impl 
+//nodes so we use pop_until version of create_subtree.
+
+O{
+ push_node(create_subtree_pop_until(impl,$));
+ }
+ 
+//This creates a funcdecl node, a funcdecl must have 4 children.
+
+ 
+ push_node(create_subtree_n_nodes(funcdecl, 4));
+ }
+
+ //This creates a vardecl node with 4 children, note that we give this 
+ //4 children because we have to include the visibility where this 
+ //semantic action gets called as well.
+ 
+ Q{
+ push_node(create_subtree_n_nodes(vardecl,4));
+ }
+ 
+ //This creates a struct node, a struct can have any number of functions declarations and variable declarations 
+ //so we use the pop_until version.
+ 
+ R{
+ push_node(create_subtree_pop_until(struct,$));
+ }
+//We create a not node, not will have a single child a factor.
+
+ S{
+ push_node(create_subtree(not,1));
+ }
+//We create a sign node , note that we have two children, 
+//the sign either + or - and the expression to apply it to.
+
+ T{ 
+   push_node(create_subtree(sign,2));
+ }
+
+ //This creates the relop node with three children an 
+ //arithmetic expression a relative operation token 
+ //and an arithemetic expression token, thus we have 3 children.
+ 
+U{
+ push_node(create_subtree_n_nodes(relop, 3));
+}
+
+
+//This creates the node for the array dimensions 
+//aggregates the numbers and makes them child nodes, 
+//can have any number of arraydimensions.
+
+V{
+ push_node(create_subtree_pop_until(arraydims, $));
+}
+
+//This creates a vardecl node, we have 3 nodes
+//here because a vardecl in a function definition 
+//will only have 3 children as we don't need the visibility.
+
+W{
+ push_node(create_subtree_n_nodes(vardecl,3));
+}
+
+//This creates a node that represents the dot operator.
+
+X{
+ push_node(create_subtree_n_nodes(dot,2));
+}
+
+//This semantic action is more complex, the way that assignment 
+//statement work is whenever we pass be a dot we create a var/funccall 
+//node and make that node a child of a dot and push the dot onto the stack. 
+//So when we arrive at the assignment operator we have a stack that has 
+//many dots on it but we need a single expression, so we go back up the 
+//stack and make the current dot/var a child of the dot that is the top 
+//of the stack, we set the current to be that dot and push it onto the 
+//stack, we do this until we have reached the sentinel token.
+
+Y{
+  top = pop_node();
+  while( peek() == dot):
+    next_dot = pop_node();
+    next_dot.add_child(top);
+    top=next_dot();
+  endwhile.
+  
+  if(peek() == $)
+    pop();
+
+  push_node(top); 
+}
+
+//This will create a dot for the previously mentioned algorithm, 
+//used whenever we are creating assignment statement with a 
+//nested class objects.
+
+Z{
+ push_node(create_subtree_n_nodes(dot,1));
+}
+
+//Creates a leaf node for plus operator
+
+A`{
+  push_node(create_leaf_node(plus));
+}
+
+//Creates a leaf node minus operator
+
+B`{
+push_node(create_leaf_node(minus));
+}
+
+//creates a leaf node for public visiblity 
+
+C`{
+ push_node(create_leaf_node(public));
+}
+
+//creates a leaf node for private visibility
+
+D`{
+push_node(create_leaf_node(private));
+}
+
+//creates a leaf node for equality operator
+
+E`{
+ push_node(create_leaf_node(eq));
+}
+
+//Create a leaf node for the not equal operator
+
+F`{
+ push_node(create_leaf_node(neq));
+}
+
+//create a leaf node for the less than or equal operator.
+
+G`{
+ push_node(create_leaf_node(leq));
+}
+
+
+H`{
+ push_node(create_leaf_node(geq));
+}
+
+I`{
+ push_node(create_leaf_node(lt));
+}
+
+J`{
+ push_node(create_leaf_node(gt));
+}
+
+//create a funcdef node, will always have 4 children, the name, 
+//the fparams, the return type and a funcbody(same as statblock)
+
+K`{
+ push_node(create_subtree_n_nodes(funcdef,4));
+}
+
+//creates a funcobdy node which is the same as a statblock node.
+
+L`{
+ push_node(create_subtree_n_nodes(funcbody,$));
+}
+
+
+M`{
+ push_node(create_leaf_node(mult));
+}
+
+N`{
+ push_node(create_leaf_node(div));
+}
+
+O`{
+ push_node(create_leaf_node(and));
+}
+
+
+//This creates an array dims node, this is meant to be 
+//used for variable declarations and function declarations
+
+P`{
+ push_node(create_subtree_pop_until(arraydims,$));
+}
+
+//This creates a fparams list node which will have as children all 
+//fparams of the current function, can have any number of children.
+
+Q`{
+push_node(create_subtree_pop_until(fparams list,$));
+}
+
+//An fparam node will always have 3 children the name the type and arraydimensions
+
+R`{
+push_node(create_subtree_n_nodes(fparam, 3));
+}
+
+//Note that the type for these nodes will be the same as 
+//the operator name, this will differ from those that we 
+//get using sign which will have a type of sign instead of lets plus.
+
+S`{
+ push_node(create_leaf_node(plus));
+}
+
+T`{
+ push_node(create_leaf_node(or));
+}
+
+U`{
+ push_node(create_leaf_node(minus);
+}
+
+V`{
+push_node(create_node_pop_until(aparams list, $));
+}
+
+//This creates an operator node(*,+,-,/), we do this by 
+//popping the 3 top nodes off the stack, the middle one will be
+//the operator the other two the factors. We then place these back 
+//in the same order and we create an operator subtree of the type 
+//of the operator that we popped off the stack.
+
+W`{
+factor1 = pop_node();
+operator = pop_node();
+factor2=pop_node();
+
+//we get the type of the operation this way.
+type=operator->type;
+
+//Push the factors back on the stack.
+push_node(factor2);
+push_node(factor1);
+
+//create and push the subtree
+push_node(create_subtree_n_nodes(type,2));
+
+}
+
+//This creates a void type node, note that we 
+//can only use this as the return type of a function
+X`{
+ push_node(create_leaf_node(void));
+}
+
+//This creates a prog node, at the end of parsing we should only have
+//nodes of type funcdef, impldef and structdecl, we organize these into 
+//lists and make a node that has as children these lists this is what 
+//this function is doing.
+
+Y`{
+ funcdefstack = init_stack();
+ structdeclstack=init_stack();
+ impldefstack = init_stack();
+
+ while(stack is not empty):
+   temp = pop_node();
+   if temp.type == structdecl then:
+     push_node_on(structdeclstack, temp);
+    elif temp.type == funcdef then:
+      push_node_on(funcdefstack);
+    elif(temp.type == impldef) then:
+      push_node_on(impldefstack);
+    else
+      problem should not be here....
+
+    structdecllist = create_subtree_pop_until_empty(structdeclstack);
+    impldeflist = create_subtree_pop_until_epmty(impldefstack);
+    funcdeflist = create_subtree_pop_until_empty(funcdefstack);
+
+    push_node(structdecllist);
+    push_node(impldeflist);
+    push_node(funcdeflist);
+
+    //We create the final prog node, which will have three children, a
+    //node for the fundef nodes, a node for the impldef nodes and 
+    //a node for the structdecl nodes.
+    node *ast_root = create_subtree_n_nodes(prog, 3));
+
+    
+}
+
+
+//Creates an ifnode, an ifnode will 
+//always have 3 children a relexpr a then statblock and
+//an else statblock.
+
+Z`{
+push_node(create_subtree_n_nodes(ifnode,3));
+}
+
+This creates whilenode, while will have 2 nodes 
+as children a relexpr node and a statblock
+
+A``{
+ push_node(create_subtree_n_nodes(whilenode,2));
+}
+
+The last 3 semantic actions create a read,write 
+and return node all of these will have 1 node 
+as a child an EXPR or VARIABLE 
+
+B``{
+  push_node(create_subtree_n_nodes(read, 1));
+}
+
+C``{
+push_node(create_subtree_n_nodes(write,1));
+}
+
+D``{
+push_node(create_subtree_n_nodes(return,1));
+}
+
+This creates the assignop node, the assignop has two children the assignment 
+value an expr node and the assignee, when we reach the end of 
+CHECKFORENDVAR the top of the stack is guaranteed to 
+have these two nodes.
+
+E``{
+ push_node(create_subtree_n_nodes(assignop, 2));
+}
+
+F``{
+ push_node(create_subtree_n_nodes(statblock),1);
+}
+
+G``{
+ push_node(create_subtree_pop_until(statblock,$));
+}
+
+H``{
+//an empty statblock.
+push_node(create_subtree_n_nodes(statblock,0))
+}

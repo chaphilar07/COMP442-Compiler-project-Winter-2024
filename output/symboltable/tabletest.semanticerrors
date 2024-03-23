@@ -1,0 +1,10 @@
+SEMANTIC ERROR ON LINE 1: Cannot inherit a class that does not exist y does not exist.
+SEMANTIC ERROR ON LINE 1: Cannot inherit a class that does not exist x does not exist.
+SEMANTIC ERROR ON LINE 1: Cannot inherit a class that does not exist z does not exist.
+SEMANTIC ERROR ON LINE 8: Cannot inherit a class that does not exist foo does not exist.
+SEMANTIC ERROR ON LINE 11: Cannot declare variable with type that does not exist, declaration of variable y, with type that does not exist
+SEMANTIC ERROR LINE 16: Cannot lookup variable/function before it has been declared/defined, on line 16, x used before declaration
+SEMANTIC ERROR ON LINE 21: Cannot implement a member function that has not been declared, function nope has not been declared.
+SEMANTIC ERROR ON LINE 27: Cannot implement functions for class that does not exist, class none does not exist cannot implement .
+SEMANTIC ERROR ON LINE 30: Cannot have function that returns non-existent type, function foo on line 30, returns type that does not exist
+End of Semantic Errors.

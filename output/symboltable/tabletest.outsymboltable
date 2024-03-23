@@ -1,0 +1,34 @@
+BEGINNING OF TABLE FOR:  global scope "Global"
+
+Table Entry 1 of "Global":class bar inherits 
+
+	BEGINNING OF TABLE FOR:  class scope "bar"
+
+	Table Entry 1 of "bar":func do -> void : 
+
+		BEGINNING OF TABLE FOR:  function scope "do"
+
+		END OF TABLE FOR SCOPE function scope "do"
+
+	Table Entry 2 of "bar":private var y nonexistent
+
+	END OF TABLE FOR SCOPE class scope "bar"
+
+Table Entry 2 of "Global":class A inherits 
+
+	BEGINNING OF TABLE FOR:  class scope "A"
+
+	Table Entry 1 of "A":public var x integer
+
+	END OF TABLE FOR SCOPE class scope "A"
+
+Table Entry 3 of "Global":func foo -> node : x type1
+
+	BEGINNING OF TABLE FOR:  function scope "foo"
+
+	Table Entry 1 of "foo":fparam x type1
+
+	END OF TABLE FOR SCOPE function scope "foo"
+
+END OF TABLE FOR SCOPE global scope "Global"
+

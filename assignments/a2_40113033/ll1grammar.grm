@@ -1,0 +1,198 @@
+START -> PROG eof  .  
+
+
+
+ADDOP -> plus  
+        |minus 
+        |or .
+
+APARAMS -> EXPR REPTAPARAMS1 
+          |.
+
+APARAMSTAIL -> comma EXPR . 
+
+ARITHEXPR -> TERM RIGHTRECARITHEXPR . 
+
+ARRAYSIZE -> lsqbr Flsqbr . 
+
+Flsqbr -> intnum rsqbr  
+         |rsqbr .
+
+ASSIGNOP -> equal . 
+
+
+EXPR -> ARITHEXPR OPTRELEXPR . 
+
+OPTRELEXPR -> RELOP ARITHEXPR | .  
+
+FACTOR -> id FACTOR2 REPTVARIABLEORFUNCTIONCALL 
+         |intlit 
+         |floatlit 
+         |lpar ARITHEXPR rpar 
+         |not FACTOR 
+         |SIGN FACTOR .
+
+FACTOR2 -> lpar APARAMS rpar | REPTIDNEST1  . 
+
+
+
+FPARAMS -> id colon TYPE REPTFPARAMS3 REPTFPARAMS4  
+          |.
+
+FPARAMSTAIL -> comma id colon TYPE REPTFPARAMSTAIL4 . 
+
+FUNCBODY -> lcurbr REPTFUNCBODY1 rcurbr . 
+
+FUNCDECL -> FUNCHEAD semi . 
+
+FUNCDEF -> FUNCHEAD FUNCBODY . 
+
+FUNCHEAD -> func id lpar FPARAMS rpar arrow RETURNTYPE .  
+
+
+REPTVARIABLEORFUNCTIONCALL -> IDNEST REPTVARIABLEORFUNCTIONCALL | . 
+IDNEST -> dot id IDNEST2 .  
+IDNEST2 ->lpar APARAMS rpar | REPTIDNEST1 .  
+
+
+
+IMPLDEF -> impl id lcurbr REPTIMPLDEF3 rcurbr . 
+
+INDICE -> lsqbr ARITHEXPR rsqbr . 
+
+MEMBERDECL -> FUNCDECL  
+             |VARDECL .
+
+MULTOP -> mult 
+         |div 
+         |and .
+
+OPTSTRUCTDECL2 -> inherits id REPTOPTSTRUCTDECL22  
+                 |.
+
+PROG -> REPTPROG0 . 
+
+RELEXPR -> ARITHEXPR RELOP ARITHEXPR .
+
+RELOP -> eq  
+        |neq 
+        |lt 
+        |gt 
+        |leq 
+        |geq .
+
+REPTAPARAMS1 -> APARAMSTAIL REPTAPARAMS1 
+               |.
+
+REPTFPARAMS3 -> ARRAYSIZE REPTFPARAMS3 
+               |.
+
+REPTFPARAMS4 -> FPARAMSTAIL REPTFPARAMS4 
+               |.
+
+REPTFPARAMSTAIL4 -> ARRAYSIZE REPTFPARAMSTAIL4  
+                   |.
+
+REPTFUNCBODY1 -> VARDECLORSTAT REPTFUNCBODY1 
+                |.
+
+
+REPTIDNEST1 -> INDICE REPTIDNEST1 
+              |.
+
+REPTIMPLDEF3 -> FUNCDEF REPTIMPLDEF3 
+               |.
+
+REPTOPTSTRUCTDECL22 -> comma id REPTOPTSTRUCTDECL22 
+                      |.
+
+REPTPROG0 -> STRUCTORIMPLORFUNC REPTPROG0  
+            |.
+
+REPTSTATBLOCK1 -> STATEMENT REPTSTATBLOCK1  
+                 |.
+
+REPTSTRUCTDECL4 -> VISIBILITY MEMBERDECL REPTSTRUCTDECL4 
+                  |.
+
+REPTVARDECL4 -> ARRAYSIZE REPTVARDECL4 
+               |.
+
+
+
+RETURNTYPE -> TYPE  
+             |void .
+
+RIGHTRECARITHEXPR -> 
+                    |ADDOP TERM RIGHTRECARITHEXPR . 
+
+RIGHTRECTERM -> 
+               | MULTOP FACTOR RIGHTRECTERM .
+
+SIGN -> plus 
+      |minus . 
+
+STATBLOCK -> lcurbr REPTSTATBLOCK1 rcurbr 
+            |STATEMENT 
+            |. 
+
+STATEMENT -> id STATEMENTBODY  
+            |if lpar RELEXPR rpar then STATBLOCK else STATBLOCK semi 
+            |while lpar RELEXPR rpar STATBLOCK semi 
+            |read lpar VARIABLE rpar semi 
+            |write lpar EXPR rpar semi 
+            |return lpar EXPR rpar semi .
+
+
+STATEMENTBODY -> REPTIDNEST1 CHECKFORENDVAR 
+                | lpar APARAMS rpar CHECKFORENDFUNC .
+
+VARFUNCSTATENEST -> dot id VARFUNCSTATENEST2 .
+
+VARFUNCSTATENEST2 -> lpar APARAMS rpar CHECKFORENDFUNC 
+                    | REPTIDNEST1 CHECKFORENDVAR .
+
+
+
+CHECKFORENDFUNC -> semi  
+            | VARFUNCSTATENEST .
+
+CHECKFORENDVAR -> ASSIGNOP EXPR semi 
+                | VARFUNCSTATENEST .
+
+
+STRUCTDECL -> struct id OPTSTRUCTDECL2 lcurbr REPTSTRUCTDECL4 rcurbr semi . 
+
+STRUCTORIMPLORFUNC -> STRUCTDECL 
+                     |IMPLDEF 
+                     |FUNCDEF .
+
+TERM -> FACTOR RIGHTRECTERM .
+
+TYPE -> integer 
+       |float 
+       |id .
+
+VARDECL -> let id colon TYPE REPTVARDECL4 semi .
+
+VARDECLORSTAT -> VARDECL  
+                |STATEMENT .
+
+VARIABLE -> id VARIABLE2 .
+
+
+VARIABLE2 ->  REPTIDNEST1 REPTVARIABLE    .
+VARIABLE2 ->  lpar APARAMS rpar VARIDNEST  .
+
+
+REPTVARIABLE ->  VARIDNEST REPTVARIABLE   .
+REPTVARIABLE ->  .
+
+VARIDNEST -> dot id VARIDNEST2 .
+
+VARIDNEST2 -> lpar APARAMS rpar VARIDNEST  .
+VARIDNEST2 -> REPTIDNEST1  .
+
+
+VISIBILITY -> public 
+             |private .

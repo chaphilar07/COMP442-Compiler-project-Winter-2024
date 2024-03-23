@@ -1,0 +1,4 @@
+#ifndef SYMBOL_TABLE_DOT_H
+#define SYMBOL_TABLE_DOT_H
+
+#endif // !SYMBOL_TABLE_DOT_H
