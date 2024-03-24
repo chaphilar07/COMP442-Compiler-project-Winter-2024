@@ -28,6 +28,26 @@ TypeInfo get_type_info(node *astnode) {
   return info;
 }
 
+/*
+ * This function compares the type information of two variables.
+ */
+bool compare_type_info(TypeInfo info1, TypeInfo info2) {
+  if (info1.type != info2.type)
+    return false;
+
+  if (strcmp(info1.typeString, info2.typeString))
+    return false;
+  if (info1.numberofdims != info2.numberofdims)
+    return false;
+
+  for (int i = 0; i < info1.numberofdims; i++) {
+    if (info1.arraydims[i] != info2.arraydims[i])
+      return false;
+  }
+
+  return true;
+}
+
 TableEntry *get_entry(Scope *scope, const char *key);
 
 const char *get_name(node *astnode);
@@ -412,7 +432,7 @@ int get_number_of_dims(node *astnode) {
     }
   }
 
-  return -1;
+  return 0;
 }
 
 varvis get_vis(node *astnode) {
@@ -469,7 +489,7 @@ void print_entry(TableEntry *entry, FILE *out) {
   if (entry->tableType == FUNCDEF_ENTRY) {
 
     fprintf(out, "func %s -> %s : ", entry->data.funcEntry.name,
-            entry->data.funcEntry.typeString);
+            entry->data.funcEntry.returnType.typeString);
     for (int i = entry->data.funcEntry.numfparams - 1; i >= 0; i--) {
       fprintf(out, "%s %s",
               entry->data.funcEntry.fparamslist[i]->data.fparamEntry.name,
@@ -615,10 +635,20 @@ TableEntry *create_func_entry(node *astnode, Scope *scope) {
 
   TableEntry *entry = malloc(sizeof(TableEntry));
 
+  if (astnode->type == funcdecl && scope->type == CLASS_SCOPE) {
+
+    entry->data.funcEntry.defined = false;
+    entry->data.funcEntry.memberFunc = true;
+
+  } else if (astnode->type == funcdef && scope->type == GLOBAL_SCOPE) {
+
+    entry->data.funcEntry.defined = true;
+    entry->data.funcEntry.memberFunc = false;
+  }
+
   entry->scope = scope;
   entry->tableType = FUNCDEF_ENTRY;
-  entry->data.funcEntry.returntype = get_type_enum(astnode);
-  entry->data.funcEntry.typeString = get_type_string(astnode);
+  entry->data.funcEntry.returnType = get_type_info(astnode);
   entry->data.funcEntry.name = get_name(astnode);
   entry->data.funcEntry.scope =
       init_scope(scope, entry->data.funcEntry.name, FUNCTION_SCOPE);
@@ -750,8 +780,8 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
 
     node *current = pop_node(node_stack);
     current_scope = peek_scope(scope_stack);
-    current->scope = current_scope; // We set the scopes of the AST nodes
-                                    // while we build the symbol table.
+
+    // while we build the symbol table.
 
     while (current->type == sentinel) {
 
@@ -764,9 +794,14 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
         break;
     }
 
+    if (current_scope == NULL)
+      fprintf(stderr, "TRYING TO ASSIGN CURRENT SCOPE TO NULL!\n");
+    current->scope = current_scope; // We set the scopes of the AST nodes
+
     // Note that because we want to have the function parameters also
     // be entries in the function scopes table, we must make the same
     // kind of
+
     if (current->type == vardecl || current->type == fparam) {
 
       fprintf(out, "Inserting vardecl %s into scope %s ... ", get_name(current),
@@ -853,6 +888,8 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
 
         if (entry->tableType == FUNCDEF_ENTRY) {
 
+          entry->data.funcEntry.defined =
+              true; // Note that we have defined the function.
           push_scope(entry->data.funcEntry.scope, scope_stack);
           push_node(init_node(sentinel), node_stack);
 
@@ -901,15 +938,25 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
 
     } else if (current->type == var) {
 
+      current->scope = current_scope;
+
+      // We must push the dimensions of the variable.
+      for (int i = 0; i < current->numchildren; i++) {
+        if (current->children[i]->type == dimlist) {
+          for (int j = 0; j < current->children[i]->numchildren; j++) {
+            push_node(current->children[i]->children[j], node_stack);
+          }
+        }
+      }
       err_code code = validate_lookup(current, current_scope);
+
       if (code == err111) {
         insert_error(errors,
                      create_error(get_name(current), err111, current->line));
       }
 
-    } else if (current->type == multop) {
-    } else if (current->type == addop) {
     } else {
+
       for (int i = current->numchildren - 1; i >= 0; i--)
         push_node(current->children[i], node_stack);
     }

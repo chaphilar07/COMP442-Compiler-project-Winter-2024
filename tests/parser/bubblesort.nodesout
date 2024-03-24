@@ -5,8 +5,6 @@ Leaf token created of type identifier and value size
 Leaf token created of type type and value integer 
 Leaf token created of type type and value void 
 Leaf token created of type identifier and value n 
-Leaf token created of type identifier and value x 
-Leaf token created of type identifier and value n 
 Leaf token created of type type and value integer 
 Leaf token created of type identifier and value i 
 Leaf token created of type type and value integer 
@@ -112,13 +110,13 @@ Leaf token created of type intnum and value 11
 Leaf token created of type identifier and value arr 
 Leaf token created of type intnum and value 6 
 Leaf token created of type intnum and value 90 
-Leaf token created of type identifier and value printarray 
+Leaf token created of type identifier and value printArray 
 Leaf token created of type identifier and value arr 
 Leaf token created of type intnum and value 7 
 Leaf token created of type identifier and value bubbleSort 
 Leaf token created of type identifier and value arr 
 Leaf token created of type intnum and value 7 
-Leaf token created of type identifier and value printarray 
+Leaf token created of type identifier and value printArray 
 Leaf token created of type identifier and value arr 
 Leaf token created of type intnum and value 7 
 Aggregate node of type impldeflist and value of (null) with 0 childen 

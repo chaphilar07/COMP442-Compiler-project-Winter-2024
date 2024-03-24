@@ -3,19 +3,40 @@ struct A inherits x,y,z{
   };
 
 
-struct foo{};
 
-struct foo inherits A{
+struct foo inherits A,b,c{
 
-  private let x: nonexistent;
+   private let x: sometype;
+   private func x() -> void;
+   private func notdefined() -> void;
+   private func notdefined1() -> void;
+   private func notdefined2() -> void;
 
-  };
+};
+
+
 struct bar inherits foo {
    
     private let y: nonexistent;
     private func do()->void;
+
+    private func notdefined()->void;
+
+
   };
 
+
+impl foo{
+    func x() -> void{
+        return(0);
+      }
+
+   private func x() -> void{}
+
+   private func notdefined() -> void{}
+   private func notdefined1() -> void{}
+   private func notdefined2() -> void{}
+  }
   impl bar{
       func do()->void{
           x=3;
@@ -28,7 +49,12 @@ struct bar inherits foo {
     impl none{
 
       }
-
 func newname(x: type1)->node{
     return(1);
   }
+
+  func main()->void{
+      let x: foo;
+
+      x.y().z();
+    }

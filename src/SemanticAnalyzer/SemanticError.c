@@ -80,11 +80,38 @@ SemanticError create_error(const char *msg, err_code code, int line) {
              "the same scope exiting",
              line, msg);
     err.msg = strdup(buffer);
+  } else if (code == err900) {
+    snprintf(buffer, sizeof(buffer),
+             "SEMANTIC ERRROR ON LINE %d: Member function %s that has "
+             "been declared but has not been defined.",
+             line, msg);
+    err.msg = strdup(buffer);
+  } else if (code == err701) {
+    snprintf(
+        buffer, sizeof(buffer),
+        "SEMANTIC ERROR ON LINE %d: Cannot access a member from a non-class "
+        "type or non-existent class type, %s is not a class type",
+        line, msg);
+    err.msg = strdup(buffer);
+  } else if (code == err501) {
+    snprintf(buffer, sizeof(buffer),
+             "SEMANTIC ERROR ON LINE %d: Error on operator %s, cannot use %s "
+             "on two different types",
+             line, msg, msg);
+    err.msg = strdup(buffer);
+
+  } else if (code == err702) {
+    snprintf(
+        buffer, sizeof(buffer),
+        "SEMANTIC ERROR ON LINE %d: No member called %s belongs to the class "
+        "being accessed",
+        line, msg);
+    err.msg = strdup(buffer);
   }
   return err;
 }
-// Comparator function for qsort, this is to sort the errors based on their line
-// numbers.
+// Comparator function for qsort, this is to sort the errors based on their
+// line numbers.
 int compare_error_by_line(const void *err1, const void *err2) {
 
   const SemanticError *error1 = (const SemanticError *)err1;
@@ -147,15 +174,13 @@ ErrorArray *init_errors() {
 // This will print an array of semantic errors, to an output stream.
 void print_errors(FILE *out, ErrorArray *err) {
   if (!out) {
-    fprintf(
-        stderr,
-        "ERROR - print_errors(): Cannot print errors output stream is null.\n");
+    fprintf(stderr, "ERROR - print_errors(): Cannot print errors output "
+                    "stream is null.\n");
     return;
   }
   if (!err) {
-    fprintf(
-        stderr,
-        "ERROR - print_errors(): Cannot print errors output stream is null.\n");
+    fprintf(stderr, "ERROR - print_errors(): Cannot print errors output "
+                    "stream is null.\n");
     return;
   }
 

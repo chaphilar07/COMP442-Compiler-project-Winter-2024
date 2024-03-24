@@ -6,11 +6,11 @@
 #ifndef AST_SYMBOL_TABLE_DOT_H
 #define AST_SYMBOL_TABLE_DOT_H
 
-#include <stdio.h>
-
 // This is the enum for the type of the node in the AST, will have to refactor
 // the rest of the code.
+#include <stdbool.h>
 #include <stdio.h>
+
 #define SIZE 2048
 
 typedef enum ScopeType { GLOBAL_SCOPE, FUNCTION_SCOPE, CLASS_SCOPE } ScopeType;
@@ -25,6 +25,7 @@ typedef enum EntryType {
 } EntryType;
 
 typedef enum LangType {
+  NONE_TYPE,
   VOID_TYPE,
   INT_TYPE,
   FLOAT_TYPE,
@@ -59,11 +60,14 @@ typedef struct FparamEntry {
 
 typedef struct FuncdefEntry {
 
+  varvis vis;
+  bool defined;
+  bool memberFunc;
+
+  TypeInfo returnType;
   const char *name;
-  const char *typeString;
   struct TableEntry **fparamslist;
   int numfparams;
-  LangType returntype;
   struct Scope *scope;
 
 } FuncdefEntry;
@@ -269,4 +273,5 @@ int push_scope(
     Scope *scope,
     ScopeStack *stack); // This function pushes a scope onto the scope stack.
 
+bool compare_type_info(TypeInfo info1, TypeInfo info2);
 #endif // !AST_GEN_H

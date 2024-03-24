@@ -6,11 +6,24 @@ Leaf token created of type visibility and value public
 Leaf token created of type identifier and value x 
 Leaf token created of type type and value integer 
 Leaf token created of type identifier and value foo 
-Leaf token created of type identifier and value foo 
 Leaf token created of type identifier and value A 
+Leaf token created of type identifier and value b 
+Leaf token created of type identifier and value c 
 Leaf token created of type visibility and value private 
 Leaf token created of type identifier and value x 
-Leaf token created of type identifier and value nonexistent 
+Leaf token created of type identifier and value sometype 
+Leaf token created of type visibility and value private 
+Leaf token created of type identifier and value x 
+Leaf token created of type type and value void 
+Leaf token created of type visibility and value private 
+Leaf token created of type identifier and value notdefined 
+Leaf token created of type type and value void 
+Leaf token created of type visibility and value private 
+Leaf token created of type identifier and value notdefined1 
+Leaf token created of type type and value void 
+Leaf token created of type visibility and value private 
+Leaf token created of type identifier and value notdefined2 
+Leaf token created of type type and value void 
 Leaf token created of type identifier and value bar 
 Leaf token created of type identifier and value foo 
 Leaf token created of type visibility and value private 
@@ -18,6 +31,21 @@ Leaf token created of type identifier and value y
 Leaf token created of type identifier and value nonexistent 
 Leaf token created of type visibility and value private 
 Leaf token created of type identifier and value do 
+Leaf token created of type type and value void 
+Leaf token created of type visibility and value private 
+Leaf token created of type identifier and value notdefined 
+Leaf token created of type type and value void 
+Leaf token created of type identifier and value foo 
+Leaf token created of type identifier and value x 
+Leaf token created of type type and value void 
+Leaf token created of type intnum and value 0 
+Leaf token created of type identifier and value x 
+Leaf token created of type type and value void 
+Leaf token created of type identifier and value notdefined 
+Leaf token created of type type and value void 
+Leaf token created of type identifier and value notdefined1 
+Leaf token created of type type and value void 
+Leaf token created of type identifier and value notdefined2 
 Leaf token created of type type and value void 
 Leaf token created of type identifier and value bar 
 Leaf token created of type identifier and value do 
@@ -33,7 +61,14 @@ Leaf token created of type identifier and value x
 Leaf token created of type identifier and value type1 
 Leaf token created of type identifier and value node 
 Leaf token created of type intnum and value 1 
-Aggregate node of type impldeflist and value of (null) with 2 childen 
-Aggregate node of type structdecl list and value of (null) with 4 childen 
-Aggregate node of type funcdef list and value of (null) with 1 childen 
+Leaf token created of type identifier and value main 
+Leaf token created of type type and value void 
+Leaf token created of type identifier and value x 
+Leaf token created of type identifier and value foo 
+Leaf token created of type identifier and value x 
+Leaf token created of type identifier and value y 
+Leaf token created of type identifier and value z 
+Aggregate node of type impldeflist and value of (null) with 3 childen 
+Aggregate node of type structdecl list and value of (null) with 3 childen 
+Aggregate node of type funcdef list and value of (null) with 2 childen 
 Aggregate node of type prog and value of (null) with 3 childen 

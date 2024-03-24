@@ -41,6 +41,14 @@ typedef enum code {
   err206,
   err207,
 
+  err501,
+  err502,
+  err503,
+
+  err701,
+  err702,
+  err900,
+
   ok,
 
 } err_code;
