@@ -78,7 +78,7 @@ err_code insert_entry(Scope *scope, TableEntry *entry) {
   else if (entry->tableType == FUNCDEF_ENTRY)
     name = entry->data.funcEntry.name;
   else if (entry->tableType == CLASS_ENTRY)
-    name = entry->data.funcEntry.name;
+    name = entry->data.classEntry.name;
   else if (entry->tableType == FPARAM_ENTRY)
     name = entry->data.fparamEntry.name;
 
@@ -656,7 +656,7 @@ TableEntry *create_class_entry(node *astnode, Scope *currentScope,
   entry->tableType = CLASS_ENTRY;
   entry->data.classEntry.name = get_name(astnode);
   entry->data.classEntry.scope =
-      init_scope(currentScope, entry->data.funcEntry.name, CLASS_SCOPE);
+      init_scope(currentScope, entry->data.classEntry.name, CLASS_SCOPE);
 
   // We need to get the inheritedScopes and the number of inheritedScopes, how
   // can we do this?
