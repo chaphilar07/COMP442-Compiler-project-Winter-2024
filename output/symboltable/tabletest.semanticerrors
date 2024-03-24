@@ -1,17 +1,15 @@
-SEMANTIC ERROR ON LINE 1: Cannot inherit a class that does not exist z does not exist.
 SEMANTIC ERROR ON LINE 1: Cannot inherit a class that does not exist y does not exist.
+SEMANTIC ERROR ON LINE 1: Cannot inherit a class that does not exist z does not exist.
 SEMANTIC ERROR ON LINE 1: Cannot inherit a class that does not exist x does not exist.
-SEMANTIC ERROR ON LINE 7: Cannot inherit a class that does not exist c does not exist.
 SEMANTIC ERROR ON LINE 7: Cannot inherit a class that does not exist b does not exist.
-SEMANTIC ERROR ON LINE 10: Cannot declare variable with type that does not exist, declaration of variable x, with type that does not exist
-SEMANTIC ERROR ON LINE 11: Duplicate use of identifier x in the same scope exiting
-SEMANTIC ERROR ON LINE 21: Cannot declare variable with type that does not exist, declaration of variable y, with type that does not exist
-SEMANTIC ERRROR ON LINE 26: Member function notdefined that has been declared but has not been defined.
-SEMANTIC ERROR ON LINE 34: Cannot implement a member function that has not been declared, function x has not been declared.
-SEMANTIC ERROR ON LINE 36: Cannot implement a member function that has not been declared, function x has not been declared.
-SEMANTIC ERROR ON LINE 47: Cannot implement a member function that has not been declared, function nope has not been declared.
-SEMANTIC ERROR ON LINE 52: Cannot implement functions for class that does not exist, class none does not exist cannot implement .
-SEMANTIC ERROR ON LINE 56: Cannot have function that returns non-existent type, function newname on line 56, returns type that does not exist
-SEMANTIC ERROR ON LINE 59: No member called y belongs to the class being accessed
-SEMANTIC ERROR ON LINE 59: No member called y belongs to the class being accessed
-End of Semantic Errors.
+SEMANTIC ERROR ON LINE 7: Cannot inherit a class that does not exist c does not exist.
+SEMANTIC ERROR ON LINE 20: Cannot declare variable with type that does not exist, declaration of variable y, with type that does not exist
+SEMANTIC ERRROR ON LINE 25: Member function notdefined that has been declared but has not been defined.
+SEMANTIC ERROR ON LINE 46: Cannot implement a member function that has not been declared, function nope has not been declared.
+SEMANTIC ERROR ON LINE 51: Cannot implement functions for class that does not exist, class none does not exist cannot implement .
+SEMANTIC ERROR ON LINE 55: Cannot have function that returns non-existent type, function newname on line 55, returns type that does not exist
+SEMANTIC ERROR ON LINE 61: No member called a belongs to the class being accessed
+SEMANTIC ERROR ON LINE 61: Cannot access a member from a non-class type or non-existent class type, a is not a class type
+SEMANTIC ERROR ON LINE 61: Cannot access a member from a non-class type or non-existent class type, y is not a class type
+SEMANTIC ERROR LINE 61: Cannot lookup variable/function before it has been declared/defined, on line 61, a used before declaration
+End of Semantic Errors total of 14 errors found.

@@ -6,7 +6,6 @@ struct A inherits x,y,z{
 
 struct foo inherits A,b,c{
 
-   private let x: sometype;
    private func x() -> void;
    private func notdefined() -> void;
    private func notdefined1() -> void;
@@ -55,6 +54,9 @@ func newname(x: type1)->node{
 
   func main()->void{
       let x: foo;
+      let y: integer;
 
-      x.y().z();
+      x.x();
+
+      x.a.y().z();
     }

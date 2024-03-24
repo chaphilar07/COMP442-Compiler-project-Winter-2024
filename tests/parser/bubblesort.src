@@ -16,7 +16,7 @@ func bubbleSort(arr: integer[], size: integer) -> void
           // swap temp and arr[i]
           temp = arr[j];
           arr[j] = arr[j+1];
-          arr[j+1] = temp;
+          arr[j][0] = temp;
         } else ;
         j = j+1;
       };

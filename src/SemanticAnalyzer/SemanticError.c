@@ -107,6 +107,20 @@ SemanticError create_error(const char *msg, err_code code, int line) {
         "being accessed",
         line, msg);
     err.msg = strdup(buffer);
+  } else if (code == err901) {
+    snprintf(buffer, sizeof(buffer),
+             "SEMANTIC ERROR ON LINE %d: Assignment cannot occur between a "
+             "variable and an expression of another type, %s is not the "
+             "expected type for the assignment.",
+             line, msg);
+    err.msg = strdup(buffer);
+  } else if (code == err903) {
+    snprintf(
+        buffer, sizeof(buffer),
+        "SEMANTIC ERROR ON LINE %d: Variable accessed with wrong number of "
+        "dimensions, variable %s does not have that many array dimensions",
+        line, msg);
+    err.msg = strdup(buffer);
   }
   return err;
 }
@@ -189,5 +203,6 @@ void print_errors(FILE *out, ErrorArray *err) {
     fprintf(out, "%s\n", err->errors[i].msg);
   }
 
-  fprintf(out, "End of Semantic Errors.\n");
+  fprintf(out, "End of Semantic Errors total of %d errors found.\n",
+          err->currentSize);
 }

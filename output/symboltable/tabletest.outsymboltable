@@ -6,6 +6,8 @@ Table Entry 1 of "Global":func main -> void :
 
 	Table Entry 1 of "main":var x foo
 
+	Table Entry 2 of "main":var y integer
+
 	END OF TABLE FOR SCOPE function scope "main"
 
 Table Entry 2 of "Global":func newname -> node : x type1
@@ -48,7 +50,11 @@ Table Entry 5 of "Global":class foo inherits A,
 
 	BEGINNING OF TABLE FOR:  class scope "foo"
 
-	Table Entry 1 of "foo":private var x sometype
+	Table Entry 1 of "foo":func x -> void : 
+
+		BEGINNING OF TABLE FOR:  function scope "x"
+
+		END OF TABLE FOR SCOPE function scope "x"
 
 	Table Entry 2 of "foo":func notdefined1 -> void : 
 

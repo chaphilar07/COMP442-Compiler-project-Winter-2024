@@ -50,8 +50,7 @@ Leaf token created of type addop and value +
 Leaf token created of type intnum and value 1 
 Leaf token created of type identifier and value arr 
 Leaf token created of type identifier and value j 
-Leaf token created of type addop and value + 
-Leaf token created of type intnum and value 1 
+Leaf token created of type intnum and value 0 
 Leaf token created of type identifier and value temp 
 Leaf token created of type identifier and value j 
 Leaf token created of type identifier and value j 

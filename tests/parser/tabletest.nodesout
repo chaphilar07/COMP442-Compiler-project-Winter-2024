@@ -11,9 +11,6 @@ Leaf token created of type identifier and value b
 Leaf token created of type identifier and value c 
 Leaf token created of type visibility and value private 
 Leaf token created of type identifier and value x 
-Leaf token created of type identifier and value sometype 
-Leaf token created of type visibility and value private 
-Leaf token created of type identifier and value x 
 Leaf token created of type type and value void 
 Leaf token created of type visibility and value private 
 Leaf token created of type identifier and value notdefined 
@@ -65,7 +62,12 @@ Leaf token created of type identifier and value main
 Leaf token created of type type and value void 
 Leaf token created of type identifier and value x 
 Leaf token created of type identifier and value foo 
+Leaf token created of type identifier and value y 
+Leaf token created of type type and value integer 
 Leaf token created of type identifier and value x 
+Leaf token created of type identifier and value x 
+Leaf token created of type identifier and value x 
+Leaf token created of type identifier and value a 
 Leaf token created of type identifier and value y 
 Leaf token created of type identifier and value z 
 Aggregate node of type impldeflist and value of (null) with 3 childen 

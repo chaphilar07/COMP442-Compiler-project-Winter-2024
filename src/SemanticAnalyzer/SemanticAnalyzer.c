@@ -8,6 +8,7 @@
 #include "../parser/AST/AST_SymbolTable.h"
 #include "SemanticError.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 /*
@@ -40,9 +41,18 @@ void print_type(TypeInfo info) {
   fprintf(stderr, "\n");
 }
 
-TypeInfo get_type_var(node *astnode) {
+int get_dimlist_count(node *astnode) {
+  for (int i = 0; i < astnode->numchildren; i++) {
+    if (astnode->children[i]->type == dimlist)
+      return astnode->children[i]->numchildren;
+  }
+  return 0;
+}
+
+TypeInfo get_type_var(node *astnode, ErrorArray *arr) {
 
   const char *name = get_name(astnode);
+  int varDimsCount = get_dimlist_count(astnode);
 
   if (astnode->scope == NULL) {
     fprintf(stderr,
@@ -55,7 +65,27 @@ TypeInfo get_type_var(node *astnode) {
   TableEntry *entry = get_entry(astnode->scope, name);
 
   if (entry->tableType == VARIABLE_ENTRY || entry->tableType == FPARAM_ENTRY) {
-    return entry->data.varEntry.type; // Return the type information.
+    TypeInfo variableTypeInfo = entry->data.varEntry.type;
+    TypeInfo curVarTypeInfo;
+    if (variableTypeInfo.numberofdims == varDimsCount) {
+      curVarTypeInfo.numberofdims = 0;
+      curVarTypeInfo.arraydims = NULL;
+      curVarTypeInfo.typeString = strdup(variableTypeInfo.typeString);
+      curVarTypeInfo.type = variableTypeInfo.type;
+    } else if (variableTypeInfo.numberofdims > varDimsCount) {
+      curVarTypeInfo.numberofdims =
+          variableTypeInfo.numberofdims - varDimsCount;
+      curVarTypeInfo.arraydims =
+          malloc(sizeof(int) * curVarTypeInfo.numberofdims);
+      for (int i = 0; i < curVarTypeInfo.numberofdims; i++) {
+        curVarTypeInfo.arraydims[i] = variableTypeInfo.arraydims[i];
+      }
+    } else {
+      insert_error(arr, create_error(get_name(astnode), err903, astnode->line));
+      TypeInfo info1 = {NONE_TYPE, NULL, NULL, 0};
+      return info1;
+    }
+    return curVarTypeInfo;
   }
 
   Scope *scopePtr = astnode->scope;
@@ -68,7 +98,29 @@ TypeInfo get_type_var(node *astnode) {
     if (entry->tableType == VARIABLE_ENTRY) {
       fprintf(stderr, "FOUND ENTRY %s IN CLASS SCOPE %s ... \n", name,
               scopePtr->scopeName);
-      return entry->data.varEntry.type;
+
+      TypeInfo variableTypeInfo = entry->data.varEntry.type;
+      TypeInfo curVarTypeInfo;
+      if (variableTypeInfo.numberofdims == varDimsCount) {
+        curVarTypeInfo.numberofdims = 0;
+        curVarTypeInfo.arraydims = NULL;
+        curVarTypeInfo.typeString = variableTypeInfo.typeString;
+        curVarTypeInfo.type = variableTypeInfo.type;
+      } else if (variableTypeInfo.numberofdims > varDimsCount) {
+        curVarTypeInfo.numberofdims =
+            variableTypeInfo.numberofdims - varDimsCount;
+        curVarTypeInfo.arraydims =
+            malloc(sizeof(int) * curVarTypeInfo.numberofdims);
+        for (int i = 0; i < curVarTypeInfo.numberofdims; i++) {
+          curVarTypeInfo.arraydims[i] = variableTypeInfo.arraydims[i];
+        }
+      } else {
+        insert_error(arr,
+                     create_error(get_name(astnode), err903, astnode->line));
+        TypeInfo info1 = {NONE_TYPE, NULL, NULL, 0};
+        return info1;
+      }
+      return curVarTypeInfo;
     }
 
     if (scopePtr->type == CLASS_SCOPE) {
@@ -177,7 +229,7 @@ TypeInfo get_type_expression(node *astnode, ErrorArray *arr,
     TypeInfo info = {FLOAT_TYPE, "float", NULL, 0};
     return info;
   } else if (astnode->type == var) {
-    return get_type_var(astnode);
+    return get_type_var(astnode, arr);
   } else if (astnode->type == funccall)
     return get_type_functioncall(astnode, globalScope);
   else if (astnode->type == dot) {
@@ -190,8 +242,14 @@ TypeInfo get_type_expression(node *astnode, ErrorArray *arr,
       TypeInfo leftInfo = get_type_expression(left, arr, globalScope);
       TableEntry *entry = get_entry(globalScope, leftInfo.typeString);
 
+      EntryType expectedType;
+      if (right->type == var)
+        expectedType = VARIABLE_ENTRY;
+      else
+        expectedType = FUNCDEF_ENTRY;
+
       if (entry->tableType != CLASS_ENTRY) {
-        insert_error(arr, create_error(get_name(left), err702, left->line));
+        insert_error(arr, create_error(get_name(left), err701, left->line));
 
         TypeInfo info = {NONE_TYPE, NULL, NULL, 0};
         return info;
@@ -200,7 +258,7 @@ TypeInfo get_type_expression(node *astnode, ErrorArray *arr,
       Scope *scopePtr = entry->data.classEntry.scope;
       entry = get_entry(scopePtr, get_name(right));
 
-      if (entry->tableType == EMPTY_ENTRY) {
+      if (entry->tableType != expectedType) {
         insert_error(arr, create_error(get_name(right), err702, right->line));
         TypeInfo info = {NONE_TYPE, NULL, NULL, 0};
         return info;
@@ -233,7 +291,13 @@ TypeInfo get_type_expression(node *astnode, ErrorArray *arr,
 
       TableEntry *tmp = get_entry(scopePtr, get_name(right->children[1]));
 
-      if (tmp->tableType == EMPTY_ENTRY) {
+      EntryType expectedType;
+      if (right->children[1]->type == var)
+        expectedType = VARIABLE_ENTRY;
+      else
+        expectedType = FUNCDEF_ENTRY;
+
+      if (tmp->tableType != expectedType) {
         insert_error(arr, create_error(get_name(right->children[1]), err702,
                                        right->children[1]->line));
         TypeInfo info = {NONE_TYPE, NULL, NULL, 0};
@@ -257,6 +321,8 @@ TypeInfo get_type_expression(node *astnode, ErrorArray *arr,
     if (!compare_type_info(info1, info2)) {
       insert_error(arr, create_error(astnode->value, err501, astnode->line));
     }
+
+    return get_type_expression(left, arr, globalScope);
   }
 
   // Could not find the type error.
@@ -562,8 +628,24 @@ void second_pass_type_check(node *root, Scope *globalScope,
       }
 
     } else if (current->type == returnnode) {
-      // We need to check that the type that is inside of the return is of
-      // the same type as the return type of the function.
+
+    } else if (current->type == assingop) {
+
+      TypeInfo LHSInfo =
+          get_type_expression(current->children[0], errors, globalScope);
+      TypeInfo RHSInfo =
+          get_type_expression(current->children[1], errors, globalScope);
+
+      if (!compare_type_info(LHSInfo, RHSInfo)) {
+
+        fprintf(stderr, "LHS:");
+        print_type(LHSInfo);
+        fprintf(stderr, "RHS:");
+        print_type(RHSInfo);
+
+        insert_error(errors,
+                     create_error(RHSInfo.typeString, err901, current->line));
+      }
 
     } else {
       for (int i = 0; i < current->numchildren; i++)
