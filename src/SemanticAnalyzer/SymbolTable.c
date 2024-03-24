@@ -29,7 +29,12 @@ TypeInfo get_type_info(node *astnode) {
 }
 
 TableEntry *get_entry(Scope *scope, const char *key);
+
 const char *get_name(node *astnode);
+
+/*
+ * This function will return the type of a scope as a string.
+ */
 const char *get_scope_type_string(ScopeType type) {
   if (type == GLOBAL_SCOPE)
     return "global scope";
@@ -82,18 +87,23 @@ err_code insert_entry(Scope *scope, TableEntry *entry) {
   else if (entry->tableType == FPARAM_ENTRY)
     name = entry->data.fparamEntry.name;
 
-  unsigned int hash = FNV1a_hash(name, SIZE);
   // Now we must check if the entry is already occupied.
 
   TableEntry *existingEntry = get_entry(scope, name);
+
+  unsigned int hash = FNV1a_hash(name, SIZE);
   if (existingEntry->tableType == EMPTY_ENTRY) {
-    scope->entries[hash] = *(entry);
-  } else {
-    if (scope->type == CLASS_SCOPE)
-      return err83;
-    else if (scope->type == FUNCTION_SCOPE)
-      return err84;
+    fprintf(stderr, "INSERTING %s INTO SCOPE %s ... \n", name,
+            scope->scopeName);
+    scope->entries[hash] = *entry;
+    return ok;
+
   }
+
+  else {
+    return err800;
+  }
+
   return ok;
 }
 
@@ -762,8 +772,13 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
       fprintf(out, "Inserting vardecl %s into scope %s ... ", get_name(current),
               current_scope->scopeName);
 
-      insert_entry(current_scope,
-                   create_variable_entry(current, current_scope, errors));
+      err_code code = insert_entry(
+          current_scope, create_variable_entry(current, current_scope, errors));
+
+      if (code != ok) {
+        insert_error(errors,
+                     create_error(get_name(current), code, current->line));
+      }
 
       fprintf(out, "inserted vardecl exiting.\n");
     } else if (current->type == structdecl) {
@@ -773,7 +788,12 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
 
       TableEntry *entry = create_class_entry(current, current_scope, errors);
 
-      insert_entry(current_scope, entry);
+      err_code code = insert_entry(current_scope, entry);
+      if (code != ok) {
+        fprintf(stderr, "DUPLICATE IDENTIFIER USED ... \n");
+        insert_error(errors,
+                     create_error(get_name(current), code, current->line));
+      }
 
       push_scope(entry->data.classEntry.scope, scope_stack);
       push_node(init_node(sentinel), node_stack);
@@ -789,7 +809,12 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
       fprintf(out, "Inserting function entry %s into scope %s ... ",
               get_name(current), current_scope->scopeName);
 
-      insert_entry(current_scope, create_func_entry(current, current_scope));
+      err_code code = insert_entry(current_scope,
+                                   create_func_entry(current, current_scope));
+      if (code != ok) {
+        insert_error(errors,
+                     create_error(get_name(current), code, current->line));
+      }
 
       fprintf(out, "Exiting function insertion.\n");
 
@@ -801,7 +826,11 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
                 get_name(current), current_scope->scopeName);
 
         TableEntry *entry = create_func_entry(current, current_scope);
-        insert_entry(current_scope, entry);
+        err_code code = insert_entry(current_scope, entry);
+        if (code != ok) {
+          insert_error(errors,
+                       create_error(get_name(current), code, current->line));
+        }
         push_node(init_node(sentinel), node_stack);
         push_scope(entry->data.funcEntry.scope, scope_stack);
 

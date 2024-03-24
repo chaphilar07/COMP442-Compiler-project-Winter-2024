@@ -2,9 +2,14 @@ struct A inherits x,y,z{
   public let x:integer;
   };
 
-struct foo inherits A{
-  };
 
+struct foo{};
+
+struct foo inherits A{
+
+  private let x: nonexistent;
+
+  };
 struct bar inherits foo {
    
     private let y: nonexistent;
@@ -24,6 +29,6 @@ struct bar inherits foo {
 
       }
 
-func foo(x: type1)->node{
+func newname(x: type1)->node{
     return(1);
   }

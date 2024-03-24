@@ -1,6 +1,14 @@
 BEGINNING OF TABLE FOR:  global scope "Global"
 
-Table Entry 1 of "Global":class bar inherits 
+Table Entry 1 of "Global":func newname -> node : x type1
+
+	BEGINNING OF TABLE FOR:  function scope "newname"
+
+	Table Entry 1 of "newname":fparam x type1
+
+	END OF TABLE FOR SCOPE function scope "newname"
+
+Table Entry 2 of "Global":class bar inherits foo, 
 
 	BEGINNING OF TABLE FOR:  class scope "bar"
 
@@ -14,7 +22,7 @@ Table Entry 1 of "Global":class bar inherits
 
 	END OF TABLE FOR SCOPE class scope "bar"
 
-Table Entry 2 of "Global":class A inherits 
+Table Entry 3 of "Global":class A inherits 
 
 	BEGINNING OF TABLE FOR:  class scope "A"
 
@@ -22,13 +30,11 @@ Table Entry 2 of "Global":class A inherits
 
 	END OF TABLE FOR SCOPE class scope "A"
 
-Table Entry 3 of "Global":func foo -> node : x type1
+Table Entry 4 of "Global":class foo inherits 
 
-	BEGINNING OF TABLE FOR:  function scope "foo"
+	BEGINNING OF TABLE FOR:  class scope "foo"
 
-	Table Entry 1 of "foo":fparam x type1
-
-	END OF TABLE FOR SCOPE function scope "foo"
+	END OF TABLE FOR SCOPE class scope "foo"
 
 END OF TABLE FOR SCOPE global scope "Global"
 

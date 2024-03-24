@@ -74,6 +74,12 @@ SemanticError create_error(const char *msg, err_code code, int line) {
              "does not exist",
              line, msg, line);
     err.msg = strdup(buffer);
+  } else if (code == err800) {
+    snprintf(buffer, sizeof(buffer),
+             "SEMANTIC ERROR ON LINE %d: Duplicate use of identifier %s in "
+             "the same scope exiting",
+             line, msg);
+    err.msg = strdup(buffer);
   }
   return err;
 }
