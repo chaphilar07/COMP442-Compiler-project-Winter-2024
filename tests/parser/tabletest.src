@@ -6,7 +6,7 @@ struct A inherits x,y,z{
 
 struct foo inherits A,b,c{
 
-   private func x() -> void;
+   private func x(y:integer) -> void;
    private func notdefined() -> void;
    private func notdefined1() -> void;
    private func notdefined2() -> void;
@@ -25,7 +25,7 @@ struct bar   {
 
 
 impl foo{
-    func x() -> void{
+    func x(y:integer) -> void{
         return(0);
       }
   }
@@ -46,14 +46,13 @@ func newname(x: type1)->void{
   }
 
 func newFunc()->integer{
-    return(0);
+    return(0.0);
   }
 
   func main()->integer{
       let x: foo;
       let y: integer;
 
-     x.x(1,1,3);
-     x.y.z();
+     x.x(1.1);
     
     }

@@ -1,1 +1,4 @@
-End of Semantic Errors total of 0 errors found.
+SEMANTIC ERROR ON LINE 51: Function printArray called  with incorrect type of arugments.
+SEMANTIC ERROR ON LINE 52: Function bubbleSort called  with incorrect type of arugments.
+SEMANTIC ERROR ON LINE 53: Function printArray called  with incorrect type of arugments.
+End of Semantic Errors total of 3 errors found.

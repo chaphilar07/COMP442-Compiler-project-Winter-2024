@@ -49,6 +49,19 @@ int get_dimlist_count(node *astnode) {
   return 0;
 }
 
+/*
+ * This function will return the number of parameters for a given function.
+ */
+int get_aparams_count(node *astnode) {
+  for (int i = 0; i < astnode->numchildren; i++) {
+    if (astnode->children[i]->type == aparamslist) {
+      return astnode->children[i]->numchildren;
+    }
+  }
+
+  return 0;
+}
+
 TypeInfo get_type_var(node *astnode, ErrorArray *arr) {
 
   const char *name = get_name(astnode);
@@ -363,7 +376,7 @@ void validate_functioncall(node *astnode, Scope *globalScope, ErrorArray *arr) {
                    create_error(get_name(astnode), err1401, astnode->line));
     }
 
-    int funccallParamsNum = get_dimlist_count(astnode);
+    int funccallParamsNum = get_aparams_count(astnode);
 
     int funcdefParamsNum = functionEntry->data.funcEntry.numfparams;
 
@@ -378,7 +391,7 @@ void validate_functioncall(node *astnode, Scope *globalScope, ErrorArray *arr) {
 
       node *dimlistNode = NULL;
       for (int i = 0; i < astnode->numchildren; i++) {
-        if (astnode->children[i]->type == dimlist) {
+        if (astnode->children[i]->type == aparamslist) {
           dimlistNode = astnode->children[i];
         }
       }
@@ -413,7 +426,7 @@ void validate_functioncall(node *astnode, Scope *globalScope, ErrorArray *arr) {
                      create_error(get_name(astnode), err1401, astnode->line));
       }
 
-      int funccallParamsNum = get_dimlist_count(astnode);
+      int funccallParamsNum = get_aparams_count(astnode);
       int funcdefParamsNum = functionEntry->data.funcEntry.numfparams;
 
       fprintf(stderr,
@@ -427,7 +440,7 @@ void validate_functioncall(node *astnode, Scope *globalScope, ErrorArray *arr) {
       } else {
         node *dimlistNode = NULL;
         for (int i = 0; i < astnode->numchildren; i++) {
-          if (astnode->children[i]->type == dimlist)
+          if (astnode->children[i]->type == aparamslist)
             dimlistNode = astnode->children[i];
         }
 
@@ -794,6 +807,8 @@ void second_pass_type_check(node *root, Scope *globalScope,
                                             err1102, current->line));
         }
       }
+    } else if (current->type == funccall) {
+      validate_functioncall(current, globalScope, errors);
     } else {
       for (int i = 0; i < current->numchildren; i++)
         push_node(current->children[i], stack);

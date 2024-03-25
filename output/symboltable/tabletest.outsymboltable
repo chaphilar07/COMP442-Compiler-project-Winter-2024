@@ -50,9 +50,11 @@ Table Entry 6 of "Global":class foo inherits A,
 
 			BEGINNING OF TABLE FOR:  class scope "foo"
 
-			Table Entry 1 of "foo":private func x -> void : 
+			Table Entry 1 of "foo":private func x -> void : y integer
 
 						BEGINNING OF TABLE FOR:  function scope "x"
+
+						Table Entry 1 of "x":fparam y integer
 
 						END OF TABLE FOR SCOPE function scope "x"
 

@@ -1,1 +1,3 @@
-End of Semantic Errors total of 0 errors found.
+SEMANTIC ERROR ON LINE 78: Function evaluate called  with incorrect type of arugments.
+SEMANTIC ERROR ON LINE 79: Function evaluate called  with incorrect type of arugments.
+End of Semantic Errors total of 2 errors found.

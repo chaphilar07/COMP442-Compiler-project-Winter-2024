@@ -17,6 +17,6 @@ SEMANTIC ERROR ON LINE 44: Cannot have function parameters declared with type th
 SEMANTIC ERROR ON LINE 44: Cannot implement functions for class that does not exist, class none does not exist cannot implement .
 SEMANTIC ERROR ON LINE 46: Invalid return type, void is the expected return type from the function.
 SEMANTIC ERROR ON LINE 46: Cannot have a return statement in function with return type of void
-SEMANTIC ERROR ON LINE 57: No member called y belongs to the class being accessed
-SEMANTIC ERROR ON LINE 57: Cannot access a member from a non-class type or non-existent class type, y is not a class type
+SEMANTIC ERROR ON LINE 50: Invalid return type, integer is the expected return type from the function.
+SEMANTIC ERROR ON LINE 56: Function x called  with incorrect type of arugments.
 End of Semantic Errors total of 21 errors found.
