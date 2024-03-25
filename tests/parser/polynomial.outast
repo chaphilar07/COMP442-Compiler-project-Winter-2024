@@ -646,7 +646,7 @@ node [fontname=Sans];charset= " UTF-8" splines=true splines=spline rankdir =LR
 967 -> 963
 967 -> 962
 962[label="identifier | counter"];
-963[label="type | integer"];
+963[label="type | float"];
 965[label="arraydims | (null)"];
 988[label="assignop | (null)"];
 988 -> 986
@@ -712,7 +712,7 @@ node [fontname=Sans];charset= " UTF-8" splines=true splines=spline rankdir =LR
 1019 -> 1015
 1015[label="identifier | counter"];
 1017[label="dimlist | (null)"];
-1020[label="intnum | 1"];
+1020[label="floatnum | 1.0"];
 1074[label="whilenode | (null)"];
 1074 -> 1072
 1074 -> 1030
@@ -726,7 +726,7 @@ node [fontname=Sans];charset= " UTF-8" splines=true splines=spline rankdir =LR
 1023[label="identifier | counter"];
 1024[label="dimlist | (null)"];
 1027[label="relop | leq"];
-1028[label="intnum | 10"];
+1028[label="floatnum | 10.0"];
 1072[label="statblock | (null)"];
 1072 -> 1071
 1072 -> 1054

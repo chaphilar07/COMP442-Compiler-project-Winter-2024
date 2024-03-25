@@ -40,10 +40,9 @@ bool compare_type_info(TypeInfo info1, TypeInfo info2) {
   if (info1.numberofdims != info2.numberofdims)
     return false;
 
-  for (int i = 0; i < info1.numberofdims; i++) {
-    if (info1.arraydims[i] != info2.arraydims[i])
-      return false;
-  }
+  // Note that we can have two variables with the same number of of dimensions
+  // but they have different quantities for those dimensions so they do not have
+  // to be equal.
 
   return true;
 }
@@ -323,6 +322,21 @@ const char *get_name(node *astnode) {
   }
 
   return name;
+}
+
+const char *get_type_from_enum(LangType type) {
+  if (type == INT_TYPE)
+    return "integer";
+  else if (type == FLOAT_TYPE)
+    return "float";
+  else if (type == ID_TYPE)
+    return "id type";
+  else if (type == NONE_TYPE)
+    return "none";
+  else if (type == VOID_TYPE)
+    return "void";
+  else
+    return "PROBLEM";
 }
 // This gets the type enum, this can be useful for faster checking and easier
 // to understand.

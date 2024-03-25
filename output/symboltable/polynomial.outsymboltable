@@ -22,7 +22,7 @@ Table Entry 2 of "Global":func main -> void :
 
 			Table Entry 2 of "main":var f1 LINEAR
 
-			Table Entry 3 of "main":var counter integer
+			Table Entry 3 of "main":var counter float
 
 			END OF TABLE FOR SCOPE function scope "main"
 

@@ -273,5 +273,6 @@ int push_scope(
     Scope *scope,
     ScopeStack *stack); // This function pushes a scope onto the scope stack.
 
+const char *get_type_from_enum(LangType type);
 bool compare_type_info(TypeInfo info1, TypeInfo info2);
 #endif // !AST_GEN_H

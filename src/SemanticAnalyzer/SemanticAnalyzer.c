@@ -80,6 +80,7 @@ TypeInfo get_type_var(node *astnode, ErrorArray *arr) {
   if (entry->tableType == VARIABLE_ENTRY || entry->tableType == FPARAM_ENTRY) {
     TypeInfo variableTypeInfo = entry->data.varEntry.type;
     TypeInfo curVarTypeInfo;
+
     if (variableTypeInfo.numberofdims == varDimsCount) {
       curVarTypeInfo.numberofdims = 0;
       curVarTypeInfo.arraydims = NULL;
@@ -93,6 +94,8 @@ TypeInfo get_type_var(node *astnode, ErrorArray *arr) {
       for (int i = 0; i < curVarTypeInfo.numberofdims; i++) {
         curVarTypeInfo.arraydims[i] = variableTypeInfo.arraydims[i];
       }
+      curVarTypeInfo.type = variableTypeInfo.type;
+      curVarTypeInfo.typeString = strdup(variableTypeInfo.typeString);
     } else {
       insert_error(arr, create_error(get_name(astnode), err903, astnode->line));
       TypeInfo info1 = {NONE_TYPE, NULL, NULL, 0};
@@ -377,7 +380,6 @@ void validate_functioncall(node *astnode, Scope *globalScope, ErrorArray *arr) {
     }
 
     int funccallParamsNum = get_aparams_count(astnode);
-
     int funcdefParamsNum = functionEntry->data.funcEntry.numfparams;
 
     fprintf(stderr,
@@ -400,6 +402,15 @@ void validate_functioncall(node *astnode, Scope *globalScope, ErrorArray *arr) {
             functionEntry->data.funcEntry.fparamslist[i]->data.fparamEntry.type;
         node *currentDim = dimlistNode->children[i];
         TypeInfo argInfo = get_type_expression(currentDim, arr, globalScope);
+
+        fprintf(stderr, "Comparing %s and %s \n",
+                get_type_from_enum(fparamInfo.type),
+                get_type_from_enum(argInfo.type));
+        fprintf(stderr, "The type of the function defs parameter: ");
+        print_type(fparamInfo);
+        fprintf(stderr, "The type of the function call args: ");
+        print_type(argInfo);
+        fprintf(stderr, "\n");
 
         if (!compare_type_info(fparamInfo, argInfo)) {
           insert_error(arr,
@@ -450,6 +461,14 @@ void validate_functioncall(node *astnode, Scope *globalScope, ErrorArray *arr) {
                                     ->data.fparamEntry.type;
           node *currentDim = dimlistNode->children[i];
           TypeInfo argInfo = get_type_expression(currentDim, arr, globalScope);
+
+          fprintf(stderr, "Comparing %s and %s \n",
+                  get_type_from_enum(fparamInfo.type),
+                  get_type_from_enum(argInfo.type));
+          fprintf(stderr, "The type of the function defs parameter: ");
+          print_type(fparamInfo);
+          fprintf(stderr, "The type of the function call args: ");
+          print_type(argInfo);
 
           if (!compare_type_info(fparamInfo, argInfo)) {
             insert_error(

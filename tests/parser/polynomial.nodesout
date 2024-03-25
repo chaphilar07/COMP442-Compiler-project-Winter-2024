@@ -135,7 +135,7 @@ Leaf token created of type identifier and value LINEAR
 Leaf token created of type identifier and value f2 
 Leaf token created of type identifier and value QUADRATIC 
 Leaf token created of type identifier and value counter 
-Leaf token created of type type and value integer 
+Leaf token created of type type and value float 
 Leaf token created of type identifier and value f1 
 Leaf token created of type identifier and value f1 
 Leaf token created of type identifier and value build 
@@ -149,10 +149,10 @@ Leaf token created of type floatnum and value 2.0
 Leaf token created of type floatnum and value 1.0 
 Leaf token created of type floatnum and value 0.0 
 Leaf token created of type identifier and value counter 
-Leaf token created of type intnum and value 1 
+Leaf token created of type floatnum and value 1.0 
 Leaf token created of type identifier and value counter 
 Leaf token created of type relop and value <= 
-Leaf token created of type intnum and value 10 
+Leaf token created of type floatnum and value 10.0 
 Leaf token created of type identifier and value counter 
 Leaf token created of type identifier and value f1 
 Leaf token created of type identifier and value evaluate 
