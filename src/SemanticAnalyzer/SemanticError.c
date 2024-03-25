@@ -129,7 +129,7 @@ SemanticError create_error(const char *msg, err_code code, int line) {
     err.msg = strdup(buffer);
   } else if (code == err1102) {
     snprintf(buffer, sizeof(buffer),
-             "SEMANTIC ERROR ON LINE %d: Invalid return type, %s is not the "
+             "SEMANTIC ERROR ON LINE %d: Invalid return type, %s is the "
              "expected return type from the function.",
              line, msg);
     err.msg = strdup(buffer);
@@ -144,6 +144,12 @@ SemanticError create_error(const char *msg, err_code code, int line) {
     snprintf(buffer, sizeof(buffer),
              "SEMANTIC ERROR ON LINE %d: Function %s called with the incorrect "
              "number of arguments .",
+             line, msg);
+    err.msg = strdup(buffer);
+  } else if (code == err1403) {
+    snprintf(buffer, sizeof(buffer),
+             "SEMANTIC ERROR ON LINE %d: Function %s called  with incorrect "
+             "type of arugments.",
              line, msg);
     err.msg = strdup(buffer);
   }

@@ -1,14 +1,14 @@
 digraph AST {
 node [shape=record];
 node [fontname=Sans];charset= " UTF-8" splines=true splines=spline rankdir =LR
-437[label="prog | (null)"];
-437 -> 436
-437 -> 435
-437 -> 434
-434[label="impldeflist | (null)"];
-434 -> 349
-434 -> 375
-434 -> 378
+447[label="prog | (null)"];
+447 -> 446
+447 -> 445
+447 -> 444
+444[label="impldeflist | (null)"];
+444 -> 349
+444 -> 375
+444 -> 378
 378[label="impldef | (null)"];
 378 -> 377
 377[label="identifier | none"];
@@ -64,10 +64,10 @@ node [fontname=Sans];charset= " UTF-8" splines=true splines=spline rankdir =LR
 345[label="return | (null)"];
 345 -> 343
 343[label="intnum | 0"];
-435[label="structdecl list | (null)"];
-435 -> 288
-435 -> 320
-435 -> 336
+445[label="structdecl list | (null)"];
+445 -> 288
+445 -> 320
+445 -> 336
 336[label="structdecl | (null)"];
 336 -> 335
 336 -> 329
@@ -163,22 +163,22 @@ node [fontname=Sans];charset= " UTF-8" splines=true splines=spline rankdir =LR
 282[label="identifier | x"];
 283[label="type | integer"];
 285[label="arraydims | (null)"];
-436[label="funcdef list | (null)"];
-436 -> 395
-436 -> 405
-436 -> 430
-430[label="funcdef | (null)"];
-430 -> 428
-430 -> 408
-430 -> 407
-430 -> 406
+446[label="funcdef list | (null)"];
+446 -> 395
+446 -> 405
+446 -> 440
+440[label="funcdef | (null)"];
+440 -> 438
+440 -> 408
+440 -> 407
+440 -> 406
 406[label="identifier | main"];
 407[label="fparams list | (null)"];
 408[label="type | integer"];
-428[label="funcbody | (null)"];
-428 -> 427
-428 -> 421
-428 -> 415
+438[label="funcbody | (null)"];
+438 -> 429
+438 -> 421
+438 -> 415
 415[label="vardecl | (null)"];
 415 -> 413
 415 -> 411
@@ -193,13 +193,25 @@ node [fontname=Sans];charset= " UTF-8" splines=true splines=spline rankdir =LR
 416[label="identifier | y"];
 417[label="type | integer"];
 419[label="arraydims | (null)"];
-427[label="return | (null)"];
+429[label="dot | (null)"];
+429 -> 437
+429 -> 427
+427[label="var | (null)"];
 427 -> 425
-425[label="var | (null)"];
-425 -> 423
-425 -> 422
-422[label="identifier | y"];
-423[label="dimlist | (null)"];
+427 -> 423
+423[label="identifier | x"];
+425[label="dimlist | (null)"];
+437[label="funccall | (null)"];
+437 -> 435
+437 -> 430
+430[label="identifier | x"];
+435[label="aparams list | (null)"];
+435 -> 434
+435 -> 433
+435 -> 432
+432[label="intnum | 1"];
+433[label="intnum | 1"];
+434[label="intnum | 3"];
 405[label="funcdef | (null)"];
 405 -> 403
 405 -> 398
@@ -212,7 +224,7 @@ node [fontname=Sans];charset= " UTF-8" splines=true splines=spline rankdir =LR
 403 -> 402
 402[label="return | (null)"];
 402 -> 400
-400[label="floatnum | 0.0"];
+400[label="intnum | 0"];
 395[label="funcdef | (null)"];
 395 -> 393
 395 -> 388
