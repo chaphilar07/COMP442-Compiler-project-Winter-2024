@@ -13,10 +13,9 @@ SEMANTIC ERROR LINE 34: Cannot lookup variable/function before it has been decla
 SEMANTIC ERROR ON LINE 35: Cannot have a return statement in function with return type of void
 SEMANTIC ERROR ON LINE 35: Invalid return type, void is not the expected return type from the function.
 SEMANTIC ERROR ON LINE 39: Cannot implement a member function that has not been declared, function nope has not been declared.
-SEMANTIC ERROR ON LINE 44: Cannot have function parameters declared with type that does not exist, fparam x onl line 44, declared with non-existent type.
 SEMANTIC ERROR ON LINE 44: Cannot implement functions for class that does not exist, class none does not exist cannot implement .
-SEMANTIC ERROR ON LINE 46: Invalid return type, void is not the expected return type from the function.
+SEMANTIC ERROR ON LINE 44: Cannot have function parameters declared with type that does not exist, fparam x onl line 44, declared with non-existent type.
 SEMANTIC ERROR ON LINE 46: Cannot have a return statement in function with return type of void
+SEMANTIC ERROR ON LINE 46: Invalid return type, void is not the expected return type from the function.
 SEMANTIC ERROR ON LINE 50: Invalid return type, integer is not the expected return type from the function.
-SEMANTIC ERROR ON LINE 59: Invalid return type, integer is not the expected return type from the function.
-End of Semantic Errors total of 21 errors found.
+End of Semantic Errors total of 20 errors found.

@@ -133,6 +133,19 @@ SemanticError create_error(const char *msg, err_code code, int line) {
              "expected return type from the function.",
              line, msg);
     err.msg = strdup(buffer);
+  } else if (code == err1401) {
+
+    snprintf(buffer, sizeof(buffer),
+             "SEMANTIC ERROR ON LINE %d: Invalid function call, function %s is "
+             "not defined in the source file.",
+             line, msg);
+    err.msg = strdup(buffer);
+  } else if (code == err1402) {
+    snprintf(buffer, sizeof(buffer),
+             "SEMANTIC ERROR ON LINE %d: Function %s called with the incorrect "
+             "number of arguments .",
+             line, msg);
+    err.msg = strdup(buffer);
   }
   return err;
 }

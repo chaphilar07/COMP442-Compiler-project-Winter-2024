@@ -47,15 +47,13 @@ Leaf token created of type type and value void
 Leaf token created of type intnum and value 1 
 Leaf token created of type identifier and value newFunc 
 Leaf token created of type type and value integer 
-Leaf token created of type intnum and value 0 
+Leaf token created of type floatnum and value 0.0 
 Leaf token created of type identifier and value main 
 Leaf token created of type type and value integer 
 Leaf token created of type identifier and value x 
 Leaf token created of type identifier and value foo 
 Leaf token created of type identifier and value y 
 Leaf token created of type type and value integer 
-Leaf token created of type identifier and value x 
-Leaf token created of type relop and value > 
 Leaf token created of type identifier and value y 
 Aggregate node of type impldeflist and value of (null) with 3 childen 
 Aggregate node of type structdecl list and value of (null) with 3 childen 

@@ -46,7 +46,7 @@ func newname(x: type1)->void{
   }
 
 func newFunc()->integer{
-    return(0);
+    return(0.0);
   }
 
   func main()->integer{
@@ -54,6 +54,6 @@ func newFunc()->integer{
       let y: integer;
 
 
-   return (x>y);
+   return (y);
     
     }

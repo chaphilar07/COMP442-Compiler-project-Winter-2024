@@ -350,7 +350,33 @@ TypeInfo get_type_expression(node *astnode, ErrorArray *arr,
  * wrong number of parameters and function not defined anywhere in the
  * source file.
  */
-err_code validate_functioncall(node *astnode) { return ok; }
+err_code validate_functioncall(node *astnode, Scope *globalScope,
+                               ErrorArray *arr) {
+
+  // This function will check they type and the number of parameters a function
+  // gets called with.
+  if (astnode->parent->type != dot) {
+
+    TableEntry *functionEntry = get_entry(globalScope, get_name(astnode));
+
+    if (functionEntry->tableType != FUNCDEF_ENTRY) {
+      insert_error(arr,
+                   create_error(get_name(astnode), err1401, astnode->line));
+    }
+
+    int funccallParamsNum = get_dimlist_count(astnode);
+    int funcdefParamsNum = functionEntry->data.funcEntry.numfparams;
+
+    if (funccallParamsNum != funcdefParamsNum) {
+      insert_error(arr,
+                   create_error(get_name(astnode), err1402, astnode->line));
+    }
+
+    // Now we want to make sure the number of fparams and types are the same.
+  }
+
+  return ok;
+}
 
 /*
  * This function will be used during creation of the symbol table the
@@ -672,6 +698,7 @@ void second_pass_type_check(node *root, Scope *globalScope,
         fprintf(stderr, "SCOPE IS NULL for RETURN ON LINE %d \n",
                 current->line);
       else {
+        // This is the type that we may receive.
         TypeInfo returnTypeExpected = get_entry(returnValue->scope->parentScope,
                                                 returnValue->scope->scopeName)
                                           ->data.funcEntry.returnType;
@@ -680,8 +707,14 @@ void second_pass_type_check(node *root, Scope *globalScope,
                                             err1101, current->line));
         }
 
+        // This is the type we actually get.
         TypeInfo typeReturned =
-            get_type_expression(current, errors, globalScope);
+            get_type_expression(current->children[0], errors, globalScope);
+
+        fprintf(stderr, "TYPE EXPECTED FROM FUNCTION\n");
+        print_type(returnTypeExpected);
+        fprintf(stderr, "TYPE RECEIVED FROM FUNCTION\n");
+        print_type(typeReturned);
 
         if (!compare_type_info(typeReturned, returnTypeExpected)) {
           insert_error(errors, create_error(returnTypeExpected.typeString,
