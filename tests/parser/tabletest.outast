@@ -1,14 +1,14 @@
 digraph AST {
 node [shape=record];
 node [fontname=Sans];charset= " UTF-8" splines=true splines=spline rankdir =LR
-447[label="prog | (null)"];
-447 -> 446
-447 -> 445
-447 -> 444
-444[label="impldeflist | (null)"];
-444 -> 349
-444 -> 375
-444 -> 378
+466[label="prog | (null)"];
+466 -> 465
+466 -> 464
+466 -> 463
+463[label="impldeflist | (null)"];
+463 -> 349
+463 -> 375
+463 -> 378
 378[label="impldef | (null)"];
 378 -> 377
 377[label="identifier | none"];
@@ -64,10 +64,10 @@ node [fontname=Sans];charset= " UTF-8" splines=true splines=spline rankdir =LR
 345[label="return | (null)"];
 345 -> 343
 343[label="intnum | 0"];
-445[label="structdecl list | (null)"];
-445 -> 288
-445 -> 320
-445 -> 336
+464[label="structdecl list | (null)"];
+464 -> 288
+464 -> 320
+464 -> 336
 336[label="structdecl | (null)"];
 336 -> 335
 336 -> 329
@@ -163,22 +163,23 @@ node [fontname=Sans];charset= " UTF-8" splines=true splines=spline rankdir =LR
 282[label="identifier | x"];
 283[label="type | integer"];
 285[label="arraydims | (null)"];
-446[label="funcdef list | (null)"];
-446 -> 395
-446 -> 405
-446 -> 440
-440[label="funcdef | (null)"];
-440 -> 438
-440 -> 408
-440 -> 407
-440 -> 406
+465[label="funcdef list | (null)"];
+465 -> 395
+465 -> 405
+465 -> 459
+459[label="funcdef | (null)"];
+459 -> 457
+459 -> 408
+459 -> 407
+459 -> 406
 406[label="identifier | main"];
 407[label="fparams list | (null)"];
 408[label="type | integer"];
-438[label="funcbody | (null)"];
-438 -> 429
-438 -> 421
-438 -> 415
+457[label="funcbody | (null)"];
+457 -> 445
+457 -> 429
+457 -> 421
+457 -> 415
 415[label="vardecl | (null)"];
 415 -> 413
 415 -> 411
@@ -212,6 +213,27 @@ node [fontname=Sans];charset= " UTF-8" splines=true splines=spline rankdir =LR
 432[label="intnum | 1"];
 433[label="intnum | 1"];
 434[label="intnum | 3"];
+445[label="dot | (null)"];
+445 -> 452
+445 -> 443
+443[label="var | (null)"];
+443 -> 441
+443 -> 439
+439[label="identifier | x"];
+441[label="dimlist | (null)"];
+452[label="dot | (null)"];
+452 -> 456
+452 -> 450
+450[label="var | (null)"];
+450 -> 448
+450 -> 446
+446[label="identifier | y"];
+448[label="dimlist | (null)"];
+456[label="funccall | (null)"];
+456 -> 454
+456 -> 453
+453[label="identifier | z"];
+454[label="aparams list | (null)"];
 405[label="funcdef | (null)"];
 405 -> 403
 405 -> 398

@@ -310,9 +310,15 @@ TypeInfo get_type_expression(node *astnode, ErrorArray *arr,
     return get_type_expression(right, arr, scopePtr);
 
   } else if (astnode->type == multop || astnode->type == addop ||
-             astnode->type == relop) {
+             astnode->type == relexpr) {
 
-    node *left = astnode->children[1];
+    // Note that relops will have three children!
+    node *left;
+    if (astnode->type == relexpr)
+      left = astnode->children[2];
+    else
+      left = astnode->children[1];
+
     node *right = astnode->children[0];
 
     TypeInfo info1 = get_type_expression(left, arr, globalScope);
@@ -323,8 +329,11 @@ TypeInfo get_type_expression(node *astnode, ErrorArray *arr,
     print_type(info2);
 
     if (!compare_type_info(info1, info2)) {
-
-      insert_error(arr, create_error(astnode->value, err501, astnode->line));
+      if (astnode->type == relexpr)
+        insert_error(arr, create_error(astnode->children[1]->value, err501,
+                                       astnode->line));
+      else
+        insert_error(arr, create_error(astnode->value, err501, astnode->line));
     }
 
     return get_type_expression(left, arr, globalScope);
@@ -341,7 +350,106 @@ TypeInfo get_type_expression(node *astnode, ErrorArray *arr,
  * wrong number of parameters and function not defined anywhere in the
  * source file.
  */
-err_code validate_functioncall(node *astnode) { return ok; }
+void validate_functioncall(node *astnode, Scope *globalScope, ErrorArray *arr) {
+
+  // This function will check they type and the number of parameters a function
+  // gets called with.
+  if (astnode->parent->type != dot) {
+
+    TableEntry *functionEntry = get_entry(globalScope, get_name(astnode));
+
+    if (functionEntry->tableType != FUNCDEF_ENTRY) {
+      insert_error(arr,
+                   create_error(get_name(astnode), err1401, astnode->line));
+    }
+
+    int funccallParamsNum = get_dimlist_count(astnode);
+
+    int funcdefParamsNum = functionEntry->data.funcEntry.numfparams;
+
+    fprintf(stderr,
+            "function %s alled with %d dimensions function defined with %d "
+            "dimensions\n",
+            get_name(astnode), funccallParamsNum, funcdefParamsNum);
+    if (funccallParamsNum != funcdefParamsNum) {
+      insert_error(arr,
+                   create_error(get_name(astnode), err1402, astnode->line));
+    } else {
+
+      node *dimlistNode = NULL;
+      for (int i = 0; i < astnode->numchildren; i++) {
+        if (astnode->children[i]->type == dimlist) {
+          dimlistNode = astnode->children[i];
+        }
+      }
+      for (int i = 0; i < funcdefParamsNum; i++) {
+        TypeInfo fparamInfo =
+            functionEntry->data.funcEntry.fparamslist[i]->data.fparamEntry.type;
+        node *currentDim = dimlistNode->children[i];
+        TypeInfo argInfo = get_type_expression(currentDim, arr, globalScope);
+
+        if (!compare_type_info(fparamInfo, argInfo)) {
+          insert_error(arr,
+                       create_error(get_name(astnode), err1403, astnode->line));
+        }
+      }
+    }
+  } else {
+    // The function call is a member function call, we must get the class then
+    // the function name
+    node *classTypeNode = astnode->parent->children[1];
+    TypeInfo classTypeInfo =
+        get_type_expression(classTypeNode, arr, globalScope);
+
+    TableEntry *classEntry = get_entry(globalScope, classTypeInfo.typeString);
+
+    if (classEntry->tableType == CLASS_ENTRY) {
+      TableEntry *functionEntry =
+          get_entry(classEntry->data.classEntry.scope, get_name(astnode));
+
+      if (functionEntry->tableType != FUNCDEF_ENTRY) {
+
+        insert_error(arr,
+                     create_error(get_name(astnode), err1401, astnode->line));
+      }
+
+      int funccallParamsNum = get_dimlist_count(astnode);
+      int funcdefParamsNum = functionEntry->data.funcEntry.numfparams;
+
+      fprintf(stderr,
+              "function %s called with %d dimensions function defined with %d "
+              "dimensions\n",
+              get_name(astnode), funccallParamsNum, funcdefParamsNum);
+      if (funcdefParamsNum != funccallParamsNum) {
+
+        insert_error(arr,
+                     create_error(get_name(astnode), err1402, astnode->line));
+      } else {
+        node *dimlistNode = NULL;
+        for (int i = 0; i < astnode->numchildren; i++) {
+          if (astnode->children[i]->type == dimlist)
+            dimlistNode = astnode->children[i];
+        }
+
+        for (int i = 0; i < funccallParamsNum; i++) {
+
+          TypeInfo fparamInfo = functionEntry->data.funcEntry.fparamslist[i]
+                                    ->data.fparamEntry.type;
+          node *currentDim = dimlistNode->children[i];
+          TypeInfo argInfo = get_type_expression(currentDim, arr, globalScope);
+
+          if (!compare_type_info(fparamInfo, argInfo)) {
+            insert_error(
+                arr, create_error(get_name(astnode), err1403, astnode->line));
+          }
+        }
+      }
+    } else {
+      insert_error(
+          arr, create_error(classTypeInfo.typeString, err701, astnode->line));
+    }
+  }
+}
 
 /*
  * This function will be used during creation of the symbol table the
@@ -650,9 +758,42 @@ void second_pass_type_check(node *root, Scope *globalScope,
                      create_error(RHSInfo.typeString, err901, current->line));
       }
 
-    } else if (current->type == multop || current->type == addop) {
+    } else if (current->type == multop || current->type == addop ||
+               current->type == relexpr) {
       get_type_expression(current, errors, globalScope);
 
+    } else if (current->type == returnnode) {
+
+      node *returnValue = current->children[0];
+      if (returnValue->scope ==
+          NULL) // This will happen when we have a function that we
+                // implemented but have no corresponding declaration.
+        fprintf(stderr, "SCOPE IS NULL for RETURN ON LINE %d \n",
+                current->line);
+      else {
+        // This is the type that we may receive.
+        TypeInfo returnTypeExpected = get_entry(returnValue->scope->parentScope,
+                                                returnValue->scope->scopeName)
+                                          ->data.funcEntry.returnType;
+        if (returnTypeExpected.type == VOID_TYPE) {
+          insert_error(errors, create_error(returnValue->scope->scopeName,
+                                            err1101, current->line));
+        }
+
+        // This is the type we actually get.
+        TypeInfo typeReturned =
+            get_type_expression(current->children[0], errors, globalScope);
+
+        fprintf(stderr, "TYPE EXPECTED FROM FUNCTION\n");
+        print_type(returnTypeExpected);
+        fprintf(stderr, "TYPE RECEIVED FROM FUNCTION\n");
+        print_type(typeReturned);
+
+        if (!compare_type_info(typeReturned, returnTypeExpected)) {
+          insert_error(errors, create_error(returnTypeExpected.typeString,
+                                            err1102, current->line));
+        }
+      }
     } else {
       for (int i = 0; i < current->numchildren; i++)
         push_node(current->children[i], stack);

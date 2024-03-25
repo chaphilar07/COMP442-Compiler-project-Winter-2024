@@ -1,80 +1,80 @@
 BEGINNING OF TABLE FOR:  global scope "Global"
 
-Table Entry 1 of "Global":func main -> void : 
+Table Entry 1 of "Global":func main -> integer : 
 
-	BEGINNING OF TABLE FOR:  function scope "main"
+			BEGINNING OF TABLE FOR:  function scope "main"
 
-	Table Entry 1 of "main":var x foo
+			Table Entry 1 of "main":var x foo
 
-	Table Entry 2 of "main":var y integer
+			Table Entry 2 of "main":var y integer
 
-	END OF TABLE FOR SCOPE function scope "main"
+			END OF TABLE FOR SCOPE function scope "main"
 
-Table Entry 2 of "Global":func newname -> node : x type1
+Table Entry 2 of "Global":func newname -> void : x type1
 
-	BEGINNING OF TABLE FOR:  function scope "newname"
+			BEGINNING OF TABLE FOR:  function scope "newname"
 
-	Table Entry 1 of "newname":fparam x type1
+			Table Entry 1 of "newname":fparam x type1
 
-	END OF TABLE FOR SCOPE function scope "newname"
+			END OF TABLE FOR SCOPE function scope "newname"
 
-Table Entry 3 of "Global":class bar inherits foo, 
+Table Entry 3 of "Global":class bar inherits 
 
-	BEGINNING OF TABLE FOR:  class scope "bar"
+			BEGINNING OF TABLE FOR:  class scope "bar"
 
-	Table Entry 1 of "bar":func do -> void : 
+			Table Entry 1 of "bar":private func do -> void : 
 
-		BEGINNING OF TABLE FOR:  function scope "do"
+						BEGINNING OF TABLE FOR:  function scope "do"
 
-		END OF TABLE FOR SCOPE function scope "do"
+						END OF TABLE FOR SCOPE function scope "do"
 
-	Table Entry 2 of "bar":func notdefined -> void : 
+			Table Entry 2 of "bar":private var y nonexistent
 
-		BEGINNING OF TABLE FOR:  function scope "notdefined"
+			END OF TABLE FOR SCOPE class scope "bar"
 
-		END OF TABLE FOR SCOPE function scope "notdefined"
+Table Entry 4 of "Global":func newFunc -> integer : 
 
-	Table Entry 3 of "bar":private var y nonexistent
+			BEGINNING OF TABLE FOR:  function scope "newFunc"
 
-	END OF TABLE FOR SCOPE class scope "bar"
+			END OF TABLE FOR SCOPE function scope "newFunc"
 
-Table Entry 4 of "Global":class A inherits 
+Table Entry 5 of "Global":class A inherits 
 
-	BEGINNING OF TABLE FOR:  class scope "A"
+			BEGINNING OF TABLE FOR:  class scope "A"
 
-	Table Entry 1 of "A":public var x integer
+			Table Entry 1 of "A":public var x integer
 
-	END OF TABLE FOR SCOPE class scope "A"
+			END OF TABLE FOR SCOPE class scope "A"
 
-Table Entry 5 of "Global":class foo inherits A, 
+Table Entry 6 of "Global":class foo inherits A, 
 
-	BEGINNING OF TABLE FOR:  class scope "foo"
+			BEGINNING OF TABLE FOR:  class scope "foo"
 
-	Table Entry 1 of "foo":func x -> void : 
+			Table Entry 1 of "foo":private func x -> void : 
 
-		BEGINNING OF TABLE FOR:  function scope "x"
+						BEGINNING OF TABLE FOR:  function scope "x"
 
-		END OF TABLE FOR SCOPE function scope "x"
+						END OF TABLE FOR SCOPE function scope "x"
 
-	Table Entry 2 of "foo":func notdefined1 -> void : 
+			Table Entry 2 of "foo":private func notdefined1 -> void : 
 
-		BEGINNING OF TABLE FOR:  function scope "notdefined1"
+						BEGINNING OF TABLE FOR:  function scope "notdefined1"
 
-		END OF TABLE FOR SCOPE function scope "notdefined1"
+						END OF TABLE FOR SCOPE function scope "notdefined1"
 
-	Table Entry 3 of "foo":func notdefined -> void : 
+			Table Entry 3 of "foo":private func notdefined -> void : 
 
-		BEGINNING OF TABLE FOR:  function scope "notdefined"
+						BEGINNING OF TABLE FOR:  function scope "notdefined"
 
-		END OF TABLE FOR SCOPE function scope "notdefined"
+						END OF TABLE FOR SCOPE function scope "notdefined"
 
-	Table Entry 4 of "foo":func notdefined2 -> void : 
+			Table Entry 4 of "foo":private func notdefined2 -> void : 
 
-		BEGINNING OF TABLE FOR:  function scope "notdefined2"
+						BEGINNING OF TABLE FOR:  function scope "notdefined2"
 
-		END OF TABLE FOR SCOPE function scope "notdefined2"
+						END OF TABLE FOR SCOPE function scope "notdefined2"
 
-	END OF TABLE FOR SCOPE class scope "foo"
+			END OF TABLE FOR SCOPE class scope "foo"
 
 END OF TABLE FOR SCOPE global scope "Global"
 

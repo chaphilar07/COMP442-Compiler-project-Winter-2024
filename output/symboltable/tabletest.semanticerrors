@@ -1,5 +1,5 @@
-SEMANTIC ERROR ON LINE 1: Cannot inherit a class that does not exist z does not exist.
 SEMANTIC ERROR ON LINE 1: Cannot inherit a class that does not exist y does not exist.
+SEMANTIC ERROR ON LINE 1: Cannot inherit a class that does not exist z does not exist.
 SEMANTIC ERROR ON LINE 1: Cannot inherit a class that does not exist x does not exist.
 SEMANTIC ERROR ON LINE 7: Cannot inherit a class that does not exist b does not exist.
 SEMANTIC ERROR ON LINE 7: Cannot inherit a class that does not exist c does not exist.
@@ -10,11 +10,13 @@ SEMANTIC ERROR ON LINE 20: Cannot declare variable with type that does not exist
 SEMANTIC ERROR ON LINE 30: Cannot have a return statement in function with return type of void
 SEMANTIC ERROR ON LINE 30: Invalid return type, void is the expected return type from the function.
 SEMANTIC ERROR LINE 34: Cannot lookup variable/function before it has been declared/defined, on line 34, x used before declaration
-SEMANTIC ERROR ON LINE 35: Invalid return type, void is the expected return type from the function.
 SEMANTIC ERROR ON LINE 35: Cannot have a return statement in function with return type of void
+SEMANTIC ERROR ON LINE 35: Invalid return type, void is the expected return type from the function.
 SEMANTIC ERROR ON LINE 39: Cannot implement a member function that has not been declared, function nope has not been declared.
-SEMANTIC ERROR ON LINE 44: Cannot implement functions for class that does not exist, class none does not exist cannot implement .
 SEMANTIC ERROR ON LINE 44: Cannot have function parameters declared with type that does not exist, fparam x onl line 44, declared with non-existent type.
-SEMANTIC ERROR ON LINE 46: Cannot have a return statement in function with return type of void
+SEMANTIC ERROR ON LINE 44: Cannot implement functions for class that does not exist, class none does not exist cannot implement .
 SEMANTIC ERROR ON LINE 46: Invalid return type, void is the expected return type from the function.
-End of Semantic Errors total of 19 errors found.
+SEMANTIC ERROR ON LINE 46: Cannot have a return statement in function with return type of void
+SEMANTIC ERROR ON LINE 57: No member called y belongs to the class being accessed
+SEMANTIC ERROR ON LINE 57: Cannot access a member from a non-class type or non-existent class type, y is not a class type
+End of Semantic Errors total of 21 errors found.

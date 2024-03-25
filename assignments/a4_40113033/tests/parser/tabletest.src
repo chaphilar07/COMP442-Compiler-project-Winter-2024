@@ -14,12 +14,11 @@ struct foo inherits A,b,c{
 };
 
 
-struct bar inherits foo {
+struct bar   {
    
     private let y: nonexistent;
     private func do()->void;
 
-    private func notdefined()->void;
 
 
   };
@@ -29,16 +28,10 @@ impl foo{
     func x() -> void{
         return(0);
       }
-
-   private func x() -> void{}
-
-   private func notdefined() -> void{}
-   private func notdefined1() -> void{}
-   private func notdefined2() -> void{}
   }
   impl bar{
       func do()->void{
-          x=3;
+        return(x);
         }
         func nope()->void{
             return(0);
@@ -48,16 +41,18 @@ impl foo{
     impl none{
 
       }
-func newname(x: type1)->node{
+func newname(x: type1)->void{
     return(1);
   }
 
-  func main()->void{
+func newFunc()->integer{
+    return(0);
+  }
+
+  func main()->integer{
       let x: foo;
       let y: integer;
 
-      x.x();
-
-   return (x*y);
+     x.x(1,1,3);
     
     }

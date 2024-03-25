@@ -2,97 +2,97 @@ BEGINNING OF TABLE FOR:  global scope "Global"
 
 Table Entry 1 of "Global":class POLYNOMIAL inherits 
 
-	BEGINNING OF TABLE FOR:  class scope "POLYNOMIAL"
+			BEGINNING OF TABLE FOR:  class scope "POLYNOMIAL"
 
-	Table Entry 1 of "POLYNOMIAL":func evaluate -> float : x float
+			Table Entry 1 of "POLYNOMIAL":public func evaluate -> float : x float
 
-		BEGINNING OF TABLE FOR:  function scope "evaluate"
+						BEGINNING OF TABLE FOR:  function scope "evaluate"
 
-		Table Entry 1 of "evaluate":fparam x float
+						Table Entry 1 of "evaluate":fparam x float
 
-		END OF TABLE FOR SCOPE function scope "evaluate"
+						END OF TABLE FOR SCOPE function scope "evaluate"
 
-	END OF TABLE FOR SCOPE class scope "POLYNOMIAL"
+			END OF TABLE FOR SCOPE class scope "POLYNOMIAL"
 
 Table Entry 2 of "Global":func main -> void : 
 
-	BEGINNING OF TABLE FOR:  function scope "main"
+			BEGINNING OF TABLE FOR:  function scope "main"
 
-	Table Entry 1 of "main":var f2 QUADRATIC
+			Table Entry 1 of "main":var f2 QUADRATIC
 
-	Table Entry 2 of "main":var f1 LINEAR
+			Table Entry 2 of "main":var f1 LINEAR
 
-	Table Entry 3 of "main":var counter integer
+			Table Entry 3 of "main":var counter integer
 
-	END OF TABLE FOR SCOPE function scope "main"
+			END OF TABLE FOR SCOPE function scope "main"
 
 Table Entry 3 of "Global":class LINEAR inherits POLYNOMIAL, 
 
-	BEGINNING OF TABLE FOR:  class scope "LINEAR"
+			BEGINNING OF TABLE FOR:  class scope "LINEAR"
 
-	Table Entry 1 of "LINEAR":private var a float
+			Table Entry 1 of "LINEAR":private var a float
 
-	Table Entry 2 of "LINEAR":func build -> LINEAR : A float,B float
+			Table Entry 2 of "LINEAR":public func build -> LINEAR : A float,B float
 
-		BEGINNING OF TABLE FOR:  function scope "build"
+						BEGINNING OF TABLE FOR:  function scope "build"
 
-		Table Entry 1 of "build":var new_function LINEAR
+						Table Entry 1 of "build":var new_function LINEAR
 
-		Table Entry 2 of "build":fparam B float
+						Table Entry 2 of "build":fparam B float
 
-		Table Entry 3 of "build":fparam A float
+						Table Entry 3 of "build":fparam A float
 
-		END OF TABLE FOR SCOPE function scope "build"
+						END OF TABLE FOR SCOPE function scope "build"
 
-	Table Entry 3 of "LINEAR":private var b float
+			Table Entry 3 of "LINEAR":private var b float
 
-	Table Entry 4 of "LINEAR":func evaluate -> float : x float
+			Table Entry 4 of "LINEAR":public func evaluate -> float : x float
 
-		BEGINNING OF TABLE FOR:  function scope "evaluate"
+						BEGINNING OF TABLE FOR:  function scope "evaluate"
 
-		Table Entry 1 of "evaluate":fparam x float
+						Table Entry 1 of "evaluate":fparam x float
 
-		Table Entry 2 of "evaluate":var result float
+						Table Entry 2 of "evaluate":var result float
 
-		END OF TABLE FOR SCOPE function scope "evaluate"
+						END OF TABLE FOR SCOPE function scope "evaluate"
 
-	END OF TABLE FOR SCOPE class scope "LINEAR"
+			END OF TABLE FOR SCOPE class scope "LINEAR"
 
 Table Entry 4 of "Global":class QUADRATIC inherits POLYNOMIAL, 
 
-	BEGINNING OF TABLE FOR:  class scope "QUADRATIC"
+			BEGINNING OF TABLE FOR:  class scope "QUADRATIC"
 
-	Table Entry 1 of "QUADRATIC":private var a float
+			Table Entry 1 of "QUADRATIC":private var a float
 
-	Table Entry 2 of "QUADRATIC":func build -> QUADRATIC : A float,B float,C float
+			Table Entry 2 of "QUADRATIC":public func build -> QUADRATIC : A float,B float,C float
 
-		BEGINNING OF TABLE FOR:  function scope "build"
+						BEGINNING OF TABLE FOR:  function scope "build"
 
-		Table Entry 1 of "build":fparam C float
+						Table Entry 1 of "build":fparam C float
 
-		Table Entry 2 of "build":var new_function QUADRATIC
+						Table Entry 2 of "build":var new_function QUADRATIC
 
-		Table Entry 3 of "build":fparam B float
+						Table Entry 3 of "build":fparam B float
 
-		Table Entry 4 of "build":fparam A float
+						Table Entry 4 of "build":fparam A float
 
-		END OF TABLE FOR SCOPE function scope "build"
+						END OF TABLE FOR SCOPE function scope "build"
 
-	Table Entry 3 of "QUADRATIC":private var c float
+			Table Entry 3 of "QUADRATIC":private var c float
 
-	Table Entry 4 of "QUADRATIC":private var b float
+			Table Entry 4 of "QUADRATIC":private var b float
 
-	Table Entry 5 of "QUADRATIC":func evaluate -> float : x float
+			Table Entry 5 of "QUADRATIC":public func evaluate -> float : x float
 
-		BEGINNING OF TABLE FOR:  function scope "evaluate"
+						BEGINNING OF TABLE FOR:  function scope "evaluate"
 
-		Table Entry 1 of "evaluate":fparam x float
+						Table Entry 1 of "evaluate":fparam x float
 
-		Table Entry 2 of "evaluate":var result float
+						Table Entry 2 of "evaluate":var result float
 
-		END OF TABLE FOR SCOPE function scope "evaluate"
+						END OF TABLE FOR SCOPE function scope "evaluate"
 
-	END OF TABLE FOR SCOPE class scope "QUADRATIC"
+			END OF TABLE FOR SCOPE class scope "QUADRATIC"
 
 END OF TABLE FOR SCOPE global scope "Global"
 

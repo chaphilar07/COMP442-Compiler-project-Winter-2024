@@ -1,7 +1,4 @@
 Leaf token created of type identifier and value POLYNOMIAL 
-Leaf token created of type identifier and value x 
-Leaf token created of type identifier and value y 
-Leaf token created of type identifier and value z 
 Leaf token created of type visibility and value public 
 Leaf token created of type identifier and value evaluate 
 Leaf token created of type identifier and value x 
@@ -57,7 +54,7 @@ Leaf token created of type identifier and value evaluate
 Leaf token created of type identifier and value x 
 Leaf token created of type type and value float 
 Leaf token created of type type and value float 
-Leaf token created of type intnum and value 0 
+Leaf token created of type floatnum and value 0.0 
 Leaf token created of type identifier and value QUADRATIC 
 Leaf token created of type identifier and value evaluate 
 Leaf token created of type identifier and value x 
