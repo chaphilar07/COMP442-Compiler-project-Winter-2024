@@ -1,0 +1,12 @@
+SEMANTIC ERROR ON LINE 1: Cannot inherit a class that does not exist y does not exist.
+SEMANTIC ERROR ON LINE 1: Cannot inherit a class that does not exist x does not exist.
+SEMANTIC ERROR ON LINE 1: Cannot inherit a class that does not exist z does not exist.
+SEMANTIC ERROR ON LINE 7: Cannot inherit a class that does not exist c does not exist.
+SEMANTIC ERROR ON LINE 7: Cannot inherit a class that does not exist b does not exist.
+SEMANTIC ERROR ON LINE 20: Cannot declare variable with type that does not exist, declaration of variable y, with type that does not exist
+SEMANTIC ERRROR ON LINE 25: Member function notdefined that has been declared but has not been defined.
+SEMANTIC ERROR ON LINE 46: Cannot implement a member function that has not been declared, function nope has not been declared.
+SEMANTIC ERROR ON LINE 51: Cannot implement functions for class that does not exist, class none does not exist cannot implement .
+SEMANTIC ERROR ON LINE 55: Cannot have function that returns non-existent type, function newname on line 55, returns type that does not exist
+SEMANTIC ERROR ON LINE 61: Error on operator *, cannot use * on two different types
+End of Semantic Errors total of 11 errors found.

@@ -1,0 +1,3 @@
+SEMANTIC ERROR ON LINE 19: Variable accessed with wrong number of dimensions, variable arr does not have that many array dimensions
+SEMANTIC ERROR ON LINE 20: Assignment cannot occur between a variable and an expression of another type, (null) is not the expected type for the assignment.
+End of Semantic Errors total of 2 errors found.

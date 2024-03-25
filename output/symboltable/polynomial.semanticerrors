@@ -1,4 +1,4 @@
-SEMANTIC ERROR ON LINE 1: Cannot inherit a class that does not exist z does not exist.
-SEMANTIC ERROR ON LINE 1: Cannot inherit a class that does not exist y does not exist.
-SEMANTIC ERROR ON LINE 1: Cannot inherit a class that does not exist x does not exist.
+SEMANTIC ERROR ON LINE 25: Invalid return type, float is not the expected return type from the function.
+SEMANTIC ERROR ON LINE 37: Invalid return type, float is not the expected return type from the function.
+SEMANTIC ERROR ON LINE 62: Invalid return type, float is not the expected return type from the function.
 End of Semantic Errors total of 3 errors found.

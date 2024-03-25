@@ -797,6 +797,10 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
     if (current_scope == NULL)
       fprintf(stderr, "TRYING TO ASSIGN CURRENT SCOPE TO NULL!\n");
     current->scope = current_scope; // We set the scopes of the AST nodes
+    if (current->type == returnnode) {
+      fprintf(stderr, "Giving scope %s to node return type ...",
+              current_scope->scopeName);
+    }
 
     // Note that because we want to have the function parameters also
     // be entries in the function scopes table, we must make the same
@@ -876,8 +880,9 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
             funcbodynode = current->children[i];
         }
 
-        for (int i = 0; i < funcbodynode->numchildren; i++)
+        for (int i = 0; i < funcbodynode->numchildren; i++) {
           push_node(funcbodynode->children[i], node_stack);
+        }
         fprintf(out, "inserted free function ...\n");
       }
       if (current_scope->type == CLASS_SCOPE) {
@@ -894,13 +899,15 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
           push_node(init_node(sentinel), node_stack);
 
           node *funcbodynode = NULL;
+
           for (int i = 0; i < current->numchildren; i++) {
             if (current->children[i]->type == funcbody)
               funcbodynode = current->children[i];
           }
 
-          for (int i = 0; i < funcbodynode->numchildren; i++)
+          for (int i = 0; i < funcbodynode->numchildren; i++) {
             push_node(funcbodynode->children[i], node_stack);
+          }
 
           fprintf(out, "inserted and defined member function ... \n");
         } else {

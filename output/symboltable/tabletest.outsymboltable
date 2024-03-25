@@ -1,6 +1,6 @@
 BEGINNING OF TABLE FOR:  global scope "Global"
 
-Table Entry 1 of "Global":func main -> void : 
+Table Entry 1 of "Global":func main -> integer : 
 
 	BEGINNING OF TABLE FOR:  function scope "main"
 
@@ -10,7 +10,7 @@ Table Entry 1 of "Global":func main -> void :
 
 	END OF TABLE FOR SCOPE function scope "main"
 
-Table Entry 2 of "Global":func newname -> node : x type1
+Table Entry 2 of "Global":func newname -> void : x type1
 
 	BEGINNING OF TABLE FOR:  function scope "newname"
 
@@ -18,7 +18,7 @@ Table Entry 2 of "Global":func newname -> node : x type1
 
 	END OF TABLE FOR SCOPE function scope "newname"
 
-Table Entry 3 of "Global":class bar inherits foo, 
+Table Entry 3 of "Global":class bar inherits 
 
 	BEGINNING OF TABLE FOR:  class scope "bar"
 
@@ -28,17 +28,17 @@ Table Entry 3 of "Global":class bar inherits foo,
 
 		END OF TABLE FOR SCOPE function scope "do"
 
-	Table Entry 2 of "bar":func notdefined -> void : 
-
-		BEGINNING OF TABLE FOR:  function scope "notdefined"
-
-		END OF TABLE FOR SCOPE function scope "notdefined"
-
-	Table Entry 3 of "bar":private var y nonexistent
+	Table Entry 2 of "bar":private var y nonexistent
 
 	END OF TABLE FOR SCOPE class scope "bar"
 
-Table Entry 4 of "Global":class A inherits 
+Table Entry 4 of "Global":func newFunc -> integer : 
+
+	BEGINNING OF TABLE FOR:  function scope "newFunc"
+
+	END OF TABLE FOR SCOPE function scope "newFunc"
+
+Table Entry 5 of "Global":class A inherits 
 
 	BEGINNING OF TABLE FOR:  class scope "A"
 
@@ -46,7 +46,7 @@ Table Entry 4 of "Global":class A inherits
 
 	END OF TABLE FOR SCOPE class scope "A"
 
-Table Entry 5 of "Global":class foo inherits A, 
+Table Entry 6 of "Global":class foo inherits A, 
 
 	BEGINNING OF TABLE FOR:  class scope "foo"
 

@@ -121,6 +121,18 @@ SemanticError create_error(const char *msg, err_code code, int line) {
         "dimensions, variable %s does not have that many array dimensions",
         line, msg);
     err.msg = strdup(buffer);
+  } else if (code == err1101) {
+    snprintf(buffer, sizeof(buffer),
+             "SEMANTIC ERROR ON LINE %d: Cannot have a return statement in "
+             "function with return type of void",
+             line);
+    err.msg = strdup(buffer);
+  } else if (code == err1102) {
+    snprintf(buffer, sizeof(buffer),
+             "SEMANTIC ERROR ON LINE %d: Invalid return type, %s is not the "
+             "expected return type from the function.",
+             line, msg);
+    err.msg = strdup(buffer);
   }
   return err;
 }

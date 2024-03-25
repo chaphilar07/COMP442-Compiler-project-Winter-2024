@@ -1,5 +1,5 @@
 // ====== struct declarations ====== //
-struct POLYNOMIAL inherits x,y,z {
+struct POLYNOMIAL {
 	public func evaluate(x: float) -> float;
 };
 

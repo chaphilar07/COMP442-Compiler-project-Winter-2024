@@ -50,6 +50,8 @@ typedef enum code {
   err900,
   err901,
   err903,
+  err1101,
+  err1102,
 
   ok,
 

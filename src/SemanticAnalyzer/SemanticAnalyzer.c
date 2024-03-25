@@ -310,16 +310,30 @@ TypeInfo get_type_expression(node *astnode, ErrorArray *arr,
     return get_type_expression(right, arr, scopePtr);
 
   } else if (astnode->type == multop || astnode->type == addop ||
-             astnode->type == relop) {
+             astnode->type == relexpr) {
 
-    node *left = astnode->children[1];
+    // Note that relops will have three children!
+    node *left;
+    if (astnode->type == relexpr)
+      left = astnode->children[2];
+    else
+      left = astnode->children[1];
+
     node *right = astnode->children[0];
 
     TypeInfo info1 = get_type_expression(left, arr, globalScope);
     TypeInfo info2 = get_type_expression(right, arr, globalScope);
 
+    fprintf(stderr, "Comparing type ");
+    print_type(info1);
+    print_type(info2);
+
     if (!compare_type_info(info1, info2)) {
-      insert_error(arr, create_error(astnode->value, err501, astnode->line));
+      if (astnode->type == relexpr)
+        insert_error(arr, create_error(astnode->children[1]->value, err501,
+                                       astnode->line));
+      else
+        insert_error(arr, create_error(astnode->value, err501, astnode->line));
     }
 
     return get_type_expression(left, arr, globalScope);
@@ -627,8 +641,6 @@ void second_pass_type_check(node *root, Scope *globalScope,
                      create_error(get_name(current), err900, current->line));
       }
 
-    } else if (current->type == returnnode) {
-
     } else if (current->type == assingop) {
 
       TypeInfo LHSInfo =
@@ -645,6 +657,36 @@ void second_pass_type_check(node *root, Scope *globalScope,
 
         insert_error(errors,
                      create_error(RHSInfo.typeString, err901, current->line));
+      }
+
+    } else if (current->type == multop || current->type == addop ||
+               current->type == relexpr) {
+      get_type_expression(current, errors, globalScope);
+
+    } else if (current->type == returnnode) {
+
+      node *returnValue = current->children[0];
+      if (returnValue->scope ==
+          NULL) // This will happen when we have a function that we implemented
+                // but have no corresponding declaration.
+        fprintf(stderr, "SCOPE IS NULL for RETURN ON LINE %d \n",
+                current->line);
+      else {
+        TypeInfo returnTypeExpected = get_entry(returnValue->scope->parentScope,
+                                                returnValue->scope->scopeName)
+                                          ->data.funcEntry.returnType;
+        if (returnTypeExpected.type == VOID_TYPE) {
+          insert_error(errors, create_error(returnValue->scope->scopeName,
+                                            err1101, current->line));
+        }
+
+        TypeInfo typeReturned =
+            get_type_expression(current, errors, globalScope);
+
+        if (!compare_type_info(typeReturned, returnTypeExpected)) {
+          insert_error(errors, create_error(returnTypeExpected.typeString,
+                                            err1102, current->line));
+        }
       }
 
     } else {
