@@ -488,6 +488,9 @@ void print_entry(TableEntry *entry, FILE *out) {
   }
   if (entry->tableType == FUNCDEF_ENTRY) {
 
+    if (entry->data.funcEntry.vis == pub || entry->data.funcEntry.vis == priv) {
+      fprintf(out, "%s ", get_vis_string(entry->data.funcEntry.vis));
+    }
     fprintf(out, "func %s -> %s : ", entry->data.funcEntry.name,
             entry->data.funcEntry.returnType.typeString);
     for (int i = entry->data.funcEntry.numfparams - 1; i >= 0; i--) {
@@ -639,6 +642,7 @@ TableEntry *create_func_entry(node *astnode, Scope *scope) {
 
     entry->data.funcEntry.defined = false;
     entry->data.funcEntry.memberFunc = true;
+    entry->data.funcEntry.vis = get_vis(astnode);
 
   } else if (astnode->type == funcdef && scope->type == GLOBAL_SCOPE) {
 
@@ -1001,7 +1005,7 @@ void print_scope(Scope *scope, FILE *out, unsigned int tabs) {
     return;
   }
   for (int i = 0; i < tabs; i++)
-    fprintf(out, "\t");
+    fprintf(out, "\t\t\t");
 
   fprintf(out, "BEGINNING OF TABLE FOR:  %s \"%s\"\n\n",
           get_scope_type_string(scope->type), scope->scopeName);
@@ -1010,7 +1014,7 @@ void print_scope(Scope *scope, FILE *out, unsigned int tabs) {
   for (int i = 0; i < SIZE; i++) {
     if (scope->entries[i].tableType != EMPTY_ENTRY) {
       for (int i = 0; i < tabs; i++)
-        fprintf(out, "\t");
+        fprintf(out, "\t\t\t");
       fprintf(out, "Table Entry %d of \"%s\":", count++, scope->scopeName);
       print_entry(&(scope->entries[i]), out);
       fprintf(out, "\n");
@@ -1024,7 +1028,7 @@ void print_scope(Scope *scope, FILE *out, unsigned int tabs) {
   }
 
   for (int i = 0; i < tabs; i++)
-    fprintf(out, "\t");
+    fprintf(out, "\t\t\t");
   fprintf(out, "END OF TABLE FOR SCOPE %s \"%s\"\n\n",
           get_scope_type_string(scope->type),
 
