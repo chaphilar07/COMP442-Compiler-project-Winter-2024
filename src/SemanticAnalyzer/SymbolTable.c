@@ -126,6 +126,9 @@ err_code insert_entry(Scope *scope, TableEntry *entry) {
   return ok;
 }
 
+/*
+ * Do not have to call free on this later on.
+ */
 const char *get_vis_string(varvis vis) {
   if (vis == priv)
     return "private";
@@ -579,12 +582,20 @@ TableEntry **get_fparams_list(node *astnode, Scope *currentscope) {
 
   for (int i = 0; i < astnode->numchildren; i++) {
     if (astnode->children[i]->type == fparamslist) {
+
       TableEntry **fparams =
-          malloc(sizeof(TableEntry *) * astnode->children[i]->numchildren);
+          malloc(sizeof(TableEntry *) *
+                 astnode->children[i]
+                     ->numchildren); // We will have to call free on this later
+                                     // on, we will go through the symbol tables
+                                     // and free all dynamic memory.
+
       for (int j = 0; j < astnode->children[i]->numchildren; j++) {
+
         fparams[j] = create_fparam_entry(astnode->children[i]->children[j],
                                          currentscope);
       }
+
       return fparams;
     }
   }
@@ -651,6 +662,11 @@ TableEntry *create_func_entry(node *astnode, Scope *scope) {
   }
 
   TableEntry *entry = malloc(sizeof(TableEntry));
+  if (!entry) {
+    fprintf(stderr, "ERROR - create_func_entry(): Cannot allocate function "
+                    "entry, exiting\n");
+    return NULL;
+  }
 
   if (astnode->type == funcdecl && scope->type == CLASS_SCOPE) {
 
@@ -1052,3 +1068,25 @@ void print_scope(Scope *scope, FILE *out, unsigned int tabs) {
  * Now we may have to refactor the functions that create entries into the table
  * so that they also take an ErrorArray.
  */
+
+/*
+ * Free symobl tables, this function will free all of the memory that we
+ * allocated dynamically we will call this when we are done using the memory.
+ */
+
+int free_scopes(Scope *globalScope) {
+  if (!globalScope) {
+    fprintf(
+        stderr,
+        "ERROR - free_scopes(): Cannot free a scope that is null, exiting.\n");
+    return -1;
+  }
+
+  if (globalScope->parentScope != NULL) {
+    fprintf(stderr, "EXPECTING A GLOBAL SCOPE CANNOT CALL THIS FUNCTION ON A "
+                    "NON-GLOBAL SCOPE.\n");
+    return -1;
+  }
+
+  return 1;
+}

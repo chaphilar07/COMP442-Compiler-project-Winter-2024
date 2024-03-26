@@ -391,6 +391,8 @@ node *parse(const char *path) {
     printf("Parse complete valid program formed ... \n");
 
     print_tree_dot(root, ast_output);
+
+    empty_stack(stack);
     if (stack->head)
       free(stack->head);
     if (stack)

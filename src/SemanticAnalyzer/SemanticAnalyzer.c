@@ -324,7 +324,8 @@ TypeInfo get_type_expression(node *astnode, ErrorArray *arr,
 
       return get_type_expression(right, arr, scopePtr);
     }
-    // Want to go down the dot chain and check each
+    // Want to go down the dot chain and check each, we take a copy of the
+    // globaScope pointer.
     Scope *scopePtr = globalScope;
 
     while (right->type == dot) {
