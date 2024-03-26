@@ -152,6 +152,12 @@ SemanticError create_error(const char *msg, err_code code, int line) {
              "type of arugments.",
              line, msg);
     err.msg = strdup(buffer);
+  } else if (code == err2100) {
+    snprintf(buffer, sizeof(buffer),
+             "SEMANTIC ERROR ON LINE %d: Trying to access variable %s with "
+             "variable/function call that is not of int type index",
+             line, msg);
+    err.msg = strdup(buffer);
   }
   return err;
 }
@@ -232,8 +238,11 @@ void print_errors(FILE *out, ErrorArray *err) {
   sort_errors_by_line(err);
   for (int i = 0; i < err->currentSize; i++) {
     fprintf(out, "%s\n", err->errors[i].msg);
+    free((void *)err->errors[i].msg);
   }
 
   fprintf(out, "End of Semantic Errors total of %d errors found.\n",
           err->currentSize);
+
+  free(err);
 }

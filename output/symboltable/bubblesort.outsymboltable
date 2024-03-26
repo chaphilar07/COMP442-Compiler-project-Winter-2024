@@ -6,6 +6,8 @@ Table Entry 1 of "Global":func main -> void :
 
 			Table Entry 1 of "main":var arr integer[7]
 
+			Table Entry 2 of "main":var y float
+
 			END OF TABLE FOR SCOPE function scope "main"
 
 Table Entry 2 of "Global":func printArray -> void : arr integer[],size integer

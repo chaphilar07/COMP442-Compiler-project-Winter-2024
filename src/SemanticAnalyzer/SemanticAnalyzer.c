@@ -5,6 +5,7 @@
  *
  */
 
+#include "SemanticAnalyzer.h"
 #include "../parser/AST/AST_SymbolTable.h"
 #include "SemanticError.h"
 #include <stdio.h>
@@ -58,14 +59,25 @@ int get_aparams_count(node *astnode) {
       return astnode->children[i]->numchildren;
     }
   }
-
   return 0;
 }
 
-TypeInfo get_type_var(node *astnode, ErrorArray *arr) {
+/*
+ * This function will return the dimlist node from a var or fparam node.
+ */
+node *get_dimlist_node(node *astnode) {
+  for (int i = 0; i < astnode->numchildren; i++) {
+    if (astnode->children[i]->type == dimlist)
+      return astnode->children[i];
+  }
+
+  return NULL;
+}
+TypeInfo get_type_var(node *astnode, ErrorArray *arr, Scope *globalScope) {
 
   const char *name = get_name(astnode);
   int varDimsCount = get_dimlist_count(astnode);
+  node *dimlistNode = get_dimlist_node(astnode);
 
   if (astnode->scope == NULL) {
     fprintf(stderr,
@@ -78,15 +90,45 @@ TypeInfo get_type_var(node *astnode, ErrorArray *arr) {
   TableEntry *entry = get_entry(astnode->scope, name);
 
   if (entry->tableType == VARIABLE_ENTRY || entry->tableType == FPARAM_ENTRY) {
-    TypeInfo variableTypeInfo = entry->data.varEntry.type;
+    TypeInfo variableTypeInfo =
+        entry->data.varEntry.type; // Get the type enum from the symbol table.
     TypeInfo curVarTypeInfo;
 
+    // Checking the type of the variable.
+    if (variableTypeInfo.numberofdims >= varDimsCount) {
+      for (int i = 0; i < dimlistNode->numchildren; i++) {
+
+        TypeInfo index =
+            get_type_expression(dimlistNode->children[i], arr, globalScope);
+        fprintf(stderr, "VARIABLE %s CALLED WITH ARRAY INDEX %d WITH TYPE: ",
+                get_name(astnode), i);
+        print_type(index);
+
+        if (index.type != INT_TYPE ||
+            (index.type == INT_TYPE && index.numberofdims != 0)) {
+          fprintf(stderr, "ERROR! VARIABLE CALLED WITH NON INTEGER TYPE! \n");
+          insert_error(arr,
+                       create_error(get_name(astnode), err2100, astnode->line));
+        }
+      }
+    }
+
     if (variableTypeInfo.numberofdims == varDimsCount) {
-      curVarTypeInfo.numberofdims = 0;
-      curVarTypeInfo.arraydims = NULL;
-      curVarTypeInfo.typeString = strdup(variableTypeInfo.typeString);
-      curVarTypeInfo.type = variableTypeInfo.type;
-    } else if (variableTypeInfo.numberofdims > varDimsCount) {
+      curVarTypeInfo.numberofdims =
+          0; // Because we are accessing the direct type not an array type.
+      curVarTypeInfo.arraydims =
+          NULL; // No array dimensions set the pointer to null.
+      curVarTypeInfo.typeString =
+          strdup(variableTypeInfo.typeString);     // The type string.
+      curVarTypeInfo.type = variableTypeInfo.type; // type enum.
+      for (int i = 0; i < variableTypeInfo.numberofdims; i++) {
+        // We want to get the ith expression of aparamlist and get the type
+        // enum.
+      }
+    } else if (variableTypeInfo.numberofdims >
+               varDimsCount) { // Called with less array dimensions than
+                               // declared with in this case we are returning an
+                               // array type.
       curVarTypeInfo.numberofdims =
           variableTypeInfo.numberofdims - varDimsCount;
       curVarTypeInfo.arraydims =
@@ -245,7 +287,7 @@ TypeInfo get_type_expression(node *astnode, ErrorArray *arr,
     TypeInfo info = {FLOAT_TYPE, "float", NULL, 0};
     return info;
   } else if (astnode->type == var) {
-    return get_type_var(astnode, arr);
+    return get_type_var(astnode, arr, globalScope);
   } else if (astnode->type == funccall)
     return get_type_functioncall(astnode, globalScope);
   else if (astnode->type == dot) {
@@ -787,7 +829,7 @@ void second_pass_type_check(node *root, Scope *globalScope,
         print_type(RHSInfo);
 
         insert_error(errors,
-                     create_error(RHSInfo.typeString, err901, current->line));
+                     create_error(LHSInfo.typeString, err901, current->line));
       }
 
     } else if (current->type == multop || current->type == addop ||

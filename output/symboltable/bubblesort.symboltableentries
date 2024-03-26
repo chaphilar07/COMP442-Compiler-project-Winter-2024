@@ -7,5 +7,6 @@ inserting free function printArray into scope Global ...inserted free function .
 Inserting vardecl n into scope printArray ... inserted vardecl exiting.
 Inserting vardecl i into scope printArray ... inserted vardecl exiting.
 inserting free function main into scope Global ...inserted free function ...
+Inserting vardecl y into scope main ... inserted vardecl exiting.
 Inserting vardecl arr into scope main ... inserted vardecl exiting.
 success

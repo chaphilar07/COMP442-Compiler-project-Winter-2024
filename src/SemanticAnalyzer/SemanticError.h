@@ -56,6 +56,8 @@ typedef enum code {
   err1402,
   err1403,
 
+  err2100,
+
   ok,
 
 } err_code;
