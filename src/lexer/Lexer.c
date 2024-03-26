@@ -553,7 +553,7 @@ token *get_next_token(token *temp, FILE *source, int *line) {
  * we give this value to the node->value (const char *), we must free this when
  * we are done.\
  *
- * We will refactor the category so that we are using an enum.
- *
- * The refactor should be rather straightforward.
+ * Note that we could refactor so that the lexer uses an enum but this would not
+ * serve a purpose we only have to free the memory that is allocated by the
+ * lexeme, not the category.
  */

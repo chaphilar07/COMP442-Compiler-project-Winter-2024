@@ -66,6 +66,10 @@ int main(int argc, char *argv[]) {
         fprintf(stderr,
                 "Invalid program could not generate symbol tables ... \n");
       }
+
+      if (result) {
+        free_tree(result);
+      }
     }
   }
 

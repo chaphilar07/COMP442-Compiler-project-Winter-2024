@@ -51,5 +51,5 @@ typedef struct _Token {
 token *get_next_token(token *temp, FILE *source, int *line);
 int compile_regex();
 void free_regexes();
-
+int is_keyword(char *);
 #endif // !LEXER_H

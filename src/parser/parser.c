@@ -173,6 +173,7 @@ int match(const char *type) {
       free(lookahead->lexeme);
     if (lookahead)
       free(lookahead);
+
     lookahead = NULL;
     lookahead = malloc(sizeof(token));
     lookahead->lexeme = NULL;
@@ -187,11 +188,15 @@ int match(const char *type) {
         free(lookahead);
       lookahead = NULL;
       lookahead = malloc(sizeof(token));
+      if (!lookahead) {
+        fprintf(stderr, "ERROR - match(): Could not allocate memory for the "
+                        "lookahead exiting.\n");
+        return -1;
+      }
       lookahead->lexeme = NULL;
       lookahead = get_next_token(lookahead, src, &line);
     }
     return true;
-
   } else {
     char msg[128];
     snprintf(msg, sizeof(msg), "%s is the expected token.", type);
@@ -202,6 +207,7 @@ int match(const char *type) {
       free(lookahead->lexeme);
     if (lookahead)
       free(lookahead);
+
     lookahead = NULL;
     lookahead = malloc(sizeof(token));
     lookahead->lexeme = NULL;
@@ -209,12 +215,19 @@ int match(const char *type) {
 
     while (!strcmp(lookahead->category, "inlinecmt") ||
            !strcmp(lookahead->category, "blockcmt")) {
+
       if (lookahead->lexeme)
         free(lookahead->lexeme);
       if (lookahead)
         free(lookahead);
+
       lookahead = NULL;
       lookahead = malloc(sizeof(token));
+      if (!lookahead) {
+        fprintf(stderr, "ERROR - match(): Could not allocate memory for the "
+                        "lookahead exiting.\n");
+        return -1;
+      }
       lookahead->lexeme = NULL;
       lookahead = get_next_token(lookahead, src, &line);
     }
@@ -274,6 +287,11 @@ int SkipErrors(const char *first[], const char *follow[], int first_len,
 
       lookahead = NULL;
       lookahead = malloc(sizeof(token));
+      if (!lookahead) {
+        fprintf(stderr, "ERROR - match(): Could not allocate memory for the "
+                        "lookahead exiting.\n");
+        return -1;
+      }
       lookahead->lexeme = NULL;
       lookahead = get_next_token(lookahead, src, &line);
 
@@ -296,6 +314,17 @@ node *START();
 /*
  * Because we use so much global state we do not need many parameters for this
  * function, would make calling it much more complicated.
+ *
+ *
+ * This function needs to be refactored to accept all of the files and the
+ * lookahead token, this may be a pain in the ass but it will make this code
+ * much more modular.
+ *
+ * Note that we could potentially make this code much more modular by making the
+ * functioncalls be parameterized but this would require a greate amout of
+ * effort. At the moment it is not very complex, it is performing as it needs
+ * and it is efficient the global state is being handled correctly, we only need
+ * to be certain that we call free on the memory that we need to call free on.
  */
 node *parse(const char *path) {
   int temp = initLookahead(path);
@@ -2835,3 +2864,8 @@ int VISIBILITY() {
 
   return success;
 }
+
+/*
+ * Note that at the end of the parse the AST should be the only data structure
+ * that has any dynamically allocated memory.
+ */

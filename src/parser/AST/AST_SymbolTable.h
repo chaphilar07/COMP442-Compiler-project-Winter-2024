@@ -276,6 +276,7 @@ int push_scope(
 const char *get_type_from_enum(LangType type);
 bool compare_type_info(TypeInfo info1, TypeInfo info2);
 
+int free_tree(node *root);
 void free_entire_tree(node *root); // This function will free all of the dynamic
                                    // memory starting from the root.
 #endif                             // !AST_GEN_H

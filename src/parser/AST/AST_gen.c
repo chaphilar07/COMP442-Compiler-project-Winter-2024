@@ -29,7 +29,9 @@ node *create_leaf_node(NodeType type, semantic_stack *stack, const char *value,
 
   temp->node_number = x++; // Used for when we create the diagram for the tree.
   temp->numchildren = 0;
-  temp->value = strdup(value);
+  temp->value = strdup(
+      value); // We must free this note that we called free on the memory for
+              // the other string this is another copy of that memory.
   temp->parent = NULL;
   temp->left_sibling = NULL;
   temp->right_sibling = NULL;
@@ -250,6 +252,8 @@ void empty_stack(semantic_stack *stack) {
   }
   while (stack->size > 0) {
     node *temp = pop_node(stack);
+    if (temp->value)
+      free((void *)temp->value);
     free(temp);
   }
 }
@@ -677,6 +681,43 @@ void add_child(node *parent, node *child) {
   parent->numchildren += 1;
 }
 
+/*
+ * We need a function that will deal with freeing all of the dynamic memory of
+ * the AST, we need to take note of what is getting allocated dynamically and
+ * what is not
+ *
+ * This function frees all of the dynamic memory of the AST, could we also free
+ * all of the symbol tables and all of there entries?
+ */
+
+int free_tree(node *root) {
+
+  if (!root) {
+    fprintf(stderr, "ERROR - free_tree():Root is null\n");
+    return -1;
+  }
+
+  semantic_stack *stack = init_stack();
+
+  push_node(root, stack);
+
+  while (stack->size > 0) {
+    node *current = pop_node(stack);
+
+    if (current->value && strcmp(current->value, "nil")) {
+      free((void *)current->value);
+    }
+    for (int i = 0; i < current->numchildren; i++) {
+      push_node(current->children[i], stack);
+    }
+    if (current->children)
+      free(current->children);
+    if (current)
+      free(current);
+  }
+
+  return 1;
+}
 // This function is used to make a node a child of the parent.
 
 /*The main function is just for testing the functionality of the functions for
