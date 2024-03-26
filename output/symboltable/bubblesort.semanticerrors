@@ -1,1 +1,2 @@
-End of Semantic Errors total of 0 errors found.
+SEMANTIC ERROR ON LINE 48: Trying to access variable arr with variable/function call that is not of int type index
+End of Semantic Errors total of 1 errors found.

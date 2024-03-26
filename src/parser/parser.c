@@ -83,7 +83,7 @@ void syntax_error(const char *err) {
 // source file returns -1 if the parth is invald or the lookahead is not assign
 // to NULL.
 int initLookahead(const char *path) {
-  src = fopen(path, "r");
+  src = fopen(path, "r"); // We open the source file for reading.
 
   if (lookahead != NULL) {
     error("ERROR - initLookahead: lookahead already allocated.");
@@ -94,9 +94,9 @@ int initLookahead(const char *path) {
     error("ERROR - initLookahead: source file not open.");
     return -1;
   }
-  line = 1;
+  line = 1; // Set the line number to one.
 
-  lookahead = malloc(sizeof(token));
+  lookahead = malloc(sizeof(token)); // Allocate memory for the token.
   if (!lookahead) {
     error("ERROR - initLookahead: cannot allocate memory for the token");
     return false;
@@ -345,7 +345,7 @@ node *parse(const char *path) {
   char rule_file_name[1024];
 
   const char *file_name = extractFileName(path);
-
+  file_name = replaceSubstring(file_name, "tests", "output");
   snprintf(ast_out_file_name, sizeof(ast_out_file_name), "%s.outast",
            file_name);
   snprintf(nodes_out_file_name, sizeof(nodes_out_file_name), "%s.nodesout",
@@ -672,6 +672,7 @@ int PROG();
 node *START() {
   if (!SkipErrors(first_start, follow_start, 4, 0, "START"))
     return false;
+
   if (in(first_prog, 4)) {
 
     node *prognode = init_node(prog);
@@ -2421,7 +2422,6 @@ int CHECKFORENDFUNC() {
 
   if (!SkipErrors(first_checkforendfunc, follow_checkforendfunc, 2, 10,
                   "CHECKFORENDFUNC")) {
-    syntax_error("CHECKFORENDFUNC");
     return false;
   }
   if (compare("semi")) {

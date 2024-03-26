@@ -155,13 +155,18 @@ char *findExactMatch(const char *haystack, const char *needle) {
   return NULL; // No match found
 }
 
+/*
+ * This function is used to replace a substring with a new string inside of a
+ * string.
+ */
 char *replaceSubstring(const char *original, const char *toReplace,
                        const char *replacement) {
   // Find the substring to replace (if it exists).
   const char *position = strstr(original, toReplace);
   if (position == NULL) {
     // The substring to replace was not found; return a copy of the original.
-    return strdup(original);
+    return strdup(original); // Note that we return a copy of the original will
+                             // this cause a memory problem?
   }
 
   // Calculate new string length and allocate memory for it.
