@@ -547,3 +547,13 @@ token *get_next_token(token *temp, FILE *source, int *line) {
     } // End of numerical
   }
 }
+
+/*
+ * Note for freeing memory later on, we will need to free, LEXEME, in the parser
+ * we give this value to the node->value (const char *), we must free this when
+ * we are done.\
+ *
+ * We will refactor the category so that we are using an enum.
+ *
+ * The refactor should be rather straightforward.
+ */
