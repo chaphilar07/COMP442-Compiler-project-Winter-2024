@@ -4,6 +4,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+/*
+ * This function removes a substring
+ */
 void removeSubstring(char *source, const char *substring) {
   char *match;
   int len = strlen(substring);
@@ -34,6 +37,7 @@ char *append_char(char *word, int length, char c) {
     return NULL;
   }
 
+  // Add the character to the end of the string.
   word = temp;
   word[length] = c;
   word[length + 1] = '\0';

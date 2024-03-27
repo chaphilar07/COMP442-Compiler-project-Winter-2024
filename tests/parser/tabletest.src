@@ -1,58 +1,28 @@
+//Test struct semantics in this section.
+
 struct A inherits x,y,z{
-  public let x:integer;
+    private let x: integer;
+    private func x() -> void;
+    private let y: A; //legal
+    private func foo()->void;
   };
 
+struct B inherits A{
 
+  private let x: A;
+  private func foo() -> B;
 
-struct foo inherits A,b,c{
+  };
 
-   private func x(y:integer) -> void;
-   private func notdefined() -> void;
-   private func notdefined1() -> void;
-   private func notdefined2() -> void;
-
-};
-
-
-struct bar   {
-   
-    private let y: nonexistent;
-    private func do()->void;
-
-
+struct C inherits B{
 
   };
 
 
-impl foo{
-    func x(y:integer) -> void{
-        return(0);
-      }
-  }
-  impl bar{
-      func do()->void{
-        return(x);
-        }
-        func nope()->void{
-            return(0);
-          }
-    }
-
-    impl none{
-
-      }
-func newname(x: type1)->void{
-    return(1);
+func foo()->float{
+    return(0);
   }
 
-func newFunc()->integer{
-    return(0.0);
-  }
 
-  func main()->integer{
-      let x: foo;
-      let y: integer;
 
-     x.x(1.1);
-    
-    }
+

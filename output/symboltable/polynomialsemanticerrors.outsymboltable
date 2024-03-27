@@ -1,10 +1,34 @@
 BEGINNING OF TABLE FOR:  global scope "Global"
 
-Table Entry 1 of "Global":class POLYNOMIAL inherits 
+Table Entry 1 of "Global":class E inherits D, 
+
+			BEGINNING OF TABLE FOR:  class scope "E"
+
+			Table Entry 1 of "E":private var c integer
+
+			END OF TABLE FOR SCOPE class scope "E"
+
+Table Entry 2 of "Global":func f3 -> integer : p1 integer[2][3]
+
+			BEGINNING OF TABLE FOR:  function scope "f3"
+
+			Table Entry 1 of "f3":fparam p1 integer[2][3]
+
+			END OF TABLE FOR SCOPE function scope "f3"
+
+Table Entry 3 of "Global":class POLYNOMIAL inherits 
 
 			BEGINNING OF TABLE FOR:  class scope "POLYNOMIAL"
 
-			Table Entry 1 of "POLYNOMIAL":public func evaluate -> float : x float
+			Table Entry 1 of "POLYNOMIAL":public func evaluate2 -> float : x float
+
+						BEGINNING OF TABLE FOR:  function scope "evaluate2"
+
+						Table Entry 1 of "evaluate2":fparam x float
+
+						END OF TABLE FOR SCOPE function scope "evaluate2"
+
+			Table Entry 2 of "POLYNOMIAL":public func evaluate -> float : x float
 
 						BEGINNING OF TABLE FOR:  function scope "evaluate"
 
@@ -14,19 +38,43 @@ Table Entry 1 of "Global":class POLYNOMIAL inherits
 
 			END OF TABLE FOR SCOPE class scope "POLYNOMIAL"
 
-Table Entry 2 of "Global":func main -> void : 
+Table Entry 4 of "Global":class C inherits 
+
+			BEGINNING OF TABLE FOR:  class scope "C"
+
+			Table Entry 1 of "C":private var a integer
+
+			END OF TABLE FOR SCOPE class scope "C"
+
+Table Entry 5 of "Global":func main -> void : 
 
 			BEGINNING OF TABLE FOR:  function scope "main"
 
-			Table Entry 1 of "main":var f2 QUADRATIC
+			Table Entry 1 of "main":var a a
 
-			Table Entry 2 of "main":var f1 LINEAR
+			Table Entry 2 of "main":var f2 QUADRATIC
 
-			Table Entry 3 of "main":var counter float
+			Table Entry 3 of "main":var j integer[1][2][3]
+
+			Table Entry 4 of "main":var c C
+
+			Table Entry 5 of "main":var f1 LINEAR
+
+			Table Entry 6 of "main":var i integer[2][3]
+
+			Table Entry 7 of "main":var counter integer
 
 			END OF TABLE FOR SCOPE function scope "main"
 
-Table Entry 3 of "Global":class LINEAR inherits POLYNOMIAL, 
+Table Entry 6 of "Global":class D inherits C, 
+
+			BEGINNING OF TABLE FOR:  class scope "D"
+
+			Table Entry 1 of "D":private var b integer
+
+			END OF TABLE FOR SCOPE class scope "D"
+
+Table Entry 7 of "Global":class LINEAR inherits POLYNOMIAL, 
 
 			BEGINNING OF TABLE FOR:  class scope "LINEAR"
 
@@ -58,7 +106,7 @@ Table Entry 3 of "Global":class LINEAR inherits POLYNOMIAL,
 
 			END OF TABLE FOR SCOPE class scope "LINEAR"
 
-Table Entry 4 of "Global":class QUADRATIC inherits POLYNOMIAL, 
+Table Entry 8 of "Global":class QUADRATIC inherits POLYNOMIAL, 
 
 			BEGINNING OF TABLE FOR:  class scope "QUADRATIC"
 
@@ -88,13 +136,19 @@ Table Entry 4 of "Global":class QUADRATIC inherits POLYNOMIAL,
 
 						Table Entry 1 of "evaluate":fparam x float
 
-						Table Entry 2 of "evaluate":var a float
-
-						Table Entry 3 of "evaluate":var result float
+						Table Entry 2 of "evaluate":var result float
 
 						END OF TABLE FOR SCOPE function scope "evaluate"
 
 			END OF TABLE FOR SCOPE class scope "QUADRATIC"
+
+Table Entry 9 of "Global":func f -> void : i integer
+
+			BEGINNING OF TABLE FOR:  function scope "f"
+
+			Table Entry 1 of "f":fparam i integer
+
+			END OF TABLE FOR SCOPE function scope "f"
 
 END OF TABLE FOR SCOPE global scope "Global"
 

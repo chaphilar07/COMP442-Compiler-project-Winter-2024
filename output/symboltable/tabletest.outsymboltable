@@ -1,82 +1,46 @@
 BEGINNING OF TABLE FOR:  global scope "Global"
 
-Table Entry 1 of "Global":func main -> integer : 
+Table Entry 1 of "Global":class C inherits B, 
 
-			BEGINNING OF TABLE FOR:  function scope "main"
+			BEGINNING OF TABLE FOR:  class scope "C"
 
-			Table Entry 1 of "main":var x foo
+			END OF TABLE FOR SCOPE class scope "C"
 
-			Table Entry 2 of "main":var y integer
+Table Entry 2 of "Global":class B inherits A, 
 
-			END OF TABLE FOR SCOPE function scope "main"
+			BEGINNING OF TABLE FOR:  class scope "B"
 
-Table Entry 2 of "Global":func newname -> void : x type1
+			Table Entry 1 of "B":private var x A
 
-			BEGINNING OF TABLE FOR:  function scope "newname"
+			Table Entry 2 of "B":private func foo -> B : 
 
-			Table Entry 1 of "newname":fparam x type1
+						BEGINNING OF TABLE FOR:  function scope "foo"
 
-			END OF TABLE FOR SCOPE function scope "newname"
+						END OF TABLE FOR SCOPE function scope "foo"
 
-Table Entry 3 of "Global":class bar inherits 
+			END OF TABLE FOR SCOPE class scope "B"
 
-			BEGINNING OF TABLE FOR:  class scope "bar"
-
-			Table Entry 1 of "bar":private func do -> void : 
-
-						BEGINNING OF TABLE FOR:  function scope "do"
-
-						END OF TABLE FOR SCOPE function scope "do"
-
-			Table Entry 2 of "bar":private var y nonexistent
-
-			END OF TABLE FOR SCOPE class scope "bar"
-
-Table Entry 4 of "Global":func newFunc -> integer : 
-
-			BEGINNING OF TABLE FOR:  function scope "newFunc"
-
-			END OF TABLE FOR SCOPE function scope "newFunc"
-
-Table Entry 5 of "Global":class A inherits 
+Table Entry 3 of "Global":class A inherits 
 
 			BEGINNING OF TABLE FOR:  class scope "A"
 
-			Table Entry 1 of "A":public var x integer
+			Table Entry 1 of "A":private var x integer
+
+			Table Entry 2 of "A":private func foo -> void : 
+
+						BEGINNING OF TABLE FOR:  function scope "foo"
+
+						END OF TABLE FOR SCOPE function scope "foo"
+
+			Table Entry 3 of "A":private var y A
 
 			END OF TABLE FOR SCOPE class scope "A"
 
-Table Entry 6 of "Global":class foo inherits A, 
+Table Entry 4 of "Global":func foo -> float : 
 
-			BEGINNING OF TABLE FOR:  class scope "foo"
+			BEGINNING OF TABLE FOR:  function scope "foo"
 
-			Table Entry 1 of "foo":private func x -> void : y integer
-
-						BEGINNING OF TABLE FOR:  function scope "x"
-
-						Table Entry 1 of "x":fparam y integer
-
-						END OF TABLE FOR SCOPE function scope "x"
-
-			Table Entry 2 of "foo":private func notdefined1 -> void : 
-
-						BEGINNING OF TABLE FOR:  function scope "notdefined1"
-
-						END OF TABLE FOR SCOPE function scope "notdefined1"
-
-			Table Entry 3 of "foo":private func notdefined -> void : 
-
-						BEGINNING OF TABLE FOR:  function scope "notdefined"
-
-						END OF TABLE FOR SCOPE function scope "notdefined"
-
-			Table Entry 4 of "foo":private func notdefined2 -> void : 
-
-						BEGINNING OF TABLE FOR:  function scope "notdefined2"
-
-						END OF TABLE FOR SCOPE function scope "notdefined2"
-
-			END OF TABLE FOR SCOPE class scope "foo"
+			END OF TABLE FOR SCOPE function scope "foo"
 
 END OF TABLE FOR SCOPE global scope "Global"
 

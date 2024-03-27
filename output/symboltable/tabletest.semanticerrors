@@ -1,22 +1,9 @@
-SEMANTIC ERROR ON LINE 1: Cannot inherit a class that does not exist y does not exist.
 SEMANTIC ERROR ON LINE 1: Cannot inherit a class that does not exist z does not exist.
+SEMANTIC ERROR ON LINE 1: Cannot inherit a class that does not exist y does not exist.
 SEMANTIC ERROR ON LINE 1: Cannot inherit a class that does not exist x does not exist.
-SEMANTIC ERROR ON LINE 7: Cannot inherit a class that does not exist b does not exist.
-SEMANTIC ERROR ON LINE 7: Cannot inherit a class that does not exist c does not exist.
-SEMANTIC ERRROR ON LINE 11: Member function notdefined that has been declared but has not been defined.
-SEMANTIC ERRROR ON LINE 12: Member function notdefined1 that has been declared but has not been defined.
-SEMANTIC ERRROR ON LINE 14: Member function notdefined2 that has been declared but has not been defined.
-SEMANTIC ERROR ON LINE 20: Cannot declare variable with type that does not exist, declaration of variable y, with type that does not exist
-SEMANTIC ERROR ON LINE 30: Cannot have a return statement in function with return type of void
-SEMANTIC ERROR ON LINE 30: Invalid return type, void is the expected return type from the function.
-SEMANTIC ERROR LINE 34: Cannot lookup variable/function before it has been declared/defined, on line 34, x used before declaration
-SEMANTIC ERROR ON LINE 35: Cannot have a return statement in function with return type of void
-SEMANTIC ERROR ON LINE 35: Invalid return type, void is the expected return type from the function.
-SEMANTIC ERROR ON LINE 39: Cannot implement a member function that has not been declared, function nope has not been declared.
-SEMANTIC ERROR ON LINE 44: Cannot have function parameters declared with type that does not exist, fparam x onl line 44, declared with non-existent type.
-SEMANTIC ERROR ON LINE 44: Cannot implement functions for class that does not exist, class none does not exist cannot implement .
-SEMANTIC ERROR ON LINE 46: Invalid return type, void is the expected return type from the function.
-SEMANTIC ERROR ON LINE 46: Cannot have a return statement in function with return type of void
-SEMANTIC ERROR ON LINE 50: Invalid return type, integer is the expected return type from the function.
-SEMANTIC ERROR ON LINE 56: Function x called  with incorrect type of arugments.
-End of Semantic Errors total of 21 errors found.
+SEMANTIC ERROR ON LINE 4: Duplicate use of identifier x in the same scope exiting
+SEMANTIC ERRROR ON LINE 6: Member function foo that has been declared but has not been defined.
+SEMANTIC ERRROR ON LINE 13: Member function foo that has been declared but has not been defined.
+WARNING! FUNCTION foo IS BEING OVERLOADED ON LINE 15 !
+WARNING! LINE 15 MEMBER VARIABLE x IS SHADOWING AN INHERITED MEMBER!
+End of Error Report, total of 8 errors found.

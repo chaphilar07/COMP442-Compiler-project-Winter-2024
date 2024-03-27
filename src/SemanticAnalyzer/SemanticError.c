@@ -158,6 +158,44 @@ SemanticError create_error(const char *msg, err_code code, int line) {
              "variable/function call that is not of int type index",
              line, msg);
     err.msg = strdup(buffer);
+  } else if (code == err0001) {
+    snprintf(buffer, sizeof(buffer),
+             "SEMANTIC ERROR: Error member %s is declared of a class type that "
+             "is of a subclass, this is not possible.",
+             msg);
+    err.msg = strdup(buffer);
+  } else if (code == war100) {
+    snprintf(
+        buffer, sizeof(buffer),
+        "WARNING! LINE %d MEMBER VARIABLE %s IS SHADOWING AN INHERITED MEMBER!",
+        line, msg);
+    err.msg = strdup(buffer);
+
+  } else if (code == err1200) {
+    snprintf(buffer, sizeof(buffer),
+             "SEMANTIC ERROR ON LINE %d: FUNCTION %s IS OVERRIDING INHERITED "
+             "FUNCTION WITH WRONG NUMBER OF PARAMETERS!",
+             line, msg);
+    err.msg = strdup(buffer);
+  } else if (code == err1201) {
+    snprintf(buffer, sizeof(buffer),
+             "SEMANTIC ERROR ON LINE %d: Cannot override a function with "
+             "different types of parameters, function %s is being overriden "
+             "with the wrong number of parameters.",
+             line, msg);
+    err.msg = strdup(buffer);
+  } else if (code == war101) {
+    snprintf(buffer, sizeof(buffer),
+             "WARNING! FUNCTION %s IS BEING OVERLOADED ON LINE %d !", msg,
+             line);
+    err.msg = strdup(buffer);
+  } else if (code == war102) {
+    snprintf(
+        buffer, sizeof(buffer),
+        "WARNING! LINE %d, LOCAL VARIABLE %s IN MEMBER FUNCTION IS SHADOWING "
+        "A CLASS MEMBER!",
+        line, msg);
+    err.msg = strdup(buffer);
   }
   return err;
 }
@@ -241,7 +279,7 @@ void print_errors(FILE *out, ErrorArray *err) {
     free((void *)err->errors[i].msg);
   }
 
-  fprintf(out, "End of Semantic Errors total of %d errors found.\n",
+  fprintf(out, "End of Error Report, total of %d errors found.\n",
           err->currentSize);
 
   free(err);

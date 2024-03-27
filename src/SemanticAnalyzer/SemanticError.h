@@ -58,6 +58,14 @@ typedef enum code {
 
   err2100,
 
+  err0001,
+
+  err1200,
+  err1201,
+
+  war100,
+  war101,
+  war102,
   ok,
 
 } err_code;

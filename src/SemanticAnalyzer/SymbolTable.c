@@ -32,6 +32,18 @@ TypeInfo get_type_info(node *astnode) {
  * This function compares the type information of two variables.
  */
 bool compare_type_info(TypeInfo info1, TypeInfo info2) {
+  // We want this function to to type promotion of ints -> floats when unary.
+  if (info1.type == INT_TYPE && info2.type == FLOAT_TYPE) {
+    if (info1.numberofdims == 0 && info2.numberofdims == 0 &&
+        info1.arraydims == NULL && info2.arraydims == NULL)
+      return true;
+  }
+  if (info1.type == FLOAT_TYPE && info2.type == INT_TYPE) {
+    if (info1.numberofdims == 0 && info2.numberofdims == 0 &&
+        info1.arraydims == NULL && info2.arraydims == NULL)
+      return true;
+  }
+
   if (info1.type != info2.type)
     return false;
 
@@ -561,6 +573,13 @@ TableEntry *create_fparam_entry(node *astnode, Scope *currentScope) {
     return NULL;
   }
   TableEntry *entry = malloc(sizeof(TableEntry));
+  if (!entry) {
+    fprintf(stderr, "ERROR - create_fparam_entry(): Cannot allocate memory for "
+                    "fparam entry, exiting.\n");
+    return NULL;
+  }
+
+  entry->line = astnode->line;
 
   entry->scope = currentScope;
   entry->tableType = FPARAM_ENTRY;
@@ -636,6 +655,7 @@ TableEntry *create_variable_entry(node *astnode, Scope *currentScope,
     return NULL;
   }
 
+  entry->line = astnode->line;
   entry->scope = currentScope;
   entry->tableType = VARIABLE_ENTRY;
 
@@ -678,8 +698,10 @@ TableEntry *create_func_entry(node *astnode, Scope *scope) {
 
     entry->data.funcEntry.defined = true;
     entry->data.funcEntry.memberFunc = false;
+    entry->data.funcEntry.vis = none;
   }
 
+  entry->line = astnode->line;
   entry->scope = scope;
   entry->tableType = FUNCDEF_ENTRY;
   entry->data.funcEntry.returnType = get_type_info(astnode);
@@ -726,6 +748,7 @@ TableEntry *create_class_entry(node *astnode, Scope *currentScope,
     return NULL;
   }
 
+  entry->line = astnode->line;
   entry->scope = currentScope;
   entry->tableType = CLASS_ENTRY;
   entry->data.classEntry.name = get_name(astnode);
@@ -845,6 +868,17 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
       fprintf(out, "Inserting vardecl %s into scope %s ... ", get_name(current),
               current_scope->scopeName);
 
+      LangType currentType = get_type_enum(current);
+      if (currentType == ID_TYPE) { // This does not work correctly!
+
+        const char *typeName = get_type_string(current);
+        TableEntry *testEntry = get_entry(globalScope, typeName);
+
+        if (testEntry->tableType != CLASS_ENTRY) {
+          insert_error(errors,
+                       create_error(get_name(current), err205, current->line));
+        }
+      }
       err_code code = insert_entry(
           current_scope, create_variable_entry(current, current_scope, errors));
 
@@ -882,8 +916,21 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
       fprintf(out, "Inserting function entry %s into scope %s ... ",
               get_name(current), current_scope->scopeName);
 
+      LangType currentType = get_type_enum(current);
+      if (currentType == ID_TYPE) { // This does not work correctly!
+
+        const char *typeName = get_type_string(current);
+        TableEntry *testEntry = get_entry(globalScope, typeName);
+
+        if (testEntry->tableType != CLASS_ENTRY) {
+          insert_error(errors,
+                       create_error(get_name(current), err205, current->line));
+        }
+      }
+
       err_code code = insert_entry(current_scope,
                                    create_func_entry(current, current_scope));
+
       if (code != ok) {
         insert_error(errors,
                      create_error(get_name(current), code, current->line));
@@ -1003,6 +1050,8 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
     }
   }
 
+  // We perform the second pass for more semantic checks and return the global
+  // scope whichh is the global symbol table.
   second_pass_type_check(root, globalScope, errors);
   return globalScope;
 }

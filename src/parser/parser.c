@@ -276,6 +276,7 @@ int SkipErrors(const char *first[], const char *follow[], int first_len,
     snprintf(msg, sizeof(msg), "%s error being processed in function %s ...",
              lookahead->category, function);
     syntax_error(msg);
+    success = false;
 
     while (!in(first, first_len) && !in(follow, follow_len) &&
            strcasecmp(lookahead->category, "eof")) {
@@ -298,6 +299,7 @@ int SkipErrors(const char *first[], const char *follow[], int first_len,
       if (contains_epsilon_transition(first, first_len) &&
           in(follow, follow_len)) {
         syntax_error(msg);
+        success = false;
         return false;
       }
     }

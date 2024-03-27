@@ -29,6 +29,7 @@ impl POLYNOMIAL {
 impl QUADRATIC { 
   func evaluate(x: float) -> float
   {
+    let a: float;
     let result: float;
     //Using Horner's method
     result = a;

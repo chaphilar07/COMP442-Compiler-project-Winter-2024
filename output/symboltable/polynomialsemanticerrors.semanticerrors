@@ -1,0 +1,30 @@
+SEMANTIC ERRROR ON LINE 4: Member function evaluate2 that has been declared but has not been defined.
+SEMANTIC ERRROR ON LINE 7: Member function evaluate that has been declared but has not been defined.
+SEMANTIC ERROR ON LINE 8: Duplicate use of identifier evaluate in the same scope exiting
+SEMANTIC ERRROR ON LINE 8: Member function evaluate that has been declared but has not been defined.
+SEMANTIC ERROR ON LINE 9: Duplicate use of identifier POLYNOMIAL in the same scope exiting
+SEMANTIC ERROR ON LINE 14: Duplicate use of identifier b in the same scope exiting
+WARNING! FUNCTION evaluate IS BEING OVERLOADED ON LINE 18 !
+SEMANTIC ERROR ON LINE 27: Cannot inherit a class that does not exist E does not exist.
+WARNING! FUNCTION evaluate IS BEING OVERLOADED ON LINE 27 !
+SEMANTIC ERROR ON LINE 91: Cannot implement a member function that has not been declared, function build2 has not been declared.
+SEMANTIC ERROR ON LINE 95: Duplicate use of identifier f in the same scope exiting
+SEMANTIC ERROR ON LINE 97: Duplicate use of identifier f in the same scope exiting
+SEMANTIC ERROR ON LINE 104: Cannot declare variable with type that does not exist, declaration of variable a, with type that does not exist
+SEMANTIC ERROR ON LINE 109: Duplicate use of identifier counter in the same scope exiting
+SEMANTIC ERROR LINE 113: Cannot lookup variable/function before it has been declared/defined, on line 113, b used before declaration
+SEMANTIC ERROR ON LINE 113: No member called b belongs to the class being accessed
+SEMANTIC ERROR ON LINE 114: No member called f belongs to the class being accessed
+SEMANTIC ERROR ON LINE 114: Assignment cannot occur between a variable and an expression of another type, integer is not the expected type for the assignment.
+SEMANTIC ERROR ON LINE 115: Assignment cannot occur between a variable and an expression of another type, (null) is not the expected type for the assignment.
+SEMANTIC ERROR ON LINE 115: Invalid function call, function undefined is not defined in the source file.
+SEMANTIC ERROR ON LINE 117: Assignment cannot occur between a variable and an expression of another type, a is not the expected type for the assignment.
+SEMANTIC ERROR ON LINE 117: Function f called with the incorrect number of arguments .
+SEMANTIC ERROR ON LINE 118: Function f called with the incorrect number of arguments .
+SEMANTIC ERROR ON LINE 120: Trying to access variable i with variable/function call that is not of int type index
+SEMANTIC ERROR ON LINE 120: Assignment cannot occur between a variable and an expression of another type, integer is not the expected type for the assignment.
+SEMANTIC ERROR ON LINE 121: Function f3 called  with incorrect type of arugments.
+SEMANTIC ERROR ON LINE 122: Cannot access a member from a non-class type or non-existent class type, counter is not a class type
+SEMANTIC ERROR LINE 122: Cannot lookup variable/function before it has been declared/defined, on line 122, x used before declaration
+SEMANTIC ERROR ON LINE 123: Assignment cannot occur between a variable and an expression of another type, integer is not the expected type for the assignment.
+End of Error Report, total of 29 errors found.

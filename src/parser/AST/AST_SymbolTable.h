@@ -95,6 +95,8 @@ typedef struct TableEntry {
   EntryType tableType;
   Scope *scope;
 
+  int line; // We will keep the line of the entry that corresponds to the entry
+            // in the actual source code.
   union {
     VariableEntry varEntry;
     FuncdefEntry funcEntry;

@@ -16,10 +16,8 @@
  *Note we will directly include inherited class members in the scope of the
  *class that is inheriting, this will simplify our life at the cost of extra
  *memory consumption.
-
  Note that we must take into account inherited classes as well, if we have a
  variable that is in a class scope that is inheriting.
-
  We will make a seperate function for checking for function calls.
  Note that we can do function declarations after we have built the symbol table,
  this is becuase we want to be able to call a function before it is defined so
@@ -27,9 +25,289 @@ we can have implicit function calls
  */
 
 /*
+ * This function will traverse the actual symbol tables and checks that the
+ * varidable declarations in a class are not of a subclass type, if they are we
+ * throw a semantic error.
+ */
+void check_tables_for_circular_inheritance(Scope *globalScope,
+                                           ErrorArray *arr) {
+  if (!globalScope) {
+    return;
+  }
+  if (!arr) {
+    return;
+  }
+
+  Scope *scopePtr = globalScope;
+
+  // In the global scope we will only have class and function entries.
+  for (int i = 0; i < SIZE; i++) {
+    if (scopePtr->entries[i].tableType == CLASS_ENTRY) {
+      TableEntry classEntry = scopePtr->entries[i];
+      Scope *classScope = classEntry.data.classEntry.scope;
+
+      for (int i = 0; i < SIZE; i++) {
+        // Get the return type information of each entry and check if it is a
+        // class type.
+
+        TypeInfo memberInfo;
+        TableEntry memberEntry = classScope->entries[i];
+
+        if (memberEntry.tableType == VARIABLE_ENTRY)
+          memberInfo = memberEntry.data.varEntry.type;
+        else
+          memberInfo = memberEntry.data.funcEntry.returnType;
+
+        if (memberInfo.type == ID_TYPE) {
+
+          const char *classTypeString = memberInfo.typeString;
+
+          for (int i = 0; i < SIZE; i++) {
+
+            TableEntry classEntryCompare = globalScope->entries[i];
+
+            if (classEntryCompare.tableType == CLASS_ENTRY) {
+              for (int i = 0;
+                   i < classEntryCompare.data.classEntry.inheritsCount; i++) {
+                if (!strcmp(classTypeString, classEntryCompare.data.classEntry
+                                                 .inheritedScopes[i]
+                                                 ->scopeName)) {
+                  fprintf(stderr,
+                          "Inserting error circular class dependency.\n");
+                  insert_error(arr,
+                               create_error(classEntry.data.classEntry.name,
+                                            err0001, -1));
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/*
+ * This function traverses the tables and checks for shadowed variables etc, we
+ * will use a DFS where we push scopes to traverse inheritance hierarchies for
+ * classes.
+ *
+ *For classes we must check each of the inherited classes to see if they have a
+ *variable/function of the same name.
+ We will check the scopes of functions and classes.
+ For each member of the class we will do a DFS of the inherited classes of the
+ current class. If the name appears in one of the super classes we will throw a
+ shadowing warning.
+
+
+ */
+
+void check_for_shadowing_in_member_functions(Scope *globalScope,
+                                             ErrorArray *errors) {
+  for (int i = 0; i < SIZE; i++) {
+    if (globalScope->entries[i].tableType == CLASS_ENTRY) {
+
+      Scope *classScope = globalScope->entries[i].data.classEntry.scope;
+      TableEntry classEntry = globalScope->entries[i];
+      Scope **inheritedScopes = classEntry.data.classEntry.inheritedScopes;
+      int numberOfInheritedScopes = classEntry.data.classEntry.inheritsCount;
+
+      for (int i = 0; i < SIZE; i++) {
+        if (classScope->entries[i].tableType == FUNCDEF_ENTRY) {
+
+          Scope *memberFunctionScope =
+              classScope->entries[i].data.funcEntry.scope;
+
+          for (int i = 0; i < SIZE; i++) {
+
+            TableEntry functionScopeEntry = memberFunctionScope->entries[i];
+            if (functionScopeEntry.tableType == VARIABLE_ENTRY) {
+              const char *functionEntryName =
+                  functionScopeEntry.data.varEntry.name;
+
+              // Now we check if an inherited class has a variable of the same
+              // name in which case we are shadowing.
+
+              TableEntry *correspondingClassScopeEntry =
+                  get_entry(classScope, functionEntryName);
+
+              if (correspondingClassScopeEntry->tableType == VARIABLE_ENTRY) {
+                insert_error(errors, create_error(functionEntryName, war102,
+                                                  classEntry.line));
+                break;
+              }
+
+              if (numberOfInheritedScopes > 0 && inheritedScopes != NULL) {
+                ScopeStack *stack = init_scope_stack();
+
+                for (int i = 0; i < numberOfInheritedScopes; i++) {
+                  push_scope(inheritedScopes[i], stack);
+                }
+
+                while (stack->size > 0) {
+                  Scope *currentScope = pop_scope(stack);
+
+                  TableEntry *entry =
+                      get_entry(currentScope, functionEntryName);
+
+                  if (entry->tableType == VARIABLE_ENTRY) {
+                    insert_error(errors, create_error(functionEntryName, war102,
+                                                      classEntry.line));
+                    break;
+                  }
+
+                  // Push the scopes onto the stack.
+                  TableEntry *currentScopeClassEntry = get_entry(
+                      currentScope->parentScope, currentScope->scopeName);
+
+                  for (int i = 0;
+                       i <
+                       currentScopeClassEntry->data.classEntry.inheritsCount;
+                       i++) {
+                    push_scope(currentScopeClassEntry->data.classEntry
+                                   .inheritedScopes[i],
+                               stack);
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+void check_tables_for_shadowing(Scope *globalScope, ErrorArray *errors) {
+
+  for (int i = 0; i < SIZE; i++) {
+    if (globalScope->entries[i].tableType == CLASS_ENTRY) {
+
+      TableEntry currentClassEntry = globalScope->entries[i];
+      Scope *currentClassScope =
+          globalScope->entries[i]
+              .data.classEntry.scope; // Get the scope of the current class.
+      Scope **inheritedEntries =
+          currentClassEntry.data.classEntry.inheritedScopes;
+      int numberOfScopes = currentClassEntry.data.classEntry.inheritsCount;
+
+      if (numberOfScopes <= 0)
+        continue;
+
+      for (int i = 0; i < SIZE; i++) {
+        TableEntry currentMemberEntry = currentClassScope->entries[i];
+
+        if (numberOfScopes <= 0) {
+          continue;
+        }
+
+        if (currentMemberEntry.tableType != EMPTY_ENTRY) {
+
+          const char *currentMemberName = NULL;
+          int currentLine = currentClassEntry.line;
+
+          EntryType currentMemberEntryType;
+
+          if (currentMemberEntry.tableType == FUNCDEF_ENTRY) {
+
+            currentMemberName = currentMemberEntry.data.funcEntry.name;
+            currentMemberEntryType = FUNCDEF_ENTRY;
+
+          } else {
+
+            currentMemberName = currentMemberEntry.data.varEntry.name;
+            currentMemberEntryType = VARIABLE_ENTRY;
+          }
+
+          // We will use a scope stack to traverse teh inheritance hierarchy.
+          ScopeStack *stack = init_scope_stack();
+
+          for (int i = 0; i < numberOfScopes; i++) {
+            push_scope(inheritedEntries[i], stack);
+          }
+
+          while (stack->size > 0) {
+            // here we need to check if the current member variable is being
+            // shadowed.
+            Scope *currentScope = pop_scope(stack);
+
+            TableEntry *currentEntry =
+                get_entry(currentScope, currentMemberName);
+
+            if (currentEntry->tableType == currentMemberEntryType) {
+              // We have some kind of shadowing here, we need to check if we
+              // have a variable or a function.
+              if (currentMemberEntryType == VARIABLE_ENTRY) {
+                insert_error(errors, create_error(currentMemberName, war100,
+                                                  currentLine));
+              }
+
+              if (currentMemberEntryType == FUNCDEF_ENTRY) {
+                // We check that the parameters are the same, and that the
+                // return type is also the same.
+                // We need to check the function parameters of each entry and
+                // compare type and number.
+
+                insert_error(errors, create_error(currentMemberName, war101,
+                                                  currentLine));
+
+                if (currentEntry->data.funcEntry.numfparams !=
+                    currentMemberEntry.data.funcEntry.numfparams) {
+
+                  insert_error(errors, create_error(currentMemberName, err1200,
+                                                    currentLine));
+
+                } else {
+
+                  for (int i = 0;
+                       i < currentMemberEntry.data.funcEntry.numfparams; i++) {
+
+                    if (!compare_type_info(
+                            currentMemberEntry.data.funcEntry.fparamslist[i]
+                                ->data.fparamEntry.type,
+                            currentEntry->data.funcEntry.fparamslist[i]
+                                ->data.fparamEntry.type)) {
+
+                      insert_error(
+                          errors,
+                          create_error(currentEntry->data.funcEntry.name,
+                                       err1201, currentLine));
+                    }
+                  }
+                }
+              }
+            }
+
+            // Want to push the inherited scopes of this scope, how do we do
+            // this.
+
+            TableEntry *classEntry =
+                get_entry(currentScope->parentScope, currentScope->scopeName);
+
+            if (classEntry->data.classEntry.inheritsCount > 0 &&
+                classEntry->data.classEntry.inheritedScopes != NULL) {
+
+              for (int i = 0; i < classEntry->data.classEntry.inheritsCount;
+                   i++) {
+                push_scope(classEntry->data.classEntry.inheritedScopes[i],
+                           stack);
+              }
+            }
+          }
+
+        } else {
+          continue;
+        }
+      }
+    }
+  }
+  return;
+}
+
+/*
  * This function will get the type of an expression that starts with a var.
- * Works corectly, if no type is found we will return a nil error, note we do
- * not have to report the error when this function gets called.
+ * Works corectly, if no type is found we will return a nil error, note we
+ * do not have to report the error when this function gets called.
  *
  * Works correctly.
  */
@@ -127,8 +405,8 @@ TypeInfo get_type_var(node *astnode, ErrorArray *arr, Scope *globalScope) {
       }
     } else if (variableTypeInfo.numberofdims >
                varDimsCount) { // Called with less array dimensions than
-                               // declared with in this case we are returning an
-                               // array type.
+                               // declared with in this case we are
+                               // returning an array type.
       curVarTypeInfo.numberofdims =
           variableTypeInfo.numberofdims - varDimsCount;
       curVarTypeInfo.arraydims =
@@ -270,16 +548,22 @@ TypeInfo get_type_functioncall(node *astnode, Scope *globalScope) {
 }
 
 /*
- * This function will return the type of any expression that is passed to it, an
- * expression can be started with any of the following: var, functioncall,
- * moltop, addop, intnum, floatnum.
- * For var, intnum and floatnum, we simply return the type, note that with var
- * we must perform a table lookup and get the type that way, so we must hash the
- * name of the var, and get the entry in the current scope
+ * This function will return the type of any expression that is passed to
+ * it, an expression can be started with any of the following: var,
+ * functioncall, moltop, addop, intnum, floatnum. For var, intnum and
+ * floatnum, we simply return the type, note that with var we must perform a
+ * table lookup and get the type that way, so we must hash the name of the
+ * var, and get the entry in the current scope
  */
 
 TypeInfo get_type_expression(node *astnode, ErrorArray *arr,
                              Scope *globalScope) {
+  if (astnode->type == sign) {
+    return get_type_expression(
+        astnode->children[0], arr,
+        globalScope); // We get the type of the expression, the right child of
+                      // the sign will always be another expression.
+  }
   if (astnode->type == intnum) {
     TypeInfo info = {INT_TYPE, "integer", NULL, 0};
     return info;
@@ -411,8 +695,8 @@ TypeInfo get_type_expression(node *astnode, ErrorArray *arr,
  */
 void validate_functioncall(node *astnode, Scope *globalScope, ErrorArray *arr) {
 
-  // This function will check they type and the number of parameters a function
-  // gets called with.
+  // This function will check they type and the number of parameters a
+  // function gets called with.
   if (astnode->parent->type != dot) {
 
     TableEntry *functionEntry = get_entry(globalScope, get_name(astnode));
@@ -462,8 +746,8 @@ void validate_functioncall(node *astnode, Scope *globalScope, ErrorArray *arr) {
       }
     }
   } else {
-    // The function call is a member function call, we must get the class then
-    // the function name
+    // The function call is a member function call, we must get the class
+    // then the function name
     node *classTypeNode = astnode->parent->children[1];
     TypeInfo classTypeInfo =
         get_type_expression(classTypeNode, arr, globalScope);
@@ -725,6 +1009,8 @@ void second_pass_type_check(node *root, Scope *globalScope,
 
   semantic_stack *stack = init_stack();
 
+  check_for_shadowing_in_member_functions(globalScope, errors);
+  check_tables_for_shadowing(globalScope, errors);
   push_node(root, stack);
 
   while (stack->size > 0) {
@@ -736,6 +1022,25 @@ void second_pass_type_check(node *root, Scope *globalScope,
      *
      */
 
+    /*
+     * Note that when creating the table we do not give functions inside of the
+     * impls that do have a class a scope, so we skip over them.
+     */
+    if (current->type == impldef) {
+      const char *getClassName = get_name(current);
+      TableEntry *classEntry = get_entry(globalScope, getClassName);
+      if (classEntry->tableType != CLASS_ENTRY) {
+        continue; // We will not push any nodes, because the function does not
+                  // exist.
+      }
+    }
+    /*
+     * The functions that do not have a scope are those that are inside of impl
+     * that either do not have a declaration or the impl is invalid.
+     */
+    if (current->type == funcdef && current->scope == NULL) {
+      continue;
+    }
     if (current->type == dot) {
 
       TypeInfo info = get_type_expression(current, errors, globalScope);
@@ -766,17 +1071,7 @@ void second_pass_type_check(node *root, Scope *globalScope,
     }
     if (current->type == multop || current->type == addop) {
     }
-    if (current->type == vardecl && get_type_enum(current) == ID_TYPE) {
-
-      const char *typeName = get_type_string(current);
-      EntryType classType = get_entry(globalScope, typeName)->tableType;
-
-      if (classType != CLASS_ENTRY) {
-        fprintf(stderr, "Class has not been defined cannot declare a variable "
-                        "of this type.\n");
-        insert_error(errors,
-                     create_error(get_name(current), err205, current->line));
-      }
+    if (current->type == vardecl && get_type_enum(current)) {
     }
 
     if (current->type == fparam && get_type_enum(current) == ID_TYPE) {
