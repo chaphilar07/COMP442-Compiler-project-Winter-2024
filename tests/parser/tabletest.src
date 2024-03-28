@@ -11,7 +11,8 @@ private func overridden()->void;
 private let x: integer;
 private func x() -> void;
 private let y: A; //legal
-private func foo()->void;
+private func foo()->void; 
+
 };
 
 struct B inherits A{
@@ -57,7 +58,7 @@ let y: integer;
 }
 }
 impl B{
-  func foo(x:integer)->void{
+  func foo(x:float)->B{
       
     }
 func overridden()->void{
@@ -90,6 +91,7 @@ struct A{}; //Not allowed
 
 func shouldbeok()->B{
 validfunc(1);
+validfunc(0,1,2);
 let x:B;
 return (x); 
 }

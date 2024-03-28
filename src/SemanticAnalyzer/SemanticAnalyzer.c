@@ -1026,10 +1026,6 @@ void second_pass_type_check(node *root, Scope *globalScope,
      * The functions that do not have a scope are those that are inside of impl
      * that either do not have a declaration or the impl is invalid.
      */
-    if (current->type == funcdef && current->scope == NULL) {
-      fprintf(stderr, "SKIPPING %s ... \n", get_name(current));
-      continue;
-    }
 
     if (current->type == dot) {
 

@@ -979,14 +979,13 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
           }
           // We also need to compare the parameters and the types of the
           // parameters.
+
+          TableEntry *tempFuncEntry = create_func_entry(current, current_scope);
           if (entry->data.funcEntry.numfparams !=
               fparamsListNode->numchildren) {
             insert_error(errors, create_error(get_name(current), err1410,
                                               current->line));
           } else {
-
-            TableEntry *tempFuncEntry =
-                create_func_entry(current, current_scope);
 
             for (int i = 0; i < fparamsListNode->numchildren; i++) {
               TypeInfo info1 =
@@ -1002,13 +1001,15 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
           }
 
           TypeInfo typeExpected = entry->data.funcEntry.returnType;
-          TypeInfo typeReceived = entry->data.funcEntry.returnType;
+          TypeInfo typeReceived = tempFuncEntry->data.funcEntry.returnType;
 
-          if (!compare_type_info(typeReceived, typeExpected)) {
+          fprintf(stderr, "TYPE EXPECTED %s TYPE RECEIVED %s \n",
+                  typeExpected.typeString, typeReceived.typeString);
+
+          if (typeReceived.type != typeExpected.type) {
             insert_error(errors, create_error(get_name(current), err1412,
                                               current->line));
           }
-
           for (int i = 0; i < current->numchildren; i++) {
             if (current->children[i]->type == funcbody)
               funcbodynode = current->children[i];
