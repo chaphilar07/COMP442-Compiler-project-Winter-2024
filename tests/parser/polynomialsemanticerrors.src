@@ -81,6 +81,8 @@ impl QUADRATIC {
     new_function.c = 1;                                               // 10.2 
     return (1);                                                       // 10.3
   }
+
+  //Need better way to make it so that we DO NOT EVER TRAVERSE FUNCTIONS THAT HAVE NO DECLARATIONS BECAUSE THEY HAVE NO SCOPES!!!
   func build2(A: float, B: float, C: float) -> QUADRATIC              // 6.1
   {
     let new_function: QUADRATIC;
@@ -101,6 +103,9 @@ func f3(p1: integer[2][3]) -> integer {}
 // ====== main ====== //
 func main() -> void
 {
+  let x: integer;
+  let y: float;
+  let z: integer;
   let a: a;                                                         // 11.5
   let c: C;
   let f1: LINEAR;

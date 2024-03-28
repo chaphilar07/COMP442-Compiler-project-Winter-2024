@@ -33,16 +33,6 @@ TypeInfo get_type_info(node *astnode) {
  */
 bool compare_type_info(TypeInfo info1, TypeInfo info2) {
   // We want this function to to type promotion of ints -> floats when unary.
-  if (info1.type == INT_TYPE && info2.type == FLOAT_TYPE) {
-    if (info1.numberofdims == 0 && info2.numberofdims == 0 &&
-        info1.arraydims == NULL && info2.arraydims == NULL)
-      return true;
-  }
-  if (info1.type == FLOAT_TYPE && info2.type == INT_TYPE) {
-    if (info1.numberofdims == 0 && info2.numberofdims == 0 &&
-        info1.arraydims == NULL && info2.arraydims == NULL)
-      return true;
-  }
 
   if (info1.type != info2.type)
     return false;
@@ -981,6 +971,44 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
 
           node *funcbodynode = NULL;
 
+          node *fparamsListNode = NULL;
+          for (int i = 0; i < current->numchildren; i++) {
+            if (current->children[i]->type == fparamslist) {
+              fparamsListNode = current->children[i];
+            }
+          }
+          // We also need to compare the parameters and the types of the
+          // parameters.
+          if (entry->data.funcEntry.numfparams !=
+              fparamsListNode->numchildren) {
+            insert_error(errors, create_error(get_name(current), err1410,
+                                              current->line));
+          } else {
+
+            TableEntry *tempFuncEntry =
+                create_func_entry(current, current_scope);
+
+            for (int i = 0; i < fparamsListNode->numchildren; i++) {
+              TypeInfo info1 =
+                  entry->data.funcEntry.fparamslist[i]->data.fparamEntry.type;
+              TypeInfo info2 = tempFuncEntry->data.funcEntry.fparamslist[i]
+                                   ->data.fparamEntry.type;
+
+              if (!compare_type_info(info1, info2)) {
+                insert_error(errors, create_error(get_name(current), err1411,
+                                                  current->line));
+              }
+            }
+          }
+
+          TypeInfo typeExpected = entry->data.funcEntry.returnType;
+          TypeInfo typeReceived = entry->data.funcEntry.returnType;
+
+          if (!compare_type_info(typeReceived, typeExpected)) {
+            insert_error(errors, create_error(get_name(current), err1412,
+                                              current->line));
+          }
+
           for (int i = 0; i < current->numchildren; i++) {
             if (current->children[i]->type == funcbody)
               funcbodynode = current->children[i];
@@ -992,6 +1020,9 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
 
           fprintf(out, "inserted and defined member function ... \n");
         } else {
+          // We have no class for this implication.
+          current->parent =
+              NULL; // Disconnect the funcdef node from the AST it is not valid.
           insert_error(errors, create_error(name, err203, current->line));
         }
       }

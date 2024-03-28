@@ -1,9 +1,44 @@
 SEMANTIC ERROR ON LINE 1: Cannot inherit a class that does not exist z does not exist.
 SEMANTIC ERROR ON LINE 1: Cannot inherit a class that does not exist y does not exist.
 SEMANTIC ERROR ON LINE 1: Cannot inherit a class that does not exist x does not exist.
-SEMANTIC ERROR ON LINE 4: Duplicate use of identifier x in the same scope exiting
-SEMANTIC ERRROR ON LINE 6: Member function foo that has been declared but has not been defined.
-SEMANTIC ERRROR ON LINE 13: Member function foo that has been declared but has not been defined.
-WARNING! FUNCTION foo IS BEING OVERLOADED ON LINE 15 !
-WARNING! LINE 15 MEMBER VARIABLE x IS SHADOWING AN INHERITED MEMBER!
-End of Error Report, total of 8 errors found.
+SEMANTIC ERRROR ON LINE 9: Member function overridden that has been declared but has not been defined.
+SEMANTIC ERROR ON LINE 11: Duplicate use of identifier x in the same scope exiting
+WARNING! LINE 15, LOCAL VARIABLE y IN MEMBER FUNCTION IS SHADOWING A CLASS MEMBER!
+SEMANTIC ERROR ON LINE 22: Cannot declare variable with type that does not exist, declaration of variable c, with type that does not exist
+WARNING! LINE 27 MEMBER VARIABLE c IS SHADOWING AN INHERITED MEMBER!
+WARNING! FUNCTION foo IS BEING OVERRIDEN ON LINE 27 !
+WARNING! ON LINE 27: FUNCTION foo IS OVERRIDING INHERITED FUNCTION WITH DIFFERENT NUMBER OF PARAMETERS!
+WARNING! FUNCTION overridden IS BEING OVERRIDEN ON LINE 27 !
+WARNING! ON LINE 27: FUNCTION overridden IS OVERRIDING INHERITED FUNCTION WITH DIFFERENT NUMBER OF PARAMETERS!
+WARNING! LINE 27 MEMBER VARIABLE b IS SHADOWING AN INHERITED MEMBER!
+WARNING! LINE 27 MEMBER VARIABLE x IS SHADOWING AN INHERITED MEMBER!
+WARNING! LINE 27 MEMBER VARIABLE a IS SHADOWING AN INHERITED MEMBER!
+SEMANTIC ERROR ON LINE 36: Error on operator *, cannot use * on two different types
+SEMANTIC ERROR ON LINE 37: Invalid return type, integer is the expected return type from the function.
+SEMANTIC ERROR ON LINE 46: Cannot implement functions for class that does not exist, class none does not exist cannot implement .
+SEMANTIC ERROR ON LINE 48: Cannot have function that returns non-existent type, function notdeclared on line 48, returns type that does not exist
+SEMANTIC ERROR ON LINE 48: Cannot implement a member function that has not been declared, function notdeclared has not been declared.
+SEMANTIC ERROR ON LINE 55: Cannot have a return statement in function with return type of void
+SEMANTIC ERROR ON LINE 55: Invalid return type, void is the expected return type from the function.
+SEMANTIC ERROR ON LINE 56: FUNCTION foo BEING DEFIND WITH DIFFERENT NUMBER OF PARAMETERS ERROR !
+SEMANTIC ERROR ON LINE 61: FUNCTION DEFINITION foo HAS DIFFERENT TYPES OF VARIABLES
+SEMANTIC ERROR ON LINE 64: FUNCTION overridden BEING DEFIND WITH DIFFERENT NUMBER OF PARAMETERS ERROR !
+SEMANTIC ERROR ON LINE 73: Error on operator *, cannot use * on two different types
+SEMANTIC ERROR ON LINE 73: Error on operator *, cannot use * on two different types
+SEMANTIC ERROR ON LINE 73: Error on operator *, cannot use * on two different types
+SEMANTIC ERROR ON LINE 73: Cannot declare variable with type that does not exist, declaration of variable z, with type that does not exist
+SEMANTIC ERROR ON LINE 74: Error on operator *, cannot use * on two different types
+SEMANTIC ERROR ON LINE 74: Error on operator *, cannot use * on two different types
+SEMANTIC ERROR ON LINE 74: Error on operator *, cannot use * on two different types
+SEMANTIC ERROR ON LINE 75: Invalid return type, void is the expected return type from the function.
+SEMANTIC ERROR ON LINE 75: Cannot have a return statement in function with return type of void
+SEMANTIC ERROR ON LINE 77: Cannot have function parameters declared with type that does not exist, fparam y onl line 77, declared with non-existent type.
+SEMANTIC ERROR ON LINE 79: Invalid return type, float is the expected return type from the function.
+SEMANTIC ERROR ON LINE 83: Invalid return type, integer is the expected return type from the function.
+SEMANTIC ERROR ON LINE 89: Duplicate use of identifier A in the same scope exiting
+SEMANTIC ERROR ON LINE 90: Function validfunc called  with incorrect type of arugments.
+SEMANTIC ERROR ON LINE 100: Error on operator *, cannot use * on two different types
+SEMANTIC ERROR ON LINE 100: Error on operator +, cannot use + on two different types
+SEMANTIC ERROR ON LINE 100: Error on operator *, cannot use * on two different types
+SEMANTIC ERROR ON LINE 101: Invalid return type, C is the expected return type from the function.
+End of Error Report, total of 43 errors found.

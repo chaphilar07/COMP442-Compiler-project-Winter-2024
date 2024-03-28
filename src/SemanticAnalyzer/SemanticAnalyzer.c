@@ -984,20 +984,6 @@ int check_type(node *astnode) { return ok; }
  * All classes are declared in the global scope, cannot have class in any
  * other scope.
  */
-int check_dot(node *astnode, Scope *globalScope) {
-  if (!astnode) {
-    fprintf(stderr, "ERROR - check_dot(): AST node has not been allocated.\n");
-    return -1;
-  }
-
-  return ok;
-}
-
-/*
- * This function will check operators like arithmetic operators and
- * relational operators.
- */
-int check_operator(node *astnode, Scope *currentScope) { return ok; }
 
 /*
  * This function will be used to check if an assignment is valid, both sides
@@ -1011,6 +997,7 @@ void second_pass_type_check(node *root, Scope *globalScope,
 
   check_for_shadowing_in_member_functions(globalScope, errors);
   check_tables_for_shadowing(globalScope, errors);
+
   push_node(root, stack);
 
   while (stack->size > 0) {
@@ -1029,6 +1016,7 @@ void second_pass_type_check(node *root, Scope *globalScope,
     if (current->type == impldef) {
       const char *getClassName = get_name(current);
       TableEntry *classEntry = get_entry(globalScope, getClassName);
+      fprintf(stderr, "HERE\n\n");
       if (classEntry->tableType != CLASS_ENTRY) {
         continue; // We will not push any nodes, because the function does not
                   // exist.
@@ -1039,8 +1027,10 @@ void second_pass_type_check(node *root, Scope *globalScope,
      * that either do not have a declaration or the impl is invalid.
      */
     if (current->type == funcdef && current->scope == NULL) {
+      fprintf(stderr, "SKIPPING %s ... \n", get_name(current));
       continue;
     }
+
     if (current->type == dot) {
 
       TypeInfo info = get_type_expression(current, errors, globalScope);
@@ -1067,12 +1057,6 @@ void second_pass_type_check(node *root, Scope *globalScope,
       fprintf(stderr, "var: ");
       print_type(info);
     }
-    if (current->type == assingop) {
-    }
-    if (current->type == multop || current->type == addop) {
-    }
-    if (current->type == vardecl && get_type_enum(current)) {
-    }
 
     if (current->type == fparam && get_type_enum(current) == ID_TYPE) {
 
@@ -1085,20 +1069,49 @@ void second_pass_type_check(node *root, Scope *globalScope,
                         "of this type.\n");
         insert_error(errors,
                      create_error(get_name(current), err206, current->line));
+
+      } else {
+        fprintf(stderr, "CLASS FOUND PUSHING TO STACK.\n");
+        for (int i = 0; i < current->numchildren; i++)
+          push_node(current->children[i], stack);
       }
     }
 
     if (current->type == funcdef && get_type_enum(current) == ID_TYPE) {
+
       const char *typeName = get_type_string(current);
       EntryType classType = get_entry(globalScope, typeName)->tableType;
 
       if (classType != CLASS_ENTRY) {
+        fprintf(stderr, "The return type of the function %s.\n", typeName);
         fprintf(stderr, "Class has not been defined cannot declare a function "
                         "to have a return type "
                         "of this type.\n");
         insert_error(errors,
                      create_error(get_name(current), err207, current->line));
+        continue;
+      } else {
+        Scope *containingScope = current->scope;
+        TableEntry *funcEntry;
+        if (containingScope->type == GLOBAL_SCOPE) {
+          funcEntry = get_entry(containingScope, get_name(current));
+          if (funcEntry->tableType == FUNCDEF_ENTRY) {
+            for (int i = 0; i < current->numchildren; i++) {
+              push_node(current->children[i], stack);
+            }
+          }
+        }
+
+        if (containingScope->type == CLASS_SCOPE) {
+          funcEntry = get_entry(containingScope, get_name(current));
+          if (funcEntry->tableType == FUNCDEF_ENTRY) {
+            for (int i = 0; i < current->numchildren; i++) {
+              push_node(current->children[i], stack);
+            }
+          }
+        }
       }
+
     } else if (current->type == funcdecl) {
 
       // We check if the entry has been defined.

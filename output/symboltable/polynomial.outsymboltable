@@ -88,9 +88,7 @@ Table Entry 4 of "Global":class QUADRATIC inherits POLYNOMIAL,
 
 						Table Entry 1 of "evaluate":fparam x float
 
-						Table Entry 2 of "evaluate":var a float
-
-						Table Entry 3 of "evaluate":var result float
+						Table Entry 2 of "evaluate":var result float
 
 						END OF TABLE FOR SCOPE function scope "evaluate"
 

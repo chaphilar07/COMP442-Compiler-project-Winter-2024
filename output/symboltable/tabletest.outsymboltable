@@ -6,39 +6,133 @@ Table Entry 1 of "Global":class C inherits B,
 
 			END OF TABLE FOR SCOPE class scope "C"
 
-Table Entry 2 of "Global":class B inherits A, 
+Table Entry 2 of "Global":func main -> void : 
+
+			BEGINNING OF TABLE FOR:  function scope "main"
+
+			Table Entry 1 of "main":var x integer
+
+			Table Entry 2 of "main":var z sometype
+
+			Table Entry 3 of "main":var y float
+
+			END OF TABLE FOR SCOPE function scope "main"
+
+Table Entry 3 of "Global":class B inherits A, 
 
 			BEGINNING OF TABLE FOR:  class scope "B"
 
 			Table Entry 1 of "B":private var x A
 
-			Table Entry 2 of "B":private func foo -> B : 
+			Table Entry 2 of "B":private var a float
+
+			Table Entry 3 of "B":private func overridden -> void : a integer,b integer
+
+						BEGINNING OF TABLE FOR:  function scope "overridden"
+
+						Table Entry 1 of "overridden":fparam a integer
+
+						Table Entry 2 of "overridden":fparam b integer
+
+						END OF TABLE FOR SCOPE function scope "overridden"
+
+			Table Entry 4 of "B":private var c D
+
+			Table Entry 5 of "B":private var b B
+
+			Table Entry 6 of "B":private func foo -> B : x float
 
 						BEGINNING OF TABLE FOR:  function scope "foo"
+
+						Table Entry 1 of "foo":fparam x float
 
 						END OF TABLE FOR SCOPE function scope "foo"
 
 			END OF TABLE FOR SCOPE class scope "B"
 
-Table Entry 3 of "Global":class A inherits 
+Table Entry 4 of "Global":func stillinvalid -> integer : 
+
+			BEGINNING OF TABLE FOR:  function scope "stillinvalid"
+
+			END OF TABLE FOR SCOPE function scope "stillinvalid"
+
+Table Entry 5 of "Global":func shouldbeok -> B : 
+
+			BEGINNING OF TABLE FOR:  function scope "shouldbeok"
+
+			Table Entry 1 of "shouldbeok":var x B
+
+			END OF TABLE FOR SCOPE function scope "shouldbeok"
+
+Table Entry 6 of "Global":func validfunc -> void : x float
+
+			BEGINNING OF TABLE FOR:  function scope "validfunc"
+
+			Table Entry 1 of "validfunc":fparam x float
+
+			END OF TABLE FOR SCOPE function scope "validfunc"
+
+Table Entry 7 of "Global":func bar -> C : 
+
+			BEGINNING OF TABLE FOR:  function scope "bar"
+
+			Table Entry 1 of "bar":var x float
+
+			Table Entry 2 of "bar":var z C
+
+			Table Entry 3 of "bar":var y integer
+
+			END OF TABLE FOR SCOPE function scope "bar"
+
+Table Entry 8 of "Global":func invalid -> float : x integer,y notatype
+
+			BEGINNING OF TABLE FOR:  function scope "invalid"
+
+			Table Entry 1 of "invalid":fparam x integer
+
+			Table Entry 2 of "invalid":fparam y notatype
+
+			END OF TABLE FOR SCOPE function scope "invalid"
+
+Table Entry 9 of "Global":class A inherits 
 
 			BEGINNING OF TABLE FOR:  class scope "A"
 
 			Table Entry 1 of "A":private var x integer
 
-			Table Entry 2 of "A":private func foo -> void : 
+			Table Entry 2 of "A":private var a integer
+
+			Table Entry 3 of "A":private func overridden -> void : 
+
+						BEGINNING OF TABLE FOR:  function scope "overridden"
+
+						END OF TABLE FOR SCOPE function scope "overridden"
+
+			Table Entry 4 of "A":private var c integer
+
+			Table Entry 5 of "A":private var b integer
+
+			Table Entry 6 of "A":private func foo -> void : 
 
 						BEGINNING OF TABLE FOR:  function scope "foo"
 
+						Table Entry 1 of "foo":var y integer
+
 						END OF TABLE FOR SCOPE function scope "foo"
 
-			Table Entry 3 of "A":private var y A
+			Table Entry 7 of "A":private var y A
 
 			END OF TABLE FOR SCOPE class scope "A"
 
-Table Entry 4 of "Global":func foo -> float : 
+Table Entry 10 of "Global":func foo -> integer : 
 
 			BEGINNING OF TABLE FOR:  function scope "foo"
+
+			Table Entry 1 of "foo":var x float
+
+			Table Entry 2 of "foo":var z float
+
+			Table Entry 3 of "foo":var y integer
 
 			END OF TABLE FOR SCOPE function scope "foo"
 

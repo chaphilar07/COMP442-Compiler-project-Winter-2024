@@ -45,6 +45,10 @@ typedef enum code {
   err502,
   err503,
 
+  err1410,
+  err1411,
+  err1412,
+
   err701,
   err702,
   err900,

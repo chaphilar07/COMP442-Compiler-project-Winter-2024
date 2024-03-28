@@ -50,19 +50,25 @@ Table Entry 5 of "Global":func main -> void :
 
 			BEGINNING OF TABLE FOR:  function scope "main"
 
-			Table Entry 1 of "main":var a a
+			Table Entry 1 of "main":var x integer
 
-			Table Entry 2 of "main":var f2 QUADRATIC
+			Table Entry 2 of "main":var a a
 
-			Table Entry 3 of "main":var j integer[1][2][3]
+			Table Entry 3 of "main":var f2 QUADRATIC
 
-			Table Entry 4 of "main":var c C
+			Table Entry 4 of "main":var j integer[1][2][3]
 
-			Table Entry 5 of "main":var f1 LINEAR
+			Table Entry 5 of "main":var z integer
 
-			Table Entry 6 of "main":var i integer[2][3]
+			Table Entry 6 of "main":var c C
 
-			Table Entry 7 of "main":var counter integer
+			Table Entry 7 of "main":var f1 LINEAR
+
+			Table Entry 8 of "main":var i integer[2][3]
+
+			Table Entry 9 of "main":var counter integer
+
+			Table Entry 10 of "main":var y float
 
 			END OF TABLE FOR SCOPE function scope "main"
 

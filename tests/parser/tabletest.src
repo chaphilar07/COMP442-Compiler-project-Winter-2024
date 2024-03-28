@@ -1,28 +1,103 @@
 //Test struct semantics in this section.
 
 struct A inherits x,y,z{
-    private let x: integer;
-    private func x() -> void;
-    private let y: A; //legal
-    private func foo()->void;
-  };
+
+private let a: integer;
+private let b: integer;
+private let c: integer;
+
+private func overridden()->void;
+
+private let x: integer;
+private func x() -> void;
+private let y: A; //legal
+private func foo()->void;
+};
 
 struct B inherits A{
 
-  private let x: A;
-  private func foo() -> B;
+private func overridden(a:integer, b:integer)->void;
 
-  };
+private let a: float;
+private let b: B;
+private let c: D;
+private let x: A;
+private func foo(x:float) -> B;
+
+};
 
 struct C inherits B{
 
-  };
+};
 
 
-func foo()->float{
-    return(0);
-  }
+func foo()->integer{
+let x: float;
+let y: integer;
+let z: float;
+return(x*y);
+}
 
 
 
+impl none{
 
+}
+
+
+impl C{
+func notdeclared() -> notatype{}
+}
+
+
+impl A{
+func foo(x: integer)->integer{
+let y: integer;
+  return(0);
+}
+}
+impl B{
+  func foo(x:integer)->void{
+      
+    }
+func overridden()->void{
+}
+
+}
+
+
+
+func main()->void{
+let x: integer;
+let y: float;
+let z: sometype;
+
+write(x*y*z);
+return(x*y*z);
+}
+
+func invalid(x:integer, y:notatype)->float{
+return (0);
+}
+
+func stillinvalid()->integer{
+return (0.0);
+}
+
+
+func validfunc(x:float)->void{}
+struct A{}; //Not allowed
+
+func shouldbeok()->B{
+validfunc(1);
+let x:B;
+return (x); 
+}
+
+
+func bar()-> C{
+let x:float;
+let y:integer;
+let z:C;
+return (x*y+z);
+}

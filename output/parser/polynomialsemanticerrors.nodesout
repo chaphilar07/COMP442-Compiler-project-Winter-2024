@@ -208,6 +208,12 @@ Leaf token created of type intnum and value 3
 Leaf token created of type type and value integer 
 Leaf token created of type identifier and value main 
 Leaf token created of type type and value void 
+Leaf token created of type identifier and value x 
+Leaf token created of type type and value integer 
+Leaf token created of type identifier and value y 
+Leaf token created of type type and value float 
+Leaf token created of type identifier and value z 
+Leaf token created of type type and value integer 
 Leaf token created of type identifier and value a 
 Leaf token created of type identifier and value a 
 Leaf token created of type identifier and value c 

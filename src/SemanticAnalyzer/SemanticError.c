@@ -173,8 +173,8 @@ SemanticError create_error(const char *msg, err_code code, int line) {
 
   } else if (code == err1200) {
     snprintf(buffer, sizeof(buffer),
-             "SEMANTIC ERROR ON LINE %d: FUNCTION %s IS OVERRIDING INHERITED "
-             "FUNCTION WITH WRONG NUMBER OF PARAMETERS!",
+             "WARNING! ON LINE %d: FUNCTION %s IS OVERRIDING INHERITED "
+             "FUNCTION WITH DIFFERENT NUMBER OF PARAMETERS!",
              line, msg);
     err.msg = strdup(buffer);
   } else if (code == err1201) {
@@ -186,8 +186,7 @@ SemanticError create_error(const char *msg, err_code code, int line) {
     err.msg = strdup(buffer);
   } else if (code == war101) {
     snprintf(buffer, sizeof(buffer),
-             "WARNING! FUNCTION %s IS BEING OVERLOADED ON LINE %d !", msg,
-             line);
+             "WARNING! FUNCTION %s IS BEING OVERRIDEN ON LINE %d !", msg, line);
     err.msg = strdup(buffer);
   } else if (code == war102) {
     snprintf(
@@ -195,6 +194,24 @@ SemanticError create_error(const char *msg, err_code code, int line) {
         "WARNING! LINE %d, LOCAL VARIABLE %s IN MEMBER FUNCTION IS SHADOWING "
         "A CLASS MEMBER!",
         line, msg);
+    err.msg = strdup(buffer);
+  } else if (code == err1410) {
+    snprintf(buffer, sizeof(buffer),
+             "SEMANTIC ERROR ON LINE %d: FUNCTION %s BEING DEFIND WITH "
+             "DIFFERENT NUMBER OF PARAMETERS ERROR !",
+             line, msg);
+    err.msg = strdup(buffer);
+  } else if (code == err1411) {
+    snprintf(buffer, sizeof(buffer),
+             "SEMANTIC ERROR ON LINE %d: FUNCTION DEFINITION %s HAS DIFFERENT "
+             "TYPES OF VARIABLES",
+             line, msg);
+    err.msg = strdup(buffer);
+  } else if (code == err1412) {
+    snprintf(buffer, sizeof(buffer),
+             "SEMANTIC ERROR ON LINE %d: FUNCTION %s HAS BEEN DEFINED WITH A "
+             "DIFFERENT RETURN TYPE",
+             line, msg);
     err.msg = strdup(buffer);
   }
   return err;
