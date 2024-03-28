@@ -1,12 +1,40 @@
 BEGINNING OF TABLE FOR:  global scope "Global"
 
-Table Entry 1 of "Global":class C inherits B, 
+Table Entry 1 of "Global":func bad_func -> float : 
+
+			BEGINNING OF TABLE FOR:  function scope "bad_func"
+
+			Table Entry 1 of "bad_func":var x float[1][2]
+
+			Table Entry 2 of "bad_func":var y A
+
+			END OF TABLE FOR SCOPE function scope "bad_func"
+
+Table Entry 2 of "Global":class C inherits B, 
 
 			BEGINNING OF TABLE FOR:  class scope "C"
 
+			Table Entry 1 of "C":private var a D
+
+			Table Entry 2 of "C":private func defined -> B : a A,b B,c C
+
+						BEGINNING OF TABLE FOR:  function scope "defined"
+
+						Table Entry 1 of "defined":fparam a A
+
+						Table Entry 2 of "defined":fparam c C
+
+						Table Entry 3 of "defined":fparam b B
+
+						END OF TABLE FOR SCOPE function scope "defined"
+
+			Table Entry 3 of "C":private var c float
+
+			Table Entry 4 of "C":private var b B
+
 			END OF TABLE FOR SCOPE class scope "C"
 
-Table Entry 2 of "Global":func main -> void : 
+Table Entry 3 of "Global":func main -> void : 
 
 			BEGINNING OF TABLE FOR:  function scope "main"
 
@@ -18,7 +46,7 @@ Table Entry 2 of "Global":func main -> void :
 
 			END OF TABLE FOR SCOPE function scope "main"
 
-Table Entry 3 of "Global":class B inherits A, 
+Table Entry 4 of "Global":class B inherits A, 
 
 			BEGINNING OF TABLE FOR:  class scope "B"
 
@@ -50,13 +78,13 @@ Table Entry 3 of "Global":class B inherits A,
 
 			END OF TABLE FOR SCOPE class scope "B"
 
-Table Entry 4 of "Global":func stillinvalid -> integer : 
+Table Entry 5 of "Global":func stillinvalid -> integer : 
 
 			BEGINNING OF TABLE FOR:  function scope "stillinvalid"
 
 			END OF TABLE FOR SCOPE function scope "stillinvalid"
 
-Table Entry 5 of "Global":func shouldbeok -> B : 
+Table Entry 6 of "Global":func shouldbeok -> B : 
 
 			BEGINNING OF TABLE FOR:  function scope "shouldbeok"
 
@@ -64,7 +92,7 @@ Table Entry 5 of "Global":func shouldbeok -> B :
 
 			END OF TABLE FOR SCOPE function scope "shouldbeok"
 
-Table Entry 6 of "Global":func validfunc -> void : x float
+Table Entry 7 of "Global":func validfunc -> void : x float
 
 			BEGINNING OF TABLE FOR:  function scope "validfunc"
 
@@ -72,7 +100,7 @@ Table Entry 6 of "Global":func validfunc -> void : x float
 
 			END OF TABLE FOR SCOPE function scope "validfunc"
 
-Table Entry 7 of "Global":func bar -> C : 
+Table Entry 8 of "Global":func bar -> C : 
 
 			BEGINNING OF TABLE FOR:  function scope "bar"
 
@@ -84,7 +112,7 @@ Table Entry 7 of "Global":func bar -> C :
 
 			END OF TABLE FOR SCOPE function scope "bar"
 
-Table Entry 8 of "Global":func invalid -> float : x integer,y notatype
+Table Entry 9 of "Global":func invalid -> float : x integer,y notatype
 
 			BEGINNING OF TABLE FOR:  function scope "invalid"
 
@@ -94,7 +122,17 @@ Table Entry 8 of "Global":func invalid -> float : x integer,y notatype
 
 			END OF TABLE FOR SCOPE function scope "invalid"
 
-Table Entry 9 of "Global":class A inherits 
+Table Entry 10 of "Global":func good_func -> integer : 
+
+			BEGINNING OF TABLE FOR:  function scope "good_func"
+
+			Table Entry 1 of "good_func":var x integer[1][2]
+
+			Table Entry 2 of "good_func":var a A
+
+			END OF TABLE FOR SCOPE function scope "good_func"
+
+Table Entry 11 of "Global":class A inherits 
 
 			BEGINNING OF TABLE FOR:  class scope "A"
 
@@ -124,7 +162,7 @@ Table Entry 9 of "Global":class A inherits
 
 			END OF TABLE FOR SCOPE class scope "A"
 
-Table Entry 10 of "Global":func foo -> integer : 
+Table Entry 12 of "Global":func foo -> integer : 
 
 			BEGINNING OF TABLE FOR:  function scope "foo"
 

@@ -558,13 +558,14 @@ TypeInfo get_type_functioncall(node *astnode, Scope *globalScope) {
 
 TypeInfo get_type_expression(node *astnode, ErrorArray *arr,
                              Scope *globalScope) {
-  if (astnode->type == sign) {
+  if (astnode->type == notnode) {
+    return get_type_expression(astnode->children[0], arr, globalScope);
+  } else if (astnode->type == sign) {
     return get_type_expression(
         astnode->children[0], arr,
         globalScope); // We get the type of the expression, the right child of
                       // the sign will always be another expression.
-  }
-  if (astnode->type == intnum) {
+  } else if (astnode->type == intnum) {
     TypeInfo info = {INT_TYPE, "integer", NULL, 0};
     return info;
   } else if (astnode->type == floatnum) {
@@ -702,8 +703,10 @@ void validate_functioncall(node *astnode, Scope *globalScope, ErrorArray *arr) {
     TableEntry *functionEntry = get_entry(globalScope, get_name(astnode));
 
     if (functionEntry->tableType != FUNCDEF_ENTRY) {
+
       insert_error(arr,
                    create_error(get_name(astnode), err1401, astnode->line));
+      return;
     }
 
     int funccallParamsNum = get_aparams_count(astnode);
@@ -713,6 +716,7 @@ void validate_functioncall(node *astnode, Scope *globalScope, ErrorArray *arr) {
             "function %s alled with %d dimensions function defined with %d "
             "dimensions\n",
             get_name(astnode), funccallParamsNum, funcdefParamsNum);
+
     if (funccallParamsNum != funcdefParamsNum) {
       insert_error(arr,
                    create_error(get_name(astnode), err1402, astnode->line));
@@ -745,7 +749,8 @@ void validate_functioncall(node *astnode, Scope *globalScope, ErrorArray *arr) {
         }
       }
     }
-  } else {
+  } else if (astnode == astnode->parent->children[0]) {
+
     // The function call is a member function call, we must get the class
     // then the function name
     node *classTypeNode = astnode->parent->children[1];
@@ -762,6 +767,7 @@ void validate_functioncall(node *astnode, Scope *globalScope, ErrorArray *arr) {
 
         insert_error(arr,
                      create_error(get_name(astnode), err1401, astnode->line));
+        return;
       }
 
       int funccallParamsNum = get_aparams_count(astnode);
@@ -772,7 +778,6 @@ void validate_functioncall(node *astnode, Scope *globalScope, ErrorArray *arr) {
               "dimensions\n",
               get_name(astnode), funccallParamsNum, funcdefParamsNum);
       if (funcdefParamsNum != funccallParamsNum) {
-
         insert_error(arr,
                      create_error(get_name(astnode), err1402, astnode->line));
       } else {
@@ -1086,24 +1091,23 @@ void second_pass_type_check(node *root, Scope *globalScope,
         insert_error(errors,
                      create_error(get_name(current), err207, current->line));
         continue;
-      } else {
-        Scope *containingScope = current->scope;
-        TableEntry *funcEntry;
-        if (containingScope->type == GLOBAL_SCOPE) {
-          funcEntry = get_entry(containingScope, get_name(current));
-          if (funcEntry->tableType == FUNCDEF_ENTRY) {
-            for (int i = 0; i < current->numchildren; i++) {
-              push_node(current->children[i], stack);
-            }
+      }
+      Scope *containingScope = current->scope;
+      TableEntry *funcEntry;
+      if (containingScope->type == GLOBAL_SCOPE) {
+        funcEntry = get_entry(containingScope, get_name(current));
+        if (funcEntry->tableType == FUNCDEF_ENTRY) {
+          for (int i = 0; i < current->numchildren; i++) {
+            push_node(current->children[i], stack);
           }
         }
+      }
 
-        if (containingScope->type == CLASS_SCOPE) {
-          funcEntry = get_entry(containingScope, get_name(current));
-          if (funcEntry->tableType == FUNCDEF_ENTRY) {
-            for (int i = 0; i < current->numchildren; i++) {
-              push_node(current->children[i], stack);
-            }
+      if (containingScope->type == CLASS_SCOPE) {
+        funcEntry = get_entry(containingScope, get_name(current));
+        if (funcEntry->tableType == FUNCDEF_ENTRY) {
+          for (int i = 0; i < current->numchildren; i++) {
+            push_node(current->children[i], stack);
           }
         }
       }

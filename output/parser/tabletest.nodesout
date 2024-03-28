@@ -54,6 +54,24 @@ Leaf token created of type type and value float
 Leaf token created of type identifier and value B 
 Leaf token created of type identifier and value C 
 Leaf token created of type identifier and value B 
+Leaf token created of type visibility and value private 
+Leaf token created of type identifier and value a 
+Leaf token created of type identifier and value D 
+Leaf token created of type visibility and value private 
+Leaf token created of type identifier and value b 
+Leaf token created of type identifier and value B 
+Leaf token created of type visibility and value private 
+Leaf token created of type identifier and value c 
+Leaf token created of type type and value float 
+Leaf token created of type visibility and value private 
+Leaf token created of type identifier and value defined 
+Leaf token created of type identifier and value a 
+Leaf token created of type identifier and value A 
+Leaf token created of type identifier and value b 
+Leaf token created of type identifier and value B 
+Leaf token created of type identifier and value c 
+Leaf token created of type identifier and value C 
+Leaf token created of type identifier and value B 
 Leaf token created of type identifier and value foo 
 Leaf token created of type type and value integer 
 Leaf token created of type identifier and value x 
@@ -141,7 +159,37 @@ Leaf token created of type multop and value *
 Leaf token created of type identifier and value y 
 Leaf token created of type addop and value + 
 Leaf token created of type identifier and value z 
+Leaf token created of type identifier and value good_func 
+Leaf token created of type type and value integer 
+Leaf token created of type identifier and value x 
+Leaf token created of type type and value integer 
+Leaf token created of type intnum and value 1 
+Leaf token created of type intnum and value 2 
+Leaf token created of type identifier and value a 
+Leaf token created of type identifier and value A 
+Leaf token created of type identifier and value x 
+Leaf token created of type intnum and value 1 
+Leaf token created of type intnum and value 2 
+Leaf token created of type identifier and value bad_func 
+Leaf token created of type type and value float 
+Leaf token created of type identifier and value x 
+Leaf token created of type type and value float 
+Leaf token created of type intnum and value 1 
+Leaf token created of type intnum and value 2 
+Leaf token created of type identifier and value y 
+Leaf token created of type identifier and value A 
+Leaf token created of type identifier and value y 
+Leaf token created of type identifier and value x 
+Leaf token created of type intnum and value 1 
+Leaf token created of type intnum and value 2 
+Leaf token created of type identifier and value x 
+Leaf token created of type intnum and value 1 
+Leaf token created of type floatnum and value 0.3 
+Leaf token created of type identifier and value main 
+Leaf token created of type type and value void 
+Leaf token created of type identifier and value counter 
+Leaf token created of type type and value float 
+Aggregate node of type funcdef list and value of (null) with 10 childen 
 Aggregate node of type impldeflist and value of (null) with 4 childen 
-Aggregate node of type funcdef list and value of (null) with 7 childen 
 Aggregate node of type structdecl list and value of (null) with 4 childen 
 Aggregate node of type prog and value of (null) with 3 childen 

@@ -28,6 +28,12 @@ private func foo(x:float) -> B;
 };
 
 struct C inherits B{
+  private let a: D;
+  private let b: B;
+  private let c: float;
+
+  private func defined(a:A,b:B, c:C)-> B;
+  
 
 };
 
@@ -103,3 +109,31 @@ let y:integer;
 let z:C;
 return (x*y+z);
 }
+
+
+func good_func()-> integer{
+   let x: integer[1][2];
+   let a: A;
+  return(x[1][2]);
+  }
+
+
+func bad_func()->float{
+    let x: float[1][2];
+    let y: A;
+    y.x(1,2);
+
+  
+
+    return(x[1][0.3]);
+  }
+
+
+func main()->void{ //Duplicate function.
+  let counter: float; 
+
+  }
+
+
+
+

@@ -628,10 +628,10 @@ void create_prog_tree(semantic_stack *stack, FILE *out) {
     }
   }
 
-  node *impllist = create_subtree(impldeflist, implstack, out);
-  push_node(impllist, stack);
   node *funcdefarr = create_subtree(funcdeflist, funcstack, out);
   push_node(funcdefarr, stack);
+  node *impllist = create_subtree(impldeflist, implstack, out);
+  push_node(impllist, stack);
   node *struclist = create_subtree(structdecllist, structstack, out);
   push_node(struclist, stack);
   return;

@@ -153,10 +153,11 @@ SemanticError create_error(const char *msg, err_code code, int line) {
              line, msg);
     err.msg = strdup(buffer);
   } else if (code == err2100) {
-    snprintf(buffer, sizeof(buffer),
-             "SEMANTIC ERROR ON LINE %d: Trying to access variable %s with "
-             "variable/function call that is not of int type index",
-             line, msg);
+    snprintf(
+        buffer, sizeof(buffer),
+        "SEMANTIC ERROR ON LINE %d: Trying to access array variable %s with "
+        "variable/function call that is not of type integer.",
+        line, msg);
     err.msg = strdup(buffer);
   } else if (code == err0001) {
     snprintf(buffer, sizeof(buffer),

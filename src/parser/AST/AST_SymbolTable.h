@@ -13,8 +13,10 @@
 
 #define SIZE 2048
 
+// Type of the scope.
 typedef enum ScopeType { GLOBAL_SCOPE, FUNCTION_SCOPE, CLASS_SCOPE } ScopeType;
 
+// Type of the table entries.
 typedef enum EntryType {
   VARIABLE_ENTRY,
   FUNCDEF_ENTRY,
@@ -24,7 +26,9 @@ typedef enum EntryType {
 
 } EntryType;
 
+// Type in the actual langauge.
 typedef enum LangType {
+
   NONE_TYPE,
   VOID_TYPE,
   INT_TYPE,
@@ -33,7 +37,9 @@ typedef enum LangType {
 
 } LangType;
 
+// Visibility for members.
 typedef enum visibility { none, priv, pub } varvis;
+
 typedef struct TypeInfo {
 
   LangType type;

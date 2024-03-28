@@ -1,0 +1,6 @@
+SEMANTIC ERROR LINE 2: Cannot lookup variable/function before it has been declared/defined, on line 2, z used before declaration
+SEMANTIC ERROR LINE 2: Cannot lookup variable/function before it has been declared/defined, on line 2, y used before declaration
+SEMANTIC ERROR LINE 2: Cannot lookup variable/function before it has been declared/defined, on line 2, x used before declaration
+SEMANTIC ERROR ON LINE 3: Cannot have a return statement in function with return type of void
+SEMANTIC ERROR ON LINE 3: Invalid return type, void is the expected return type from the function.
+End of Error Report, total of 5 errors found.

@@ -12,6 +12,7 @@
  * not have any kind of order inside of the symbol tables, we cannot rely on
  * order inside of the hash table, the entires will be distributed randomly.
  */
+
 // defines the necessary functions for the symbol table data structures.
 #include "../parser/AST/AST_SymbolTable.h"
 #include "SemanticAnalyzer.h"
