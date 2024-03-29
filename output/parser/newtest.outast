@@ -21,25 +21,25 @@ node [fontname=Sans];charset= " UTF-8" splines=true splines=spline rankdir =LR
 1322 -> 1320
 1320[label="addop | +"];
 1320 -> 1318
-1320 -> 1313
-1313[label="multop | *"];
-1313 -> 1311
-1313 -> 1306
+1320 -> 1306
 1306[label="var | (null)"];
 1306 -> 1304
 1306 -> 1303
 1303[label="identifier | x"];
 1304[label="dimlist | (null)"];
+1318[label="multop | /"];
+1318 -> 1316
+1318 -> 1311
 1311[label="var | (null)"];
 1311 -> 1309
 1311 -> 1308
 1308[label="identifier | y"];
 1309[label="dimlist | (null)"];
-1318[label="var | (null)"];
-1318 -> 1316
-1318 -> 1315
-1315[label="identifier | z"];
-1316[label="dimlist | (null)"];
+1316[label="var | (null)"];
+1316 -> 1314
+1316 -> 1313
+1313[label="identifier | z"];
+1314[label="dimlist | (null)"];
 1330[label="impldeflist | (null)"];
 1331[label="structdecl list | (null)"];
 }

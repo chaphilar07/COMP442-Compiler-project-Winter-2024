@@ -16,20 +16,20 @@ func id lpar rpar arrow void lcubr return lpar FACTOR RIGHTRECTERM RIGHTRECARITH
 func id lpar rpar arrow void lcubr return lpar id FACTOR2 REPTVARIABLEORFUNCTIONCALL RIGHTRECTERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
 func id lpar rpar arrow void lcubr return lpar id REPTVARIABLEORFUNCTIONCALL RIGHTRECTERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
 func id lpar rpar arrow void lcubr return lpar id RIGHTRECTERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
-func id lpar rpar arrow void lcubr return lpar id MULTOP FACTOR RIGHTRECTERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
-func id lpar rpar arrow void lcubr return lpar id mult FACTOR RIGHTRECTERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
-func id lpar rpar arrow void lcubr return lpar id mult id FACTOR2 REPTVARIABLEORFUNCTIONCALL RIGHTRECTERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
-func id lpar rpar arrow void lcubr return lpar id mult id REPTVARIABLEORFUNCTIONCALL RIGHTRECTERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
-func id lpar rpar arrow void lcubr return lpar id mult id RIGHTRECTERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
-func id lpar rpar arrow void lcubr return lpar id mult id RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
-func id lpar rpar arrow void lcubr return lpar id mult id ADDOP TERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
-func id lpar rpar arrow void lcubr return lpar id mult id plus TERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
-func id lpar rpar arrow void lcubr return lpar id mult id plus FACTOR RIGHTRECTERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
-func id lpar rpar arrow void lcubr return lpar id mult id plus id FACTOR2 REPTVARIABLEORFUNCTIONCALL RIGHTRECTERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
-func id lpar rpar arrow void lcubr return lpar id mult id plus id REPTVARIABLEORFUNCTIONCALL RIGHTRECTERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
-func id lpar rpar arrow void lcubr return lpar id mult id plus id RIGHTRECTERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
-func id lpar rpar arrow void lcubr return lpar id mult id plus id RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
-func id lpar rpar arrow void lcubr return lpar id mult id plus id OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
-func id lpar rpar arrow void lcubr return lpar id mult id plus id rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
-func id lpar rpar arrow void lcubr return lpar id mult id plus id rpar semi rcubr REPTPROG0 eof
-func id lpar rpar arrow void lcubr return lpar id mult id plus id rpar semi rcubr eof
+func id lpar rpar arrow void lcubr return lpar id RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar rpar arrow void lcubr return lpar id ADDOP TERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar rpar arrow void lcubr return lpar id plus TERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar rpar arrow void lcubr return lpar id plus FACTOR RIGHTRECTERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar rpar arrow void lcubr return lpar id plus id FACTOR2 REPTVARIABLEORFUNCTIONCALL RIGHTRECTERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar rpar arrow void lcubr return lpar id plus id REPTVARIABLEORFUNCTIONCALL RIGHTRECTERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar rpar arrow void lcubr return lpar id plus id RIGHTRECTERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar rpar arrow void lcubr return lpar id plus id MULTOP FACTOR RIGHTRECTERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar rpar arrow void lcubr return lpar id plus id div FACTOR RIGHTRECTERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar rpar arrow void lcubr return lpar id plus id div id FACTOR2 REPTVARIABLEORFUNCTIONCALL RIGHTRECTERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar rpar arrow void lcubr return lpar id plus id div id REPTVARIABLEORFUNCTIONCALL RIGHTRECTERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar rpar arrow void lcubr return lpar id plus id div id RIGHTRECTERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar rpar arrow void lcubr return lpar id plus id div id RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar rpar arrow void lcubr return lpar id plus id div id OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar rpar arrow void lcubr return lpar id plus id div id rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar rpar arrow void lcubr return lpar id plus id div id rpar semi rcubr REPTPROG0 eof
+func id lpar rpar arrow void lcubr return lpar id plus id div id rpar semi rcubr eof
