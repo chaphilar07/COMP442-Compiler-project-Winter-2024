@@ -1,6 +1,5 @@
-SEMANTIC ERROR LINE 2: Cannot lookup variable/function before it has been declared/defined, on line 2, z used before declaration
-SEMANTIC ERROR LINE 2: Cannot lookup variable/function before it has been declared/defined, on line 2, y used before declaration
-SEMANTIC ERROR LINE 2: Cannot lookup variable/function before it has been declared/defined, on line 2, x used before declaration
-SEMANTIC ERROR ON LINE 3: Cannot have a return statement in function with return type of void
-SEMANTIC ERROR ON LINE 3: Invalid return type, void is the expected return type from the function.
-End of Error Report, total of 5 errors found.
+SEMANTIC ERROR ON LINE 9: Cannot have a return statement in function with return type of void
+SEMANTIC ERROR ON LINE 9: Invalid return type, void is the expected return type from the function.
+SEMANTIC ERROR ON LINE 10: FUNCTION bar BEING DEFIND WITH DIFFERENT NUMBER OF PARAMETERS ERROR !
+SEMANTIC ERROR ON LINE 10: FUNCTION bar HAS BEEN DEFINED WITH A DIFFERENT RETURN TYPE
+End of Error Report, total of 4 errors found.

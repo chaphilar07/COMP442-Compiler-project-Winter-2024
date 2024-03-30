@@ -96,7 +96,19 @@ typedef struct Scope {
                               // symbol table will be a hash table.
 
 } Scope;
+
+// Our table entry should contain something called an offset, the offset will
+// the difference with the top of the stack frame
+
 typedef struct TableEntry {
+
+  /*
+   * We need to keep track of the size of the entry and the offset of the entry
+   * inside of the table.
+   */
+  unsigned int size; // This is the actual size of the entry do not confuse with
+                     // the offset, we will use this when we reserve bytes.
+  unsigned int offset; // The offset within the current symbol table.
 
   EntryType tableType;
   Scope *scope;

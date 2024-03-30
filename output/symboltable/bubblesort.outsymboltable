@@ -1,42 +1,42 @@
 BEGINNING OF TABLE FOR:  global scope "Global"
 
-Table Entry 1 of "Global":func main -> void : 
+Table Entry 1 of "Global":func main -> void : 	size: 28	offset: 0
 
 			BEGINNING OF TABLE FOR:  function scope "main"
 
-			Table Entry 1 of "main":var arr integer[7]
+			Table Entry 1 of "main":var arr integer[7]	size: 28	offset: 0
 
 			END OF TABLE FOR SCOPE function scope "main"
 
-Table Entry 2 of "Global":func printArray -> void : arr integer[],size integer
+Table Entry 2 of "Global":func printArray -> void : arr integer[],size integer	size: 12	offset: 0
 
 			BEGINNING OF TABLE FOR:  function scope "printArray"
 
-			Table Entry 1 of "printArray":fparam arr integer[]
+			Table Entry 1 of "printArray":fparam arr integer[]	size: 0	offset: 0
 
-			Table Entry 2 of "printArray":fparam size integer
+			Table Entry 2 of "printArray":fparam size integer	size: 4	offset: 0
 
-			Table Entry 3 of "printArray":var n integer
+			Table Entry 3 of "printArray":var n integer	size: 4	offset: 4
 
-			Table Entry 4 of "printArray":var i integer
+			Table Entry 4 of "printArray":var i integer	size: 4	offset: 8
 
 			END OF TABLE FOR SCOPE function scope "printArray"
 
-Table Entry 3 of "Global":func bubbleSort -> void : arr integer[],size integer
+Table Entry 3 of "Global":func bubbleSort -> void : arr integer[],size integer	size: 20	offset: 0
 
 			BEGINNING OF TABLE FOR:  function scope "bubbleSort"
 
-			Table Entry 1 of "bubbleSort":fparam arr integer[]
+			Table Entry 1 of "bubbleSort":fparam arr integer[]	size: 0	offset: 0
 
-			Table Entry 2 of "bubbleSort":fparam size integer
+			Table Entry 2 of "bubbleSort":fparam size integer	size: 4	offset: 0
 
-			Table Entry 3 of "bubbleSort":var j integer
+			Table Entry 3 of "bubbleSort":var j integer	size: 4	offset: 4
 
-			Table Entry 4 of "bubbleSort":var n integer
+			Table Entry 4 of "bubbleSort":var n integer	size: 4	offset: 8
 
-			Table Entry 5 of "bubbleSort":var i integer
+			Table Entry 5 of "bubbleSort":var i integer	size: 4	offset: 12
 
-			Table Entry 6 of "bubbleSort":var temp integer
+			Table Entry 6 of "bubbleSort":var temp integer	size: 4	offset: 16
 
 			END OF TABLE FOR SCOPE function scope "bubbleSort"
 

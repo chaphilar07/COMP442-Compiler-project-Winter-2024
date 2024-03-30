@@ -347,7 +347,10 @@ node *parse(const char *path) {
   char rule_file_name[1024];
 
   const char *file_name = extractFileName(path);
+
+  // Now we will print to the correct directory.
   file_name = replaceSubstring(file_name, "tests", "output");
+
   snprintf(ast_out_file_name, sizeof(ast_out_file_name), "%s.outast",
            file_name);
   snprintf(nodes_out_file_name, sizeof(nodes_out_file_name), "%s.nodesout",

@@ -14,6 +14,7 @@
  */
 
 // defines the necessary functions for the symbol table data structures.
+#include "../CodeGeneration/CodeGeneration.h"
 #include "../parser/AST/AST_SymbolTable.h"
 #include "SemanticAnalyzer.h"
 #include "SemanticError.h"
@@ -493,6 +494,7 @@ void print_entry(TableEntry *entry, FILE *out) {
       else
         fprintf(out, "[]");
     }
+    fprintf(out, "\tsize: %d\toffset: %d", entry->size, entry->offset);
     fprintf(out, "\n");
   }
   if (entry->tableType == FPARAM_ENTRY) {
@@ -504,6 +506,7 @@ void print_entry(TableEntry *entry, FILE *out) {
       else
         fprintf(out, "[]");
     }
+    fprintf(out, "\tsize: %d\toffset: %d", entry->size, entry->offset);
     fprintf(out, "\n");
   }
   if (entry->tableType == FUNCDEF_ENTRY) {
@@ -535,6 +538,7 @@ void print_entry(TableEntry *entry, FILE *out) {
         fprintf(out, ",");
     }
 
+    fprintf(out, "\tsize: %d\toffset: %d", entry->size, entry->offset);
     fprintf(out, "\n");
   }
   if (entry->tableType == CLASS_ENTRY) {
@@ -543,6 +547,7 @@ void print_entry(TableEntry *entry, FILE *out) {
       fprintf(out, "%s, ",
               entry->data.classEntry.inheritedScopes[i]->scopeName);
     }
+    fprintf(out, "\tsize: %d\toffset: %d", entry->size, entry->offset);
     fprintf(out, "\n");
   }
 }
@@ -577,6 +582,37 @@ TableEntry *create_fparam_entry(node *astnode, Scope *currentScope) {
 
   entry->data.fparamEntry.type = get_type_info(astnode);
   entry->data.fparamEntry.name = get_name(astnode);
+
+  unsigned int typeSize;
+
+  if (entry->data.fparamEntry.type.type == INT_TYPE)
+    typeSize = 4;
+  else if (entry->data.fparamEntry.type.type == FLOAT_TYPE)
+    typeSize = 8;
+  else if (entry->data.fparamEntry.type.type == ID_TYPE) {
+    Scope *scopePtr = currentScope; // Take copy of the currentScopes pointer.
+
+    while (scopePtr->type != GLOBAL_SCOPE) {
+      scopePtr = scopePtr->parentScope;
+    }
+    typeSize =
+        get_entry(scopePtr, entry->data.fparamEntry.type.typeString)
+            ->size; // We get the size of the class being declared, so we will
+                    // need to create the size of the classes as we go.
+  } else {
+    // Error!
+    return NULL;
+  }
+
+  // Get the total size of the variable.
+  unsigned int varSize = 1 * typeSize;
+  if (entry->data.fparamEntry.type.numberofdims > 0 &&
+      entry->data.fparamEntry.type.arraydims) {
+    for (int i = 0; i < entry->data.fparamEntry.type.numberofdims; i++) {
+      varSize *= entry->data.fparamEntry.type.arraydims[i];
+    }
+  }
+  entry->size = varSize;
 
   return entry;
 }
@@ -653,9 +689,38 @@ TableEntry *create_variable_entry(node *astnode, Scope *currentScope,
   entry->data.varEntry.type = get_type_info(astnode);
   entry->data.varEntry.name = get_name(astnode);
 
-  if (astnode->numchildren == 4) {
-    entry->data.varEntry.vis = get_vis(astnode);
+  entry->data.varEntry.vis = get_vis(astnode);
+
+  unsigned int typeSize;
+
+  if (entry->data.varEntry.type.type == INT_TYPE)
+    typeSize = 4;
+  else if (entry->data.varEntry.type.type == FLOAT_TYPE)
+    typeSize = 8;
+  else if (entry->data.varEntry.type.type == ID_TYPE) {
+    Scope *scopePtr = currentScope; // Take copy of the currentScopes pointer.
+
+    while (scopePtr->type != GLOBAL_SCOPE) {
+      scopePtr = scopePtr->parentScope;
+    }
+    typeSize =
+        get_entry(scopePtr, entry->data.varEntry.type.typeString)
+            ->size; // We get the size of the class being declared, so we will
+                    // need to create the size of the classes as we go.
+  } else {
+    // Error!
+    return NULL;
   }
+
+  // Get the total size of the variable.
+  unsigned int varSize = 1 * typeSize;
+  if (entry->data.varEntry.type.numberofdims > 0 &&
+      entry->data.varEntry.type.arraydims) {
+    for (int i = 0; i < entry->data.varEntry.type.numberofdims; i++) {
+      varSize *= entry->data.varEntry.type.arraydims[i];
+    }
+  }
+  entry->size = varSize;
 
   return entry;
 }
@@ -830,10 +895,32 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
     current_scope = peek_scope(scope_stack);
 
     // while we build the symbol table.
-
     while (current->type == sentinel) {
 
-      pop_scope(scope_stack);
+      /*
+       * What we can do here is get the sizes for the classes and for the
+       * functions, we will get them as we build the tables makes things
+       * simpler.
+       */
+      Scope *scopePtr = pop_scope(scope_stack);
+      if (scopePtr->type == CLASS_SCOPE || scopePtr->type == FUNCTION_SCOPE) {
+
+        TableEntry *tempEntry =
+            get_entry(scopePtr->parentScope, scopePtr->scopeName);
+
+        unsigned int runningSum = 0;
+
+        for (int i = 0; i < SIZE; i++) {
+
+          if (scopePtr->entries[i].tableType == VARIABLE_ENTRY ||
+              scopePtr->entries[i].tableType == FPARAM_ENTRY) {
+
+            scopePtr->entries[i].offset = runningSum;
+            runningSum += scopePtr->entries[i].size;
+          }
+        }
+        tempEntry->size = runningSum;
+      }
       current_scope = peek_scope(scope_stack);
 
       if (node_stack->size > 0)
@@ -978,10 +1065,13 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
               fparamsListNode = current->children[i];
             }
           }
+
           // We also need to compare the parameters and the types of the
           // parameters.
-
+          // Create a temporary function entry for the impls function definition
+          // and compare the parameters and return type.
           TableEntry *tempFuncEntry = create_func_entry(current, current_scope);
+
           if (entry->data.funcEntry.numfparams !=
               fparamsListNode->numchildren) {
             insert_error(errors, create_error(get_name(current), err1410,
@@ -1083,9 +1173,12 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
     }
   }
 
-  // We perform the second pass for more semantic checks and return the global
-  // scope whichh is the global symbol table.
+  /*
+   * Perform the second pass and then calcuate the size and offsets for the code
+   * generation.
+   */
   second_pass_type_check(root, globalScope, errors);
+
   return globalScope;
 }
 

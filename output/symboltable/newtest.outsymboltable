@@ -1,10 +1,16 @@
 BEGINNING OF TABLE FOR:  global scope "Global"
 
-Table Entry 1 of "Global":func foo -> void : 
+Table Entry 1 of "Global":class foo inherits 	size: 0	offset: 0
 
-			BEGINNING OF TABLE FOR:  function scope "foo"
+			BEGINNING OF TABLE FOR:  class scope "foo"
 
-			END OF TABLE FOR SCOPE function scope "foo"
+			Table Entry 1 of "foo":private func bar -> void : 	size: 0	offset: 0
+
+						BEGINNING OF TABLE FOR:  function scope "bar"
+
+						END OF TABLE FOR SCOPE function scope "bar"
+
+			END OF TABLE FOR SCOPE class scope "foo"
 
 END OF TABLE FOR SCOPE global scope "Global"
 
