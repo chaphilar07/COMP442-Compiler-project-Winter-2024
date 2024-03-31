@@ -66,6 +66,7 @@ typedef struct FparamEntry {
 
 typedef struct FuncdefEntry {
 
+  unsigned int returnTypeSize;
   varvis vis;
   bool defined;
   bool memberFunc;
@@ -299,4 +300,9 @@ bool compare_type_info(TypeInfo info1, TypeInfo info2);
 int free_tree(node *root);
 void free_entire_tree(node *root); // This function will free all of the dynamic
                                    // memory starting from the root.
-#endif                             // !AST_GEN_H
+
+TypeInfo get_type_info(node *astnode);
+
+void remove_child(node *parent, node *child);
+
+#endif // !AST_GEN_H

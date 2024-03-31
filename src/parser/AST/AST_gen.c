@@ -597,6 +597,8 @@ void print_tree_dot(node *root, FILE *out) {
 
   while (stack->size > 0) {
     node *temp = pop_node(stack);
+    if (temp == NULL)
+      continue;
     fprintf(out, "%d[label=\"%s | %s\"];\n", temp->node_number,
             get_node_type_string(temp), temp->value);
     for (int i = 0; i < temp->numchildren; i++) {
@@ -717,6 +719,39 @@ int free_tree(node *root) {
   }
 
   return 1;
+}
+
+/*
+ * this function will remove a child node from a parent node can be helpful for
+ * the future.
+ */
+void remove_child(node *parent, node *child) {
+  if (!parent || !child) {
+    fprintf(stderr, "ERROR - remove_child(): Cannot remove the child from "
+                    "parent one of them is NULL\n");
+    return;
+  }
+
+  bool remove = false;
+  for (int i = 0; i < parent->numchildren; i++) {
+
+    if (parent->children[i] == child) {
+
+      parent->children[i] = NULL;
+      free_tree(child); // We free the child nodes tree in the function!
+      remove = true;
+      for (int j = i + 1; j < parent->numchildren; j++) {
+        parent->children[j - 1] = parent->children[j];
+      }
+      break;
+    }
+  }
+
+  if (remove) {
+    parent->numchildren -= 1;
+    parent->children =
+        realloc(parent->children, sizeof(node *) * parent->numchildren);
+  }
 }
 // This function is used to make a node a child of the parent.
 

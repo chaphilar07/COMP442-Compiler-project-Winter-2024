@@ -1,6 +1,6 @@
 BEGINNING OF TABLE FOR:  global scope "Global"
 
-Table Entry 1 of "Global":func main -> void : 	size: 28	offset: 0
+Table Entry 1 of "Global":func main -> void : 	size: 28	return type size: 0
 
 			BEGINNING OF TABLE FOR:  function scope "main"
 
@@ -8,7 +8,7 @@ Table Entry 1 of "Global":func main -> void : 	size: 28	offset: 0
 
 			END OF TABLE FOR SCOPE function scope "main"
 
-Table Entry 2 of "Global":func printArray -> void : arr integer[],size integer	size: 12	offset: 0
+Table Entry 2 of "Global":func printArray -> void : arr integer[],size integer	size: 12	return type size: 0
 
 			BEGINNING OF TABLE FOR:  function scope "printArray"
 
@@ -22,7 +22,7 @@ Table Entry 2 of "Global":func printArray -> void : arr integer[],size integer	s
 
 			END OF TABLE FOR SCOPE function scope "printArray"
 
-Table Entry 3 of "Global":func bubbleSort -> void : arr integer[],size integer	size: 20	offset: 0
+Table Entry 3 of "Global":func bubbleSort -> void : arr integer[],size integer	size: 20	return type size: 0
 
 			BEGINNING OF TABLE FOR:  function scope "bubbleSort"
 

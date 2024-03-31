@@ -31,6 +31,8 @@ typedef enum code {
   err141,
   err151,
 
+  err3100,
+
   err800,
 
   err200,

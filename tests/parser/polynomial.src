@@ -64,6 +64,11 @@ impl LINEAR {
 } 
 
 // ====== main ====== //
+//
+func test()->QUADRATIC{
+    let A: QUADRATIC;
+    return(A);
+  }
 func main() -> void
 {
   let f1: LINEAR;

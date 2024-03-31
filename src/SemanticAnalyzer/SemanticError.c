@@ -214,6 +214,12 @@ SemanticError create_error(const char *msg, err_code code, int line) {
              "DIFFERENT RETURN TYPE",
              line, msg);
     err.msg = strdup(buffer);
+  } else if (code == err3100) {
+    snprintf(buffer, sizeof(buffer),
+             "SEMANTIC ERROR ON LINE %d: NON-VOID FUNCTION MUST RETURN A "
+             "VALUE, FUNCTION %s HAS NO RETURN STATEMENT.",
+             line, msg);
+    err.msg = strdup(buffer);
   }
   return err;
 }

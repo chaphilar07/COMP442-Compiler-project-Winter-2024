@@ -60,7 +60,6 @@ func notdeclared() -> notatype{}
 impl A{
 func foo(x: integer)->integer{
 let y: integer;
-  return(0);
 }
 }
 impl B{
@@ -131,7 +130,11 @@ func bad_func()->float{
 
 func main()->void{ //Duplicate function.
   let counter: float; 
+   
+  }
 
+func somefunc()->A{
+    doStuff();
   }
 
 

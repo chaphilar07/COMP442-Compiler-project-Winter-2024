@@ -70,6 +70,10 @@ const char *get_scope_type_string(ScopeType type) {
 }
 
 unsigned int FNV1a_hash(const char *str, int size) {
+  if (!str) {
+    fprintf(stderr, "ERROR FNV-1a(): Cannot hash a NULL string.\n");
+    return 0;
+  }
   unsigned int hash = 2166136261U; // FNV-1a offset basis
   const unsigned int prime = 16777619;
 
@@ -324,6 +328,8 @@ const char *get_name(node *astnode) {
 
   const char *name = NULL;
   for (int i = 0; i < astnode->numchildren; i++) {
+    if (astnode->children[i] == NULL)
+      continue;
     if (astnode->children[i]->type == identifier)
       name = astnode->children[i]->value;
   }
@@ -538,7 +544,8 @@ void print_entry(TableEntry *entry, FILE *out) {
         fprintf(out, ",");
     }
 
-    fprintf(out, "\tsize: %d\toffset: %d", entry->size, entry->offset);
+    fprintf(out, "\tsize: %d\treturn type size: %d", entry->size,
+            entry->data.funcEntry.returnTypeSize);
     fprintf(out, "\n");
   }
   if (entry->tableType == CLASS_ENTRY) {
@@ -776,6 +783,31 @@ TableEntry *create_func_entry(node *astnode, Scope *scope) {
                  entry->data.funcEntry.fparamslist[i]);
   }
 
+  // We also need the size of the return type.
+  TypeInfo returnInfo = entry->data.funcEntry.returnType;
+
+  // Note that a function cannot return an array type only unary.
+  if (returnInfo.type == INT_TYPE)
+    entry->data.funcEntry.returnTypeSize = 4;
+  else if (returnInfo.type == FLOAT_TYPE)
+    entry->data.funcEntry.returnTypeSize = 8;
+  else if (returnInfo.type == ID_TYPE) {
+
+    Scope *scopePtr = scope;
+
+    while (scopePtr->type != GLOBAL_SCOPE) {
+      scopePtr = scopePtr->parentScope;
+    }
+
+    entry->data.funcEntry.returnTypeSize =
+        get_entry(scopePtr, entry->data.funcEntry.returnType.typeString)->size;
+
+  } else if (returnInfo.type == VOID_TYPE) {
+    entry->data.funcEntry.returnTypeSize = 0;
+  } else {
+    entry->data.funcEntry.returnTypeSize = 0;
+  }
+
   return entry;
 }
 // current function and assign it the parent scope.
@@ -919,6 +951,7 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
             runningSum += scopePtr->entries[i].size;
           }
         }
+
         tempEntry->size = runningSum;
       }
       current_scope = peek_scope(scope_stack);
@@ -931,6 +964,7 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
 
     if (current_scope == NULL)
       fprintf(stderr, "TRYING TO ASSIGN CURRENT SCOPE TO NULL!\n");
+
     current->scope = current_scope; // We set the scopes of the AST nodes
     if (current->type == returnnode) {
       fprintf(stderr, "Giving scope %s to node return type ...",
@@ -1039,12 +1073,14 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
             funcbodynode = current->children[i];
         }
 
+        funcbodynode->scope = current_scope;
         for (int i = 0; i < funcbodynode->numchildren; i++) {
           push_node(funcbodynode->children[i], node_stack);
         }
         fprintf(out, "inserted free function ...\n");
       }
       if (current_scope->type == CLASS_SCOPE) {
+
         fprintf(out, "Defining member function %s ... ", get_name(current));
 
         const char *name = get_name(current);
@@ -1106,16 +1142,36 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
               funcbodynode = current->children[i];
           }
 
+          funcbodynode->scope = current_scope;
           for (int i = 0; i < funcbodynode->numchildren; i++) {
             push_node(funcbodynode->children[i], node_stack);
           }
 
           fprintf(out, "inserted and defined member function ... \n");
         } else {
-          // We have no class for this implication.
-          current->parent =
-              NULL; // Disconnect the funcdef node from the AST it is not valid.
-          insert_error(errors, create_error(name, err203, current->line));
+          // We will "stem" the tree here, what we will do is remove the link to
+          // this tree at the parent.
+
+          /*
+           * Want to to here is "cut" the fundef node from the rest of the tree,
+           * to do this we will get the parent node find the child node of the
+           * parent node that corresponds to this function definition nodes and
+           * we wll set it to NULL.
+           *
+           * This should work correctly but it is causing seg faults when we are
+           *
+           */
+
+          int line = current->line;
+          node *parent = current->parent;
+          remove_child(
+              parent,
+              current); // This function removes the child from the tree.
+
+          FILE *temp = fopen("dottest.txt", "w+");
+          print_tree_dot(root, temp);
+
+          insert_error(errors, create_error(name, err203, line));
         }
       }
 
@@ -1127,19 +1183,29 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
       int hash = FNV1a_hash(name, SIZE);
 
       if (current_scope->entries[hash].tableType == EMPTY_ENTRY) {
-        insert_error(errors,
-                     create_error(get_name(current), err101, current->line));
+        // We should also stem this from the tree, it is not necessary.
+
+        int line = current->line;
+        node *parent = current->parent;
+        remove_child(parent, current);
+
+        insert_error(errors, create_error(get_name(current), err101, line));
         continue;
       }
       if (current_scope->entries[hash].tableType != CLASS_ENTRY) {
-        insert_error(errors,
-                     create_error(get_name(current), err101, current->line));
+
+        int line = current->line;
+        node *parent = current->parent;
+        remove_child(parent, current);
+
+        insert_error(errors, create_error(get_name(current), err101, line));
         // We report a semantic error do not insert the function.
         continue;
       }
 
       push_scope(current_scope->entries[hash].data.classEntry.scope,
                  scope_stack);
+
       push_node(init_node(sentinel), node_stack);
 
       for (int i = 0; i < current->numchildren; i++)
@@ -1177,7 +1243,8 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
    * Perform the second pass and then calcuate the size and offsets for the code
    * generation.
    */
-  second_pass_type_check(root, globalScope, errors);
+  second_pass_type_check(root, globalScope,
+                         errors); // Now this will be working correctly.
 
   return globalScope;
 }

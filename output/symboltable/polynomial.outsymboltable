@@ -4,7 +4,7 @@ Table Entry 1 of "Global":class POLYNOMIAL inherits 	size: 0	offset: 0
 
 			BEGINNING OF TABLE FOR:  class scope "POLYNOMIAL"
 
-			Table Entry 1 of "POLYNOMIAL":public func evaluate -> float : x float	size: 8	offset: 0
+			Table Entry 1 of "POLYNOMIAL":public func evaluate -> float : x float	size: 8	return type size: 8
 
 						BEGINNING OF TABLE FOR:  function scope "evaluate"
 
@@ -14,7 +14,15 @@ Table Entry 1 of "Global":class POLYNOMIAL inherits 	size: 0	offset: 0
 
 			END OF TABLE FOR SCOPE class scope "POLYNOMIAL"
 
-Table Entry 2 of "Global":func main -> void : 	size: 48	offset: 0
+Table Entry 2 of "Global":func test -> QUADRATIC : 	size: 24	return type size: 24
+
+			BEGINNING OF TABLE FOR:  function scope "test"
+
+			Table Entry 1 of "test":var A QUADRATIC	size: 24	offset: 0
+
+			END OF TABLE FOR SCOPE function scope "test"
+
+Table Entry 3 of "Global":func main -> void : 	size: 48	return type size: 0
 
 			BEGINNING OF TABLE FOR:  function scope "main"
 
@@ -26,13 +34,13 @@ Table Entry 2 of "Global":func main -> void : 	size: 48	offset: 0
 
 			END OF TABLE FOR SCOPE function scope "main"
 
-Table Entry 3 of "Global":class LINEAR inherits POLYNOMIAL, 	size: 16	offset: 0
+Table Entry 4 of "Global":class LINEAR inherits POLYNOMIAL, 	size: 16	offset: 0
 
 			BEGINNING OF TABLE FOR:  class scope "LINEAR"
 
 			Table Entry 1 of "LINEAR":private var a float	size: 8	offset: 0
 
-			Table Entry 2 of "LINEAR":public func build -> LINEAR : A float,B float	size: 32	offset: 0
+			Table Entry 2 of "LINEAR":public func build -> LINEAR : A float,B float	size: 32	return type size: 0
 
 						BEGINNING OF TABLE FOR:  function scope "build"
 
@@ -46,7 +54,7 @@ Table Entry 3 of "Global":class LINEAR inherits POLYNOMIAL, 	size: 16	offset: 0
 
 			Table Entry 3 of "LINEAR":private var b float	size: 8	offset: 8
 
-			Table Entry 4 of "LINEAR":public func evaluate -> float : x float	size: 16	offset: 0
+			Table Entry 4 of "LINEAR":public func evaluate -> float : x float	size: 16	return type size: 8
 
 						BEGINNING OF TABLE FOR:  function scope "evaluate"
 
@@ -58,13 +66,13 @@ Table Entry 3 of "Global":class LINEAR inherits POLYNOMIAL, 	size: 16	offset: 0
 
 			END OF TABLE FOR SCOPE class scope "LINEAR"
 
-Table Entry 4 of "Global":class QUADRATIC inherits POLYNOMIAL, 	size: 24	offset: 0
+Table Entry 5 of "Global":class QUADRATIC inherits POLYNOMIAL, 	size: 24	offset: 0
 
 			BEGINNING OF TABLE FOR:  class scope "QUADRATIC"
 
 			Table Entry 1 of "QUADRATIC":private var a float	size: 8	offset: 0
 
-			Table Entry 2 of "QUADRATIC":public func build -> QUADRATIC : A float,B float,C float	size: 48	offset: 0
+			Table Entry 2 of "QUADRATIC":public func build -> QUADRATIC : A float,B float,C float	size: 48	return type size: 0
 
 						BEGINNING OF TABLE FOR:  function scope "build"
 
@@ -82,7 +90,7 @@ Table Entry 4 of "Global":class QUADRATIC inherits POLYNOMIAL, 	size: 24	offset:
 
 			Table Entry 4 of "QUADRATIC":private var b float	size: 8	offset: 16
 
-			Table Entry 5 of "QUADRATIC":public func evaluate -> float : x float	size: 16	offset: 0
+			Table Entry 5 of "QUADRATIC":public func evaluate -> float : x float	size: 16	return type size: 8
 
 						BEGINNING OF TABLE FOR:  function scope "evaluate"
 

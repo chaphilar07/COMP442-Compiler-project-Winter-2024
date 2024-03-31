@@ -25,6 +25,45 @@ we can have implicit function calls
  */
 
 /*
+ * This function will check for a function's return type, if the return type is
+ * not void we must ensure that there is a return statement and that it is the
+ * last statement of the function*/
+
+void check_for_return_statement_function(node *astnode, Scope *globalScope,
+                                         ErrorArray *errors) {
+
+  TypeInfo returnInfo;
+  returnInfo = get_type_info(astnode);
+
+  int number_of_statements = astnode->children[0]->numchildren;
+
+  node *return_node = NULL;
+
+  for (int i = 0; i < number_of_statements; i++) {
+    if (astnode->children[0]->children[i]->type == returnnode) {
+      return_node = astnode->children[0]->children[i];
+    }
+  }
+
+  /*
+   * This function only checks if a function has a return type node we do not
+   * check if the function has the correct return type.
+   */
+  if (returnInfo.type == VOID_TYPE && !return_node)
+    return; // The return type is void and there is no return statement no error
+            // found.
+
+  else if (returnInfo.type != VOID_TYPE && !return_node) {
+    // Semantic Error! Non-void return type function must have a return value.
+
+    insert_error(errors,
+                 create_error(get_name(astnode), err3100, astnode->line));
+  } else if (returnInfo.type != VOID_TYPE && return_node) {
+    return; // Ok , we report this elsewhere.
+  }
+  return;
+}
+/*
  * This function will traverse the actual symbol tables and checks that the
  * varidable declarations in a class are not of a subclass type, if they are we
  * throw a semantic error.
@@ -318,6 +357,13 @@ void print_type(TypeInfo info) {
     fprintf(stderr, "[%d]", info.arraydims[i]);
   }
   fprintf(stderr, "\n");
+}
+void print_type_to_file(TypeInfo info, FILE *file) {
+  fprintf(file, "Type %s with array dimensions:", info.typeString);
+  for (int i = 0; i < info.numberofdims; i++) {
+    fprintf(file, "[%d]", info.arraydims[i]);
+  }
+  fprintf(file, "\n");
 }
 
 int get_dimlist_count(node *astnode) {
@@ -994,7 +1040,7 @@ int check_type(node *astnode) { return ok; }
  * This function will be used to check if an assignment is valid, both sides
  * must be of the same type.
  */
-
+FILE *temp;
 void second_pass_type_check(node *root, Scope *globalScope,
                             ErrorArray *errors) {
 
@@ -1005,38 +1051,21 @@ void second_pass_type_check(node *root, Scope *globalScope,
 
   push_node(root, stack);
 
+  temp = fopen("no-scopes.txt", "w+");
   while (stack->size > 0) {
     node *current = pop_node(stack);
 
-    /*
-     * We do type check on declaration if the type of a declaration is not
-     * known we throw semantic error.
-     *
-     */
-
-    /*
-     * Note that when creating the table we do not give functions inside of the
-     * impls that do have a class a scope, so we skip over them.
-     */
-    if (current->type == impldef) {
-      const char *getClassName = get_name(current);
-      TableEntry *classEntry = get_entry(globalScope, getClassName);
-      fprintf(stderr, "HERE\n\n");
-      if (classEntry->tableType != CLASS_ENTRY) {
-        continue; // We will not push any nodes, because the function does not
-                  // exist.
-      }
+    if (current == NULL) {
+      continue;
     }
-    /*
-     * The functions that do not have a scope are those that are inside of impl
-     * that either do not have a declaration or the impl is invalid.
-     */
-
     if (current->type == dot) {
 
       TypeInfo info = get_type_expression(current, errors, globalScope);
       fprintf(stderr, "dot %d ", current->line);
       print_type(info);
+    }
+    if (current->type == funcdef) {
+      check_for_return_statement_function(current, globalScope, errors);
     }
     if (current->type == funccall) {
       TypeInfo info = get_type_expression(current, errors, globalScope);
@@ -1167,11 +1196,6 @@ void second_pass_type_check(node *root, Scope *globalScope,
         TypeInfo typeReturned =
             get_type_expression(current->children[0], errors, globalScope);
 
-        fprintf(stderr, "TYPE EXPECTED FROM FUNCTION\n");
-        print_type(returnTypeExpected);
-        fprintf(stderr, "TYPE RECEIVED FROM FUNCTION\n");
-        print_type(typeReturned);
-
         if (!compare_type_info(typeReturned, returnTypeExpected)) {
           insert_error(errors, create_error(returnTypeExpected.typeString,
                                             err1102, current->line));
@@ -1180,8 +1204,18 @@ void second_pass_type_check(node *root, Scope *globalScope,
     } else if (current->type == funccall) {
       validate_functioncall(current, globalScope, errors);
     } else {
-      for (int i = 0; i < current->numchildren; i++)
-        push_node(current->children[i], stack);
+
+      for (int i = 0; i < current->numchildren; i++) {
+        if (current->children[i] != NULL)
+          push_node(current->children[i], stack);
+      }
     }
   }
 }
+
+/*
+ * Note that some of the nodes are NOT given scopes, these include identifiers,
+ * type, arraydims, etc these nodes just aggregate data they never get pushed
+ * onto the stack! But we still need to push the children of these nodes onto
+ * the stack!
+ */

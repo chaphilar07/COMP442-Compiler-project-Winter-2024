@@ -23,6 +23,8 @@
          sb     0(r2),r3        % Store char in buffer
          addi   r2,r2,1
          j      getname
+
+
  endget  sb     0(r2),r0        % Store terminator
          jr     r15             % Return
 
