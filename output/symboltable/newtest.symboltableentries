@@ -1,5 +1,10 @@
-Inserting class foo into scope Global ... Inserted class entry.
-Inserting function entry bar into scope foo ... Exiting function insertion.
-Encountered impl with name foo ... Found corresponding class with name foo .
-Defining member function bar ... inserted and defined member function ... 
+Inserting class A into scope Global ... Inserted class entry.
+Inserting vardecl y into scope A ... inserted vardecl exiting.
+Inserting class B into scope Global ... Inserted class entry.
+Inserting vardecl x into scope B ... inserted vardecl exiting.
+Inserting function entry foo into scope B ... Exiting function insertion.
+Inserting vardecl a into scope B ... inserted vardecl exiting.
+Encountered impl with name B ... Found corresponding class with name B .
+Defining member function foo ... inserted and defined member function ... 
+Inserting vardecl z into scope foo ... inserted vardecl exiting.
 success

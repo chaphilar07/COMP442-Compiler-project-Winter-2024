@@ -98,7 +98,7 @@ node [fontname=Sans];charset= " UTF-8" splines=true splines=spline rankdir =LR
 1031 -> 1027
 1031 -> 1026
 1026[label="identifier | counter"];
-1027[label="type | integer"];
+1027[label="type | float"];
 1029[label="arraydims | (null)"];
 1037[label="vardecl | (null)"];
 1037 -> 1035

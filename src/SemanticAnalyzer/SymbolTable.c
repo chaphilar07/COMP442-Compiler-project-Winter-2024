@@ -1162,6 +1162,7 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
            *
            */
 
+          const char *name = strdup(get_name(current));
           int line = current->line;
           node *parent = current->parent;
           remove_child(
@@ -1172,6 +1173,7 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
           print_tree_dot(root, temp);
 
           insert_error(errors, create_error(name, err203, line));
+          free((void *)name);
         }
       }
 
@@ -1185,20 +1187,24 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
       if (current_scope->entries[hash].tableType == EMPTY_ENTRY) {
         // We should also stem this from the tree, it is not necessary.
 
+        const char *name = strdup(get_name(current));
         int line = current->line;
         node *parent = current->parent;
         remove_child(parent, current);
 
-        insert_error(errors, create_error(get_name(current), err101, line));
+        insert_error(errors, create_error(name, err101, line));
+        free((void *)name);
         continue;
       }
       if (current_scope->entries[hash].tableType != CLASS_ENTRY) {
 
+        const char *name = strdup(get_name(current));
         int line = current->line;
         node *parent = current->parent;
         remove_child(parent, current);
 
         insert_error(errors, create_error(get_name(current), err101, line));
+        free((void *)name);
         // We report a semantic error do not insert the function.
         continue;
       }
@@ -1243,8 +1249,6 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
    * Perform the second pass and then calcuate the size and offsets for the code
    * generation.
    */
-  second_pass_type_check(root, globalScope,
-                         errors); // Now this will be working correctly.
 
   return globalScope;
 }

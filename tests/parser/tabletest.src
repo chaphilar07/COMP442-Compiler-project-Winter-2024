@@ -118,11 +118,12 @@ func good_func()-> integer{
 
 
 func bad_func()->float{
+    
     let x: float[1][2];
     let y: A;
-    y.x(1,2);
 
-  
+    x[1][2]=3.0;
+    y.x=3; //So my variable lookup function does not work correctly...
 
     return(x[1][0.3]);
   }

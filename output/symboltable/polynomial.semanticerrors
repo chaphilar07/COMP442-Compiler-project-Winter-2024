@@ -1,3 +1,9 @@
 WARNING! FUNCTION evaluate IS BEING OVERRIDEN ON LINE 12 !
 WARNING! FUNCTION evaluate IS BEING OVERRIDEN ON LINE 21 !
-End of Error Report, total of 2 errors found.
+SEMANTIC ERROR ON LINE 42: Assignment cannot occur between a variable and an expression of another type, nil is not the expected type for the assignment.
+SEMANTIC ERROR ON LINE 43: Assignment cannot occur between a variable and an expression of another type, nil is not the expected type for the assignment.
+SEMANTIC ERROR ON LINE 44: Assignment cannot occur between a variable and an expression of another type, nil is not the expected type for the assignment.
+SEMANTIC ERROR ON LINE 53: Assignment cannot occur between a variable and an expression of another type, nil is not the expected type for the assignment.
+SEMANTIC ERROR ON LINE 54: Assignment cannot occur between a variable and an expression of another type, nil is not the expected type for the assignment.
+SEMANTIC ERROR ON LINE 78: Assignment cannot occur between a variable and an expression of another type, QUADRATIC is not the expected type for the assignment.
+End of Error Report, total of 8 errors found.

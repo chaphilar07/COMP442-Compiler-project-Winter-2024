@@ -1,10 +1,24 @@
-struct foo{
-    private func bar() -> void;
+struct A{
+    private let y:integer;
+  };
+
+struct B inherits A{
+    private let x: float;
+    private func foo()->B;
+    private let a: A;
   };
 
 
-impl foo{
-    func bar(x:integer)->integer{
-        return(0);
+impl B{
+    func foo()->B{
+
+      let z: B;
+      z.a.y=3; // No error here but why?
+      return (z.a.y);
       }
   }
+
+
+  //Problem! For member variables, we always look at the current scope even if we should first be looking at the scope of the 
+  //class that is calling! So this occurs only when there is a conflict! If the names are distinct this will not occur, focus on the code gen part,
+  //We can alwats come back and clean up the semantic checks mess that we have made here.

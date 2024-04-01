@@ -177,10 +177,13 @@ Leaf token created of type intnum and value 1
 Leaf token created of type intnum and value 2 
 Leaf token created of type identifier and value y 
 Leaf token created of type identifier and value A 
-Leaf token created of type identifier and value y 
 Leaf token created of type identifier and value x 
 Leaf token created of type intnum and value 1 
 Leaf token created of type intnum and value 2 
+Leaf token created of type floatnum and value 3.0 
+Leaf token created of type identifier and value y 
+Leaf token created of type identifier and value x 
+Leaf token created of type intnum and value 3 
 Leaf token created of type identifier and value x 
 Leaf token created of type intnum and value 1 
 Leaf token created of type floatnum and value 0.3 

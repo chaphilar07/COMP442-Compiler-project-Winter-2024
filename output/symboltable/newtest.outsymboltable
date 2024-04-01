@@ -1,16 +1,30 @@
 BEGINNING OF TABLE FOR:  global scope "Global"
 
-Table Entry 1 of "Global":class foo inherits 	size: 0	offset: 0
+Table Entry 1 of "Global":class B inherits A, 	size: 12	offset: 0
 
-			BEGINNING OF TABLE FOR:  class scope "foo"
+			BEGINNING OF TABLE FOR:  class scope "B"
 
-			Table Entry 1 of "foo":private func bar -> void : 	size: 0	return type size: 0
+			Table Entry 1 of "B":private var x float	size: 8	offset: 0
 
-						BEGINNING OF TABLE FOR:  function scope "bar"
+			Table Entry 2 of "B":private var a A	size: 4	offset: 8
 
-						END OF TABLE FOR SCOPE function scope "bar"
+			Table Entry 3 of "B":private func foo -> B : 	size: 12	return type size: 0
 
-			END OF TABLE FOR SCOPE class scope "foo"
+						BEGINNING OF TABLE FOR:  function scope "foo"
+
+						Table Entry 1 of "foo":var z B	size: 12	offset: 0
+
+						END OF TABLE FOR SCOPE function scope "foo"
+
+			END OF TABLE FOR SCOPE class scope "B"
+
+Table Entry 2 of "Global":class A inherits 	size: 4	offset: 0
+
+			BEGINNING OF TABLE FOR:  class scope "A"
+
+			Table Entry 1 of "A":private var y integer	size: 4	offset: 0
+
+			END OF TABLE FOR SCOPE class scope "A"
 
 END OF TABLE FOR SCOPE global scope "Global"
 

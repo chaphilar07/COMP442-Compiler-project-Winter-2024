@@ -27,7 +27,9 @@ we can have implicit function calls
 /*
  * This function will check for a function's return type, if the return type is
  * not void we must ensure that there is a return statement and that it is the
- * last statement of the function*/
+ * last statement of the function
+ * Works correctly.
+ */
 
 void check_for_return_statement_function(node *astnode, Scope *globalScope,
                                          ErrorArray *errors) {
@@ -68,63 +70,6 @@ void check_for_return_statement_function(node *astnode, Scope *globalScope,
  * varidable declarations in a class are not of a subclass type, if they are we
  * throw a semantic error.
  */
-void check_tables_for_circular_inheritance(Scope *globalScope,
-                                           ErrorArray *arr) {
-  if (!globalScope) {
-    return;
-  }
-  if (!arr) {
-    return;
-  }
-
-  Scope *scopePtr = globalScope;
-
-  // In the global scope we will only have class and function entries.
-  for (int i = 0; i < SIZE; i++) {
-    if (scopePtr->entries[i].tableType == CLASS_ENTRY) {
-      TableEntry classEntry = scopePtr->entries[i];
-      Scope *classScope = classEntry.data.classEntry.scope;
-
-      for (int i = 0; i < SIZE; i++) {
-        // Get the return type information of each entry and check if it is a
-        // class type.
-
-        TypeInfo memberInfo;
-        TableEntry memberEntry = classScope->entries[i];
-
-        if (memberEntry.tableType == VARIABLE_ENTRY)
-          memberInfo = memberEntry.data.varEntry.type;
-        else
-          memberInfo = memberEntry.data.funcEntry.returnType;
-
-        if (memberInfo.type == ID_TYPE) {
-
-          const char *classTypeString = memberInfo.typeString;
-
-          for (int i = 0; i < SIZE; i++) {
-
-            TableEntry classEntryCompare = globalScope->entries[i];
-
-            if (classEntryCompare.tableType == CLASS_ENTRY) {
-              for (int i = 0;
-                   i < classEntryCompare.data.classEntry.inheritsCount; i++) {
-                if (!strcmp(classTypeString, classEntryCompare.data.classEntry
-                                                 .inheritedScopes[i]
-                                                 ->scopeName)) {
-                  fprintf(stderr,
-                          "Inserting error circular class dependency.\n");
-                  insert_error(arr,
-                               create_error(classEntry.data.classEntry.name,
-                                            err0001, -1));
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
 
 /*
  * This function traverses the tables and checks for shadowed variables etc, we
@@ -137,8 +82,6 @@ void check_tables_for_circular_inheritance(Scope *globalScope,
  For each member of the class we will do a DFS of the inherited classes of the
  current class. If the name appears in one of the super classes we will throw a
  shadowing warning.
-
-
  */
 
 void check_for_shadowing_in_member_functions(Scope *globalScope,
@@ -397,201 +340,33 @@ node *get_dimlist_node(node *astnode) {
 
   return NULL;
 }
-TypeInfo get_type_var(node *astnode, ErrorArray *arr, Scope *globalScope) {
-
-  const char *name = get_name(astnode);
-  int varDimsCount = get_dimlist_count(astnode);
-  node *dimlistNode = get_dimlist_node(astnode);
-
-  if (astnode->scope == NULL) {
-    fprintf(stderr,
-            "ERROR - node %s, line %d does not have a scope !, exiting\n", name,
-            astnode->line);
-    TypeInfo info = {NONE_TYPE, NULL, NULL, 0};
-    return info;
-  }
-
-  TableEntry *entry = get_entry(astnode->scope, name);
-
-  if (entry->tableType == VARIABLE_ENTRY || entry->tableType == FPARAM_ENTRY) {
-    TypeInfo variableTypeInfo =
-        entry->data.varEntry.type; // Get the type enum from the symbol table.
-    TypeInfo curVarTypeInfo;
-
-    // Checking the type of the variable.
-    if (variableTypeInfo.numberofdims >= varDimsCount) {
-      for (int i = 0; i < dimlistNode->numchildren; i++) {
-
-        TypeInfo index =
-            get_type_expression(dimlistNode->children[i], arr, globalScope);
-        fprintf(stderr, "VARIABLE %s CALLED WITH ARRAY INDEX %d WITH TYPE: ",
-                get_name(astnode), i);
-        print_type(index);
-
-        if (index.type != INT_TYPE ||
-            (index.type == INT_TYPE && index.numberofdims != 0)) {
-          fprintf(stderr, "ERROR! VARIABLE CALLED WITH NON INTEGER TYPE! \n");
-          insert_error(arr,
-                       create_error(get_name(astnode), err2100, astnode->line));
-        }
-      }
-    }
-
-    if (variableTypeInfo.numberofdims == varDimsCount) {
-      curVarTypeInfo.numberofdims =
-          0; // Because we are accessing the direct type not an array type.
-      curVarTypeInfo.arraydims =
-          NULL; // No array dimensions set the pointer to null.
-      curVarTypeInfo.typeString =
-          strdup(variableTypeInfo.typeString);     // The type string.
-      curVarTypeInfo.type = variableTypeInfo.type; // type enum.
-      for (int i = 0; i < variableTypeInfo.numberofdims; i++) {
-        // We want to get the ith expression of aparamlist and get the type
-        // enum.
-      }
-    } else if (variableTypeInfo.numberofdims >
-               varDimsCount) { // Called with less array dimensions than
-                               // declared with in this case we are
-                               // returning an array type.
-      curVarTypeInfo.numberofdims =
-          variableTypeInfo.numberofdims - varDimsCount;
-      curVarTypeInfo.arraydims =
-          malloc(sizeof(int) * curVarTypeInfo.numberofdims);
-      for (int i = 0; i < curVarTypeInfo.numberofdims; i++) {
-        curVarTypeInfo.arraydims[i] = variableTypeInfo.arraydims[i];
-      }
-      curVarTypeInfo.type = variableTypeInfo.type;
-      curVarTypeInfo.typeString = strdup(variableTypeInfo.typeString);
-    } else {
-      insert_error(arr, create_error(get_name(astnode), err903, astnode->line));
-      TypeInfo info1 = {NONE_TYPE, NULL, NULL, 0};
-      return info1;
-    }
-    return curVarTypeInfo;
-  }
-
-  Scope *scopePtr = astnode->scope;
-
-  while ((scopePtr = scopePtr->parentScope)->type != GLOBAL_SCOPE &&
-         scopePtr != NULL) {
-
-    entry = get_entry(scopePtr, name);
-
-    if (entry->tableType == VARIABLE_ENTRY) {
-      fprintf(stderr, "FOUND ENTRY %s IN CLASS SCOPE %s ... \n", name,
-              scopePtr->scopeName);
-
-      TypeInfo variableTypeInfo = entry->data.varEntry.type;
-      TypeInfo curVarTypeInfo;
-      if (variableTypeInfo.numberofdims == varDimsCount) {
-        curVarTypeInfo.numberofdims = 0;
-        curVarTypeInfo.arraydims = NULL;
-        curVarTypeInfo.typeString = variableTypeInfo.typeString;
-        curVarTypeInfo.type = variableTypeInfo.type;
-      } else if (variableTypeInfo.numberofdims > varDimsCount) {
-        curVarTypeInfo.numberofdims =
-            variableTypeInfo.numberofdims - varDimsCount;
-        curVarTypeInfo.arraydims =
-            malloc(sizeof(int) * curVarTypeInfo.numberofdims);
-        for (int i = 0; i < curVarTypeInfo.numberofdims; i++) {
-          curVarTypeInfo.arraydims[i] = variableTypeInfo.arraydims[i];
-        }
-      } else {
-        insert_error(arr,
-                     create_error(get_name(astnode), err903, astnode->line));
-        TypeInfo info1 = {NONE_TYPE, NULL, NULL, 0};
-        return info1;
-      }
-      return curVarTypeInfo;
-    }
-
-    if (scopePtr->type == CLASS_SCOPE) {
-
-      TableEntry *classEntry =
-          get_entry(scopePtr->parentScope, scopePtr->scopeName);
-
-      fprintf(stderr, "Checking inherited classes LOOKING FOR TYPE!...\n");
-      // We check if classEntry inherits.
-      ScopeStack *stack =
-          init_scope_stack(); // make memory for a new scope stack.
-
-      if (classEntry->data.classEntry.inheritsCount > 0 &&
-          classEntry->data.classEntry.inheritedScopes != NULL) {
-
-        fprintf(stderr, "CLASS %s inherits %d classes, must check ",
-                classEntry->data.classEntry.name,
-                classEntry->data.classEntry.inheritsCount);
-
-        for (int i = 0; i < classEntry->data.classEntry.inheritsCount; i++) {
-          fprintf(stderr, "%s ",
-                  classEntry->data.classEntry.inheritedScopes[i]->scopeName);
-
-          push_scope(classEntry->data.classEntry.inheritedScopes[i], stack);
-          fprintf(stderr, "Top of the stack %s \n",
-                  peek_scope(stack)->scopeName);
-        }
-        fprintf(stderr, "\n");
-        fprintf(stderr, "%s\n", peek_scope(stack)->scopeName);
-      }
-
-      while (stack->size > 0) {
-        Scope *current = pop_scope(stack);
-        fprintf(stderr, "Checking inherited class %s for entry %s ... \n",
-                current->scopeName, name);
-        entry = get_entry(current, name);
-
-        if (entry->tableType == VARIABLE_ENTRY &&
-            strcmp(entry->data.varEntry.name, name) == 0) {
-          fprintf(stderr, "FOUND ENTRY %s in SCOPE %s .\n", name,
-                  current->scopeName);
-          return entry->data.varEntry.type;
-        }
-
-        classEntry = get_entry(current->parentScope, current->scopeName);
-        if (classEntry->data.classEntry.inheritsCount > 0 &&
-            classEntry->data.classEntry.inheritedScopes != NULL) {
-          for (int i = 0; i < classEntry->data.classEntry.inheritsCount; i++) {
-            push_scope(classEntry->data.classEntry.inheritedScopes[i], stack);
-          }
-        }
-      }
-    }
-  }
-  TypeInfo info = {NONE_TYPE, "nil", NULL, 0};
-  return info;
-}
 
 /*
- * get_type_functioncall() this will get the type of a function call.
+ * This function will return the type information for a variable lookup.
  */
-TypeInfo get_type_functioncall(node *astnode, Scope *globalScope) {
 
-  const char *name = get_name(astnode);
-  TableEntry *entry = get_entry(globalScope, name);
+TypeInfo get_type_var(node *astnode, ErrorArray *errors, Scope *globalScope) {
 
-  if (entry->tableType == FUNCDEF_ENTRY &&
-      entry->data.funcEntry.defined == true) {
-    return entry->data.funcEntry.returnType;
+  const char *varName = get_name(astnode);
+  Scope *scopePtr =
+      NULL; // This will be the start of the scope that we look through.
+
+  // We have to check if the node is a member access.
+  if ((astnode->parent->type == dot &&
+       astnode->parent->children[0] == astnode) ||
+      (astnode->parent->type == dot && astnode->parent->parent->type == dot &&
+       astnode->parent->children[1] == astnode)) {
+
+  } else { // If this is not the case we do not have member access and we only
+           // need to check the current scope.
   }
 
-  for (int i = 0; i < SIZE; i++) {
-    if (globalScope->entries[i].tableType == CLASS_ENTRY) {
-
-      Scope *classScope = globalScope->entries[i].data.classEntry.scope;
-
-      fprintf(stderr, "Checking class %s for function def %s ...\n",
-              classScope->scopeName, name);
-      TableEntry *funcDefEntry = get_entry(classScope, name);
-      if (funcDefEntry->tableType == FUNCDEF_ENTRY) {
-        return funcDefEntry->data.funcEntry.returnType;
-      }
-    }
-  }
-
-  // Not found.
-  TypeInfo info = {NONE_TYPE, "nil", NULL, 0};
-  return info;
+  TypeInfo temp = {NONE_TYPE, "nil", NULL, 0};
+  return temp;
 }
+
+TypeInfo get_type_functioncall(node *astnode, ErrorArray *errors,
+                               Scope *globalScope) {}
 
 /*
  * This function will return the type of any expression that is passed to
@@ -618,86 +393,143 @@ TypeInfo get_type_expression(node *astnode, ErrorArray *arr,
     TypeInfo info = {FLOAT_TYPE, "float", NULL, 0};
     return info;
   } else if (astnode->type == var) {
-    return get_type_var(astnode, arr, globalScope);
+    return get_type_var(astnode, arr, astnode->scope);
   } else if (astnode->type == funccall)
-    return get_type_functioncall(astnode, globalScope);
+    return get_type_functioncall(astnode, astnode->scope);
+
+  // We should refactor this to use recursion rather than do this iteratively.
   else if (astnode->type == dot) {
+    // We want to make this part a recursive function.
 
     node *left = astnode->children[1];
     node *right = astnode->children[0];
+    node *parent = astnode->parent;
 
-    if (right->type != dot) {
+    if (right->type == dot) {
+
+      if (parent->type == dot) {
+        const char *name = get_name(left);
+        TypeInfo classInfo =
+            get_type_expression(parent->children[1], arr, globalScope);
+
+        EntryType expectedType;
+
+        if (left->type == funccall)
+          expectedType = FUNCDEF_ENTRY;
+        else
+          expectedType = VARIABLE_ENTRY;
+
+        Scope *scopePtr = globalScope;
+
+        while (scopePtr->type != GLOBAL_SCOPE) {
+          scopePtr = scopePtr->parentScope;
+        }
+
+        TableEntry *classEntry = get_entry(scopePtr, classInfo.typeString);
+        if (classEntry->tableType != CLASS_ENTRY) {
+          insert_error(arr, create_error(get_name(parent->children[1]), err701,
+                                         parent->children[1]->line));
+          TypeInfo temp = {NONE_TYPE, "nil", NULL, 0};
+          return temp; // Error cannot access non class type.
+        }
+
+        // Now check that we have a member.
+
+        Scope *classScope = classEntry->data.classEntry.scope;
+
+        TableEntry *memberEntry = get_entry(classScope, name);
+
+        if (memberEntry->tableType != expectedType) {
+          insert_error(arr, create_error(get_name(left), err702, left->line));
+          TypeInfo temp = {NONE_TYPE, "nil", NULL, 0};
+          return temp;
+        }
+      }
+
+      // call the function recursively, if all of the checks are correct if not
+      // we will return a dummy value.
+      get_type_expression(right, arr, globalScope);
+    } else {
+      // In this case we return the type of the right child.
+      node *left = astnode->children[1];
+      node *right = astnode->children[0];
+      node *parent = astnode->parent;
+
+      if (parent->type == dot) {
+        const char *name = get_name(left);
+        TypeInfo classInfo =
+            get_type_expression(parent->children[1], arr, globalScope);
+
+        EntryType expectedType;
+
+        if (left->type == funccall)
+          expectedType = FUNCDEF_ENTRY;
+        else
+          expectedType = VARIABLE_ENTRY;
+
+        Scope *scopePtr = globalScope;
+
+        while (scopePtr->type != GLOBAL_SCOPE) {
+          scopePtr = scopePtr->parentScope;
+        }
+
+        TableEntry *classEntry = get_entry(scopePtr, classInfo.typeString);
+        if (classEntry->tableType != CLASS_ENTRY) {
+          insert_error(arr, create_error(get_name(parent->children[1]), err701,
+                                         parent->children[1]->line));
+          TypeInfo temp = {NONE_TYPE, "nil", NULL, 0};
+          return temp; // Error cannot access non class type.
+        }
+
+        // Now check that we have a member.
+
+        Scope *classScope = classEntry->data.classEntry.scope;
+
+        TableEntry *memberEntry = get_entry(classScope, name);
+
+        if (memberEntry->tableType != expectedType) {
+          insert_error(arr, create_error(get_name(left), err702, left->line));
+          TypeInfo temp = {NONE_TYPE, "nil", NULL, 0};
+          return temp;
+        }
+      }
+      // We must also check that the right node here is a member of the class of
+      // the left!
+
+      const char *name = get_name(right);
+      Scope *scopePtr = globalScope;
+
+      while (scopePtr->type != GLOBAL_SCOPE) {
+        scopePtr = scopePtr->parentScope;
+      }
+
+      EntryType expectedType;
+
+      if (right->type == funccall)
+        expectedType = FUNCDEF_ENTRY;
+      else
+        expectedType = VARIABLE_ENTRY;
 
       TypeInfo leftInfo = get_type_expression(left, arr, globalScope);
-      TableEntry *entry = get_entry(globalScope, leftInfo.typeString);
+      TableEntry *classEntry = get_entry(scopePtr, leftInfo.typeString);
 
-      EntryType expectedType;
-      if (right->type == var)
-        expectedType = VARIABLE_ENTRY;
-      else
-        expectedType = FUNCDEF_ENTRY;
-
-      if (entry->tableType != CLASS_ENTRY) {
+      if (classEntry->tableType != CLASS_ENTRY) {
         insert_error(arr, create_error(get_name(left), err701, left->line));
-
-        TypeInfo info = {NONE_TYPE, NULL, NULL, 0};
-        return info;
+        TypeInfo temp = {NONE_TYPE, "nil", NULL, 0};
+        return temp;
       }
 
-      Scope *scopePtr = entry->data.classEntry.scope;
-      entry = get_entry(scopePtr, get_name(right));
+      Scope *classScope = classEntry->data.classEntry.scope;
+      TableEntry *memberEntry = get_entry(classScope, name);
 
-      if (entry->tableType != expectedType) {
+      if (memberEntry->tableType != expectedType) {
         insert_error(arr, create_error(get_name(right), err702, right->line));
-        TypeInfo info = {NONE_TYPE, NULL, NULL, 0};
-        return info;
+        TypeInfo temp = {NONE_TYPE, "nil", NULL, 0};
+        return temp;
       }
 
-      return get_type_expression(right, arr, scopePtr);
+      return get_type_expression(right, arr, globalScope);
     }
-    // Want to go down the dot chain and check each, we take a copy of the
-    // globaScope pointer.
-    Scope *scopePtr = globalScope;
-
-    while (right->type == dot) {
-
-      TypeInfo leftInfo = get_type_expression(left, arr, scopePtr);
-      TableEntry *entry = get_entry(
-          scopePtr, leftInfo.typeString); // We get the corresponding class
-                                          // entry, if it exisits.
-
-      // Left is not class type, cannot
-      if (entry->tableType != CLASS_ENTRY) {
-
-        insert_error(arr, create_error(get_name(left), err701, left->line));
-
-        TypeInfo info = {NONE_TYPE, NULL, NULL, 0};
-        return info;
-      }
-
-      scopePtr = entry->data.classEntry.scope;
-      fprintf(stderr, "Entering scope %s looking if they have member %s ..\n",
-              scopePtr->scopeName, get_name(right->children[1]));
-
-      TableEntry *tmp = get_entry(scopePtr, get_name(right->children[1]));
-
-      EntryType expectedType;
-      if (right->children[1]->type == var)
-        expectedType = VARIABLE_ENTRY;
-      else
-        expectedType = FUNCDEF_ENTRY;
-
-      if (tmp->tableType != expectedType) {
-        insert_error(arr, create_error(get_name(right->children[1]), err702,
-                                       right->children[1]->line));
-        TypeInfo info = {NONE_TYPE, NULL, NULL, 0};
-        return info;
-      }
-      left = right->children[1];
-      right = right->children[0];
-    }
-
-    return get_type_expression(right, arr, scopePtr);
 
   } else if (astnode->type == multop || astnode->type == addop ||
              astnode->type == relexpr) {
@@ -739,15 +571,27 @@ TypeInfo get_type_expression(node *astnode, ErrorArray *arr,
  * the source file, throws and error if not, two different kinds of errors,
  * wrong number of parameters and function not defined anywhere in the
  * source file.
+ *
+ * Note that when this function validates the function being called we can write
+ * the assembly code.
+ *
+ * Note that we can also use this model for the get_type_funccall function
+ * instead of what we currently have.
  */
 void validate_functioncall(node *astnode, Scope *globalScope, ErrorArray *arr) {
 
   // This function will check they type and the number of parameters a
   // function gets called with.
-  if (astnode->parent->type != dot) {
+  // Either we have a free function call with no dot parent in the tree or we
+  // have a function call that is a the child of a dot and is returning a class
+  // type variable.
+  if (astnode->parent->type != dot ||
+      (astnode->parent->type == dot &&
+       astnode->parent->children[1] == astnode)) {
 
     TableEntry *functionEntry = get_entry(globalScope, get_name(astnode));
 
+    // Function not found.
     if (functionEntry->tableType != FUNCDEF_ENTRY) {
 
       insert_error(arr,
@@ -755,6 +599,7 @@ void validate_functioncall(node *astnode, Scope *globalScope, ErrorArray *arr) {
       return;
     }
 
+    // Get the info for the function parameters.
     int funccallParamsNum = get_aparams_count(astnode);
     int funcdefParamsNum = functionEntry->data.funcEntry.numfparams;
 
@@ -766,6 +611,7 @@ void validate_functioncall(node *astnode, Scope *globalScope, ErrorArray *arr) {
     if (funccallParamsNum != funcdefParamsNum) {
       insert_error(arr,
                    create_error(get_name(astnode), err1402, astnode->line));
+      return;
     } else {
 
       node *dimlistNode = NULL;
@@ -777,6 +623,7 @@ void validate_functioncall(node *astnode, Scope *globalScope, ErrorArray *arr) {
       for (int i = 0; i < funcdefParamsNum; i++) {
         TypeInfo fparamInfo =
             functionEntry->data.funcEntry.fparamslist[i]->data.fparamEntry.type;
+
         node *currentDim = dimlistNode->children[i];
         TypeInfo argInfo = get_type_expression(currentDim, arr, globalScope);
 
@@ -792,10 +639,16 @@ void validate_functioncall(node *astnode, Scope *globalScope, ErrorArray *arr) {
         if (!compare_type_info(fparamInfo, argInfo)) {
           insert_error(arr,
                        create_error(get_name(astnode), err1403, astnode->line));
+          return;
         }
       }
     }
-  } else if (astnode == astnode->parent->children[0]) {
+
+    // Here we should add the semantic action to write add the function call to
+    // the call stack.
+  } else if (astnode == astnode->parent->children[0] &&
+             astnode->parent->type ==
+                 dot) { // If the funcion is a member function call.
 
     // The function call is a member function call, we must get the class
     // then the function name
@@ -826,6 +679,7 @@ void validate_functioncall(node *astnode, Scope *globalScope, ErrorArray *arr) {
       if (funcdefParamsNum != funccallParamsNum) {
         insert_error(arr,
                      create_error(get_name(astnode), err1402, astnode->line));
+        return;
       } else {
         node *dimlistNode = NULL;
         for (int i = 0; i < astnode->numchildren; i++) {
@@ -851,6 +705,7 @@ void validate_functioncall(node *astnode, Scope *globalScope, ErrorArray *arr) {
           if (!compare_type_info(fparamInfo, argInfo)) {
             insert_error(
                 arr, create_error(get_name(astnode), err1403, astnode->line));
+            return;
           }
         }
       }
@@ -865,114 +720,6 @@ void validate_functioncall(node *astnode, Scope *globalScope, ErrorArray *arr) {
  * This function will be used during creation of the symbol table the
  * function will check if a variable being used has been declaerd.
  */
-int validate_lookup(node *astnode, Scope *currentScope) {
-  if (!astnode) {
-    fprintf(stderr,
-            "ERROR - validate_lookup(): Node passed is null exiting\n'");
-    return -1;
-  }
-  if (!currentScope) {
-
-    fprintf(stderr,
-            "ERROR - validate_lookup(): Scope passed is null exiting\n'");
-    return -1;
-  }
-
-  // What this function needs to do is check if the current scope has a
-  // corresponding entry for the variable. we should be able to call this
-  // recursively until we either reach a scope with the variable OR we are
-  // in the global scope.
-
-  // Check the current scope.
-  const char *name = get_name(astnode);
-  TableEntry *entry = get_entry(currentScope, name);
-
-  // Check if the entry is declared in the current scope.
-  if ((entry->tableType == VARIABLE_ENTRY ||
-       entry->tableType == FPARAM_ENTRY)) {
-    fprintf(stderr, "FOUND ENTRY %s IN SCOPE %s \n", name,
-            currentScope->scopeName);
-    return ok;
-  }
-
-  Scope *scopePtr = currentScope;
-
-  // Now we must check all of the parent scopes for the variable
-  // declaration.
-
-  while ((scopePtr = scopePtr->parentScope)->type != GLOBAL_SCOPE) {
-    // If our variable is used within the scope of a class we can check all
-    // the way up the hierarchy.
-
-    fprintf(stderr, "Entering scope %s ...\n", scopePtr->scopeName);
-
-    if (scopePtr->type == CLASS_SCOPE) {
-      // We check the current class scope.
-
-      entry = get_entry(scopePtr, name);
-
-      if (entry->tableType == VARIABLE_ENTRY &&
-          strcmp(name, entry->data.varEntry.name) == 0) {
-        fprintf(stderr, "FOUND %s IN SCOPE %s\n", name, scopePtr->scopeName);
-        return ok;
-      }
-
-      TableEntry *classEntry =
-          get_entry(scopePtr->parentScope, scopePtr->scopeName);
-
-      fprintf(stderr, "Checking inherited classes...\n");
-      // We check if classEntry inherits.
-      ScopeStack *stack =
-          init_scope_stack(); // make memory for a new scope stack.
-
-      if (classEntry->data.classEntry.inheritsCount > 0 &&
-          classEntry->data.classEntry.inheritedScopes != NULL) {
-
-        fprintf(stderr, "CLASS %s inherits %d classes, must check ",
-                classEntry->data.classEntry.name,
-                classEntry->data.classEntry.inheritsCount);
-
-        for (int i = 0; i < classEntry->data.classEntry.inheritsCount; i++) {
-          fprintf(stderr, "%s ",
-                  classEntry->data.classEntry.inheritedScopes[i]->scopeName);
-
-          push_scope(classEntry->data.classEntry.inheritedScopes[i], stack);
-          fprintf(stderr, "Top of the stack %s \n",
-                  peek_scope(stack)->scopeName);
-        }
-        fprintf(stderr, "\n");
-        fprintf(stderr, "%s\n", peek_scope(stack)->scopeName);
-      }
-
-      // Using this we can check if a variable has been declared in any of
-      // the super scopes. We basically do a DFS through the inherited
-      // scopes.
-      while (stack->size > 0) {
-        Scope *current = pop_scope(stack);
-        fprintf(stderr, "Checking inherited class %s for entry %s ... \n",
-                current->scopeName, name);
-        entry = get_entry(current, name);
-
-        if (entry->tableType == VARIABLE_ENTRY &&
-            strcmp(entry->data.varEntry.name, name) == 0) {
-          fprintf(stderr, "FOUND ENTRY %s in SCOPE %s .\n", name,
-                  current->scopeName);
-          return ok;
-        }
-
-        classEntry = get_entry(current->parentScope, current->scopeName);
-        if (classEntry->data.classEntry.inheritsCount > 0 &&
-            classEntry->data.classEntry.inheritedScopes != NULL) {
-          for (int i = 0; i < classEntry->data.classEntry.inheritsCount; i++) {
-            push_scope(classEntry->data.classEntry.inheritedScopes[i], stack);
-          }
-        }
-      }
-    }
-  }
-
-  return err111;
-}
 
 /*
  * This function is used to check if a free function call has been defined
@@ -986,236 +733,7 @@ int validate_lookup(node *astnode, Scope *currentScope) {
  * call for a function that is not defined at all.
  */
 
-int check_functioncall(node *astnode, Scope *currentScope) {
-  if (!astnode) {
-    fprintf(stderr, "ERROR - check_functioncall(): AST node is null exiting\n");
-    return -1;
-  }
-  if (!currentScope) {
-    fprintf(stderr, "ERROR - check_functioncall(): Scope is null exiting.\n");
-    return -1;
-  }
-
-  TableEntry *funcEntry = get_entry(currentScope, get_name(astnode));
-
-  // Now we need to check
-  // 1. the type of the entry it must be a funcdef
-  // 3. the fparams of the function are the same.
-
-  if (funcEntry->tableType != FUNCDEF_ENTRY) {
-    return err202; // Function has not been defined.
-  }
-
-  // Now check the parameters, must be the same as the entry.
-  // TableEntry **fparams = get_fparams_list(astnode, currentScope);
-  int fparamsCount = get_fparam_count(astnode);
-
-  // If the number of parameters differs.
-  if (fparamsCount != funcEntry->data.funcEntry.numfparams) {
-    return err203;
-  }
-  // Now we must check that they are actually the same types of parameters,
-  // note that we can have expressions etc be passed as parameters to
-  // functions.
-
-  return ok;
-}
-
-/*
- * This function checks the type of an AST node, this is used when we have a
- * declaration of a variable, if that variable is not a of a type that has
- * been defined program.
- */
-int check_type(node *astnode) { return ok; }
-
-/*
- * This will check a dot, it will check if both sides of the dot are
- * correct, eg. LHS = class type, RHS = member of the class type.
- *
- * All classes are declared in the global scope, cannot have class in any
- * other scope.
- */
-
 /*
  * This function will be used to check if an assignment is valid, both sides
  * must be of the same type.
- */
-FILE *temp;
-void second_pass_type_check(node *root, Scope *globalScope,
-                            ErrorArray *errors) {
-
-  semantic_stack *stack = init_stack();
-
-  check_for_shadowing_in_member_functions(globalScope, errors);
-  check_tables_for_shadowing(globalScope, errors);
-
-  push_node(root, stack);
-
-  temp = fopen("no-scopes.txt", "w+");
-  while (stack->size > 0) {
-    node *current = pop_node(stack);
-
-    if (current == NULL) {
-      continue;
-    }
-    if (current->type == dot) {
-
-      TypeInfo info = get_type_expression(current, errors, globalScope);
-      fprintf(stderr, "dot %d ", current->line);
-      print_type(info);
-    }
-    if (current->type == funcdef) {
-      check_for_return_statement_function(current, globalScope, errors);
-    }
-    if (current->type == funccall) {
-      TypeInfo info = get_type_expression(current, errors, globalScope);
-      fprintf(stderr, "functioncall %s  %d ", get_name(current), current->line);
-      print_type(info);
-    }
-    if (current->type == floatnum) {
-      TypeInfo info = get_type_expression(current, errors, globalScope);
-      fprintf(stderr, "floatnum: ");
-      print_type(info);
-    }
-    if (current->type == intnum) {
-
-      TypeInfo info = get_type_expression(current, errors, globalScope);
-      print_type(info);
-    }
-    if (current->type == var) {
-      TypeInfo info = get_type_expression(current, errors, globalScope);
-      fprintf(stderr, "var: ");
-      print_type(info);
-    }
-
-    if (current->type == fparam && get_type_enum(current) == ID_TYPE) {
-
-      const char *typeName = get_type_string(current);
-      EntryType classType = get_entry(globalScope, typeName)->tableType;
-
-      if (classType != CLASS_ENTRY) {
-        fprintf(stderr, "Class has not been defined cannot declare a "
-                        "function parameter "
-                        "of this type.\n");
-        insert_error(errors,
-                     create_error(get_name(current), err206, current->line));
-
-      } else {
-        fprintf(stderr, "CLASS FOUND PUSHING TO STACK.\n");
-        for (int i = 0; i < current->numchildren; i++)
-          push_node(current->children[i], stack);
-      }
-    }
-
-    if (current->type == funcdef && get_type_enum(current) == ID_TYPE) {
-
-      const char *typeName = get_type_string(current);
-      EntryType classType = get_entry(globalScope, typeName)->tableType;
-
-      if (classType != CLASS_ENTRY) {
-        fprintf(stderr, "The return type of the function %s.\n", typeName);
-        fprintf(stderr, "Class has not been defined cannot declare a function "
-                        "to have a return type "
-                        "of this type.\n");
-        insert_error(errors,
-                     create_error(get_name(current), err207, current->line));
-        continue;
-      }
-      Scope *containingScope = current->scope;
-      TableEntry *funcEntry;
-      if (containingScope->type == GLOBAL_SCOPE) {
-        funcEntry = get_entry(containingScope, get_name(current));
-        if (funcEntry->tableType == FUNCDEF_ENTRY) {
-          for (int i = 0; i < current->numchildren; i++) {
-            push_node(current->children[i], stack);
-          }
-        }
-      }
-
-      if (containingScope->type == CLASS_SCOPE) {
-        funcEntry = get_entry(containingScope, get_name(current));
-        if (funcEntry->tableType == FUNCDEF_ENTRY) {
-          for (int i = 0; i < current->numchildren; i++) {
-            push_node(current->children[i], stack);
-          }
-        }
-      }
-
-    } else if (current->type == funcdecl) {
-
-      // We check if the entry has been defined.
-      TableEntry *funcEntry = get_entry(current->scope, get_name(current));
-
-      if (funcEntry->tableType == FUNCDEF_ENTRY &&
-          funcEntry->data.funcEntry.defined == false) {
-        insert_error(errors,
-                     create_error(get_name(current), err900, current->line));
-      }
-
-    } else if (current->type == assingop) {
-
-      TypeInfo LHSInfo =
-          get_type_expression(current->children[0], errors, globalScope);
-      TypeInfo RHSInfo =
-          get_type_expression(current->children[1], errors, globalScope);
-
-      if (!compare_type_info(LHSInfo, RHSInfo)) {
-
-        fprintf(stderr, "LHS:");
-        print_type(LHSInfo);
-        fprintf(stderr, "RHS:");
-        print_type(RHSInfo);
-
-        insert_error(errors,
-                     create_error(LHSInfo.typeString, err901, current->line));
-      }
-
-    } else if (current->type == multop || current->type == addop ||
-               current->type == relexpr) {
-      get_type_expression(current, errors, globalScope);
-
-    } else if (current->type == returnnode) {
-
-      node *returnValue = current->children[0];
-      if (returnValue->scope ==
-          NULL) // This will happen when we have a function that we
-                // implemented but have no corresponding declaration.
-        fprintf(stderr, "SCOPE IS NULL for RETURN ON LINE %d \n",
-                current->line);
-      else {
-        // This is the type that we may receive.
-        TypeInfo returnTypeExpected = get_entry(returnValue->scope->parentScope,
-                                                returnValue->scope->scopeName)
-                                          ->data.funcEntry.returnType;
-        if (returnTypeExpected.type == VOID_TYPE) {
-          insert_error(errors, create_error(returnValue->scope->scopeName,
-                                            err1101, current->line));
-        }
-
-        // This is the type we actually get.
-        TypeInfo typeReturned =
-            get_type_expression(current->children[0], errors, globalScope);
-
-        if (!compare_type_info(typeReturned, returnTypeExpected)) {
-          insert_error(errors, create_error(returnTypeExpected.typeString,
-                                            err1102, current->line));
-        }
-      }
-    } else if (current->type == funccall) {
-      validate_functioncall(current, globalScope, errors);
-    } else {
-
-      for (int i = 0; i < current->numchildren; i++) {
-        if (current->children[i] != NULL)
-          push_node(current->children[i], stack);
-      }
-    }
-  }
-}
-
-/*
- * Note that some of the nodes are NOT given scopes, these include identifiers,
- * type, arraydims, etc these nodes just aggregate data they never get pushed
- * onto the stack! But we still need to push the children of these nodes onto
- * the stack!
  */

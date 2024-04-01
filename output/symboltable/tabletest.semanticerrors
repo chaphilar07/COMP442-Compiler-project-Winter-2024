@@ -23,18 +23,17 @@ WARNING! LINE 39 MEMBER VARIABLE a IS SHADOWING AN INHERITED MEMBER!
 WARNING! LINE 39 MEMBER VARIABLE c IS SHADOWING AN INHERITED MEMBER!
 SEMANTIC ERROR ON LINE 43: Error on operator *, cannot use * on two different types
 SEMANTIC ERROR ON LINE 44: Invalid return type, integer is the expected return type from the function.
-SEMANTIC ERROR ON LINE 53: Cannot implement functions for class that does not exist, class (null) does not exist cannot implement .
-SEMANTIC ERROR ON LINE 55: Cannot implement a member function that has not been declared, function À
-ž/×€ has not been declared.
+SEMANTIC ERROR ON LINE 53: Cannot implement functions for class that does not exist, class none does not exist cannot implement .
+SEMANTIC ERROR ON LINE 55: Cannot implement a member function that has not been declared, function notdeclared has not been declared.
 SEMANTIC ERROR ON LINE 62: FUNCTION foo BEING DEFIND WITH DIFFERENT NUMBER OF PARAMETERS ERROR !
 SEMANTIC ERROR ON LINE 62: NON-VOID FUNCTION MUST RETURN A VALUE, FUNCTION foo HAS NO RETURN STATEMENT.
 SEMANTIC ERROR ON LINE 62: FUNCTION foo HAS BEEN DEFINED WITH A DIFFERENT RETURN TYPE
 SEMANTIC ERROR ON LINE 67: NON-VOID FUNCTION MUST RETURN A VALUE, FUNCTION foo HAS NO RETURN STATEMENT.
 SEMANTIC ERROR ON LINE 70: FUNCTION overridden BEING DEFIND WITH DIFFERENT NUMBER OF PARAMETERS ERROR !
-SEMANTIC ERROR ON LINE 79: Error on operator *, cannot use * on two different types
-SEMANTIC ERROR ON LINE 79: Error on operator *, cannot use * on two different types
-SEMANTIC ERROR ON LINE 79: Error on operator *, cannot use * on two different types
 SEMANTIC ERROR ON LINE 79: Cannot declare variable with type that does not exist, declaration of variable z, with type that does not exist
+SEMANTIC ERROR ON LINE 79: Error on operator *, cannot use * on two different types
+SEMANTIC ERROR ON LINE 79: Error on operator *, cannot use * on two different types
+SEMANTIC ERROR ON LINE 79: Error on operator *, cannot use * on two different types
 SEMANTIC ERROR ON LINE 80: Error on operator *, cannot use * on two different types
 SEMANTIC ERROR ON LINE 80: Error on operator *, cannot use * on two different types
 SEMANTIC ERROR ON LINE 80: Error on operator *, cannot use * on two different types
@@ -46,14 +45,13 @@ SEMANTIC ERROR ON LINE 89: Invalid return type, integer is the expected return t
 SEMANTIC ERROR ON LINE 95: Duplicate use of identifier A in the same scope exiting
 SEMANTIC ERROR ON LINE 96: Function validfunc called  with incorrect type of arugments.
 SEMANTIC ERROR ON LINE 97: Function validfunc called with the incorrect number of arguments .
+SEMANTIC ERROR ON LINE 107: Error on operator *, cannot use * on two different types
 SEMANTIC ERROR ON LINE 107: Error on operator +, cannot use + on two different types
 SEMANTIC ERROR ON LINE 107: Error on operator *, cannot use * on two different types
-SEMANTIC ERROR ON LINE 107: Error on operator *, cannot use * on two different types
 SEMANTIC ERROR ON LINE 108: Invalid return type, C is the expected return type from the function.
-SEMANTIC ERROR ON LINE 121: No member called x belongs to the class being accessed
-SEMANTIC ERROR ON LINE 121: Invalid function call, function x is not defined in the source file.
-SEMANTIC ERROR ON LINE 125: Trying to access array variable x with variable/function call that is not of type integer.
-SEMANTIC ERROR ON LINE 134: Duplicate use of identifier main in the same scope exiting
-SEMANTIC ERROR ON LINE 135: Invalid function call, function doStuff is not defined in the source file.
-SEMANTIC ERROR ON LINE 141: NON-VOID FUNCTION MUST RETURN A VALUE, FUNCTION somefunc HAS NO RETURN STATEMENT.
-End of Error Report, total of 57 errors found.
+SEMANTIC ERROR ON LINE 126: Assignment cannot occur between a variable and an expression of another type, nil is not the expected type for the assignment.
+SEMANTIC ERROR ON LINE 126: Trying to access array variable x with variable/function call that is not of type integer.
+SEMANTIC ERROR ON LINE 135: Duplicate use of identifier main in the same scope exiting
+SEMANTIC ERROR ON LINE 136: Invalid function call, function doStuff is not defined in the source file.
+SEMANTIC ERROR ON LINE 142: NON-VOID FUNCTION MUST RETURN A VALUE, FUNCTION somefunc HAS NO RETURN STATEMENT.
+End of Error Report, total of 56 errors found.

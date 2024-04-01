@@ -46,7 +46,7 @@ Table Entry 4 of "Global":class C inherits 	size: 4	offset: 0
 
 			END OF TABLE FOR SCOPE class scope "C"
 
-Table Entry 5 of "Global":func main -> void : 	size: 112	return type size: 0
+Table Entry 5 of "Global":func main -> void : 	size: 116	return type size: 0
 
 			BEGINNING OF TABLE FOR:  function scope "main"
 
@@ -66,9 +66,9 @@ Table Entry 5 of "Global":func main -> void : 	size: 112	return type size: 0
 
 			Table Entry 8 of "main":var i integer[2][3]	size: 24	offset: 76
 
-			Table Entry 9 of "main":var counter integer	size: 4	offset: 100
+			Table Entry 9 of "main":var counter float	size: 8	offset: 100
 
-			Table Entry 10 of "main":var y float	size: 8	offset: 104
+			Table Entry 10 of "main":var y float	size: 8	offset: 108
 
 			END OF TABLE FOR SCOPE function scope "main"
 
