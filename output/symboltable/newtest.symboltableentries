@@ -1,5 +1,1 @@
-Inserting class foo into scope Global ... Inserted class entry.
-Inserting function entry bar into scope foo ... Exiting function insertion.
-Encountered impl with name foo ... Found corresponding class with name foo .
-Defining member function bar ... inserted and defined member function ... 
 success

@@ -1,36 +1,22 @@
 BEGINNING OF TABLE FOR:  global scope "Global"
 
-Table Entry 1 of "Global":func bad_func -> float : 	size: 32	return type size: 8
+Table Entry 1 of "Global":func bad_func -> float : 	size: 48	return type size: 8
 
 			BEGINNING OF TABLE FOR:  function scope "bad_func"
 
 			Table Entry 1 of "bad_func":var x float[1][2]	size: 16	offset: 0
 
-			Table Entry 2 of "bad_func":var y A	size: 16	offset: 16
+			Table Entry 2 of "bad_func":var z B	size: 16	offset: 16
+
+			Table Entry 3 of "bad_func":var y C	size: 16	offset: 32
 
 			END OF TABLE FOR SCOPE function scope "bad_func"
 
-Table Entry 2 of "Global":class C inherits B, 	size: 32	offset: 0
+Table Entry 2 of "Global":class C inherits B, 	size: 16	offset: 0
 
 			BEGINNING OF TABLE FOR:  class scope "C"
 
-			Table Entry 1 of "C":private var a D	size: 0	offset: 0
-
-			Table Entry 2 of "C":private func defined -> B : a A,b B,c C	size: 0	return type size: 24
-
-						BEGINNING OF TABLE FOR:  function scope "defined"
-
-						Table Entry 1 of "defined":fparam a A	size: 16	offset: 0
-
-						Table Entry 2 of "defined":fparam c C	size: 0	offset: 0
-
-						Table Entry 3 of "defined":fparam b B	size: 24	offset: 0
-
-						END OF TABLE FOR SCOPE function scope "defined"
-
-			Table Entry 3 of "C":private var c float	size: 8	offset: 0
-
-			Table Entry 4 of "C":private var b B	size: 24	offset: 8
+			Table Entry 1 of "C":public var a B	size: 16	offset: 0
 
 			END OF TABLE FOR SCOPE class scope "C"
 
@@ -46,13 +32,13 @@ Table Entry 3 of "Global":func main -> void : 	size: 8	return type size: 0
 
 			END OF TABLE FOR SCOPE function scope "main"
 
-Table Entry 4 of "Global":class B inherits A, 	size: 24	offset: 0
+Table Entry 4 of "Global":class B inherits A, 	size: 16	offset: 0
 
 			BEGINNING OF TABLE FOR:  class scope "B"
 
-			Table Entry 1 of "B":private var x A	size: 16	offset: 0
+			Table Entry 1 of "B":private var x float	size: 8	offset: 0
 
-			Table Entry 2 of "B":private var a float	size: 8	offset: 16
+			Table Entry 2 of "B":private var a float	size: 8	offset: 8
 
 			Table Entry 3 of "B":private func overridden -> void : a integer,b integer	size: 8	return type size: 0
 
@@ -64,11 +50,11 @@ Table Entry 4 of "Global":class B inherits A, 	size: 24	offset: 0
 
 						END OF TABLE FOR SCOPE function scope "overridden"
 
-			Table Entry 4 of "B":private var c D	size: 0	offset: 24
+			Table Entry 4 of "B":private var c D	size: 0	offset: 16
 
-			Table Entry 5 of "B":private var b B	size: 0	offset: 24
+			Table Entry 5 of "B":private var b B	size: 0	offset: 16
 
-			Table Entry 6 of "B":private func foo -> B : x float	size: 8	return type size: 0
+			Table Entry 6 of "B":private func foo -> A : x float	size: 8	return type size: 20
 
 						BEGINNING OF TABLE FOR:  function scope "foo"
 
@@ -84,11 +70,11 @@ Table Entry 5 of "Global":func stillinvalid -> integer : 	size: 0	return type si
 
 			END OF TABLE FOR SCOPE function scope "stillinvalid"
 
-Table Entry 6 of "Global":func shouldbeok -> B : 	size: 24	return type size: 24
+Table Entry 6 of "Global":func shouldbeok -> B : 	size: 16	return type size: 16
 
 			BEGINNING OF TABLE FOR:  function scope "shouldbeok"
 
-			Table Entry 1 of "shouldbeok":var x B	size: 24	offset: 0
+			Table Entry 1 of "shouldbeok":var x B	size: 16	offset: 0
 
 			END OF TABLE FOR SCOPE function scope "shouldbeok"
 
@@ -100,15 +86,15 @@ Table Entry 7 of "Global":func validfunc -> void : x float	size: 8	return type s
 
 			END OF TABLE FOR SCOPE function scope "validfunc"
 
-Table Entry 8 of "Global":func bar -> C : 	size: 44	return type size: 32
+Table Entry 8 of "Global":func bar -> C : 	size: 28	return type size: 16
 
 			BEGINNING OF TABLE FOR:  function scope "bar"
 
 			Table Entry 1 of "bar":var x float	size: 8	offset: 0
 
-			Table Entry 2 of "bar":var z C	size: 32	offset: 8
+			Table Entry 2 of "bar":var z C	size: 16	offset: 8
 
-			Table Entry 3 of "bar":var y integer	size: 4	offset: 40
+			Table Entry 3 of "bar":var y integer	size: 4	offset: 24
 
 			END OF TABLE FOR SCOPE function scope "bar"
 
@@ -122,29 +108,29 @@ Table Entry 9 of "Global":func invalid -> float : x integer,y notatype	size: 4	r
 
 			END OF TABLE FOR SCOPE function scope "invalid"
 
-Table Entry 10 of "Global":func good_func -> integer : 	size: 24	return type size: 4
+Table Entry 10 of "Global":func good_func -> integer : 	size: 28	return type size: 4
 
 			BEGINNING OF TABLE FOR:  function scope "good_func"
 
 			Table Entry 1 of "good_func":var x integer[1][2]	size: 8	offset: 0
 
-			Table Entry 2 of "good_func":var a A	size: 16	offset: 8
+			Table Entry 2 of "good_func":var a A	size: 20	offset: 8
 
 			END OF TABLE FOR SCOPE function scope "good_func"
 
-Table Entry 11 of "Global":func somefunc -> A : 	size: 0	return type size: 16
+Table Entry 11 of "Global":func somefunc -> A : 	size: 0	return type size: 20
 
 			BEGINNING OF TABLE FOR:  function scope "somefunc"
 
 			END OF TABLE FOR SCOPE function scope "somefunc"
 
-Table Entry 12 of "Global":class A inherits 	size: 16	offset: 0
+Table Entry 12 of "Global":class A inherits 	size: 20	offset: 0
 
 			BEGINNING OF TABLE FOR:  class scope "A"
 
-			Table Entry 1 of "A":private var x integer	size: 4	offset: 0
+			Table Entry 1 of "A":private var x float	size: 8	offset: 0
 
-			Table Entry 2 of "A":private var a integer	size: 4	offset: 4
+			Table Entry 2 of "A":private var a integer	size: 4	offset: 8
 
 			Table Entry 3 of "A":private func overridden -> void : 	size: 0	return type size: 0
 
@@ -152,9 +138,9 @@ Table Entry 12 of "Global":class A inherits 	size: 16	offset: 0
 
 						END OF TABLE FOR SCOPE function scope "overridden"
 
-			Table Entry 4 of "A":private var c integer	size: 4	offset: 8
+			Table Entry 4 of "A":private var c integer	size: 4	offset: 12
 
-			Table Entry 5 of "A":private var b integer	size: 4	offset: 12
+			Table Entry 5 of "A":private var b integer	size: 4	offset: 16
 
 			Table Entry 6 of "A":private func foo -> void : 	size: 4	return type size: 0
 
@@ -164,7 +150,7 @@ Table Entry 12 of "Global":class A inherits 	size: 16	offset: 0
 
 						END OF TABLE FOR SCOPE function scope "foo"
 
-			Table Entry 7 of "A":private var y A	size: 0	offset: 16
+			Table Entry 7 of "A":private var y A	size: 0	offset: 20
 
 			END OF TABLE FOR SCOPE class scope "A"
 

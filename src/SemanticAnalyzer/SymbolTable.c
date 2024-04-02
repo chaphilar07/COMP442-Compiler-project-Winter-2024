@@ -904,7 +904,12 @@ TableEntry *create_class_entry(node *astnode, Scope *currentScope,
  * 2. funccall
  */
 
+FILE *temp;
 Scope *create_program_scope(node *root, FILE *out, void *arr) {
+
+  char buffer[124];
+  snprintf(buffer, sizeof(buffer), "nodes%d.txt", rand());
+  temp = fopen(buffer, "w+");
 
   ErrorArray *errors = (ErrorArray *)arr;
 
@@ -966,19 +971,41 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
       fprintf(stderr, "TRYING TO ASSIGN CURRENT SCOPE TO NULL!\n");
 
     current->scope = current_scope; // We set the scopes of the AST nodes
-    if (current->type == returnnode) {
-      fprintf(stderr, "Giving scope %s to node return type ...",
-              current_scope->scopeName);
-    }
 
     // Note that because we want to have the function parameters also
     // be entries in the function scopes table, we must make the same
     // kind of
 
-    if (current->type == vardecl || current->type == fparam) {
+    // Note for dots we will traverse the tree before we assign the scope so we
+    // must assign scopes now rather than later.
+    if (current->type == dot) {
+      semantic_stack *stack = init_stack();
+      push_node(current, stack);
 
-      fprintf(out, "Inserting vardecl %s into scope %s ... ", get_name(current),
-              current_scope->scopeName);
+      while (stack->size > 0) {
+        node *currentNode = pop_node(stack);
+
+        currentNode->scope = current_scope;
+
+        if (currentNode->numchildren > 0) {
+          for (int i = 0; i < currentNode->numchildren; i++) {
+            push_node(currentNode->children[i], stack);
+          }
+        }
+      }
+    }
+
+    if (current->type == var && current->scope != NULL) {
+
+      err_code code = validate_lookup(current, errors, globalScope);
+
+      if (code == err111) {
+        insert_error(errors,
+                     create_error(get_name(current), err111, current->line));
+      }
+    }
+
+    if (current->type == vardecl || current->type == fparam) {
 
       LangType currentType = get_type_enum(current);
       if (currentType == ID_TYPE) { // This does not work correctly!
@@ -999,17 +1026,12 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
                      create_error(get_name(current), code, current->line));
       }
 
-      fprintf(out, "inserted vardecl exiting.\n");
     } else if (current->type == structdecl) {
-
-      fprintf(out, "Inserting class %s into scope %s ... ", get_name(current),
-              current_scope->scopeName);
 
       TableEntry *entry = create_class_entry(current, current_scope, errors);
 
       err_code code = insert_entry(current_scope, entry);
       if (code != ok) {
-        fprintf(stderr, "DUPLICATE IDENTIFIER USED ... \n");
         insert_error(errors,
                      create_error(get_name(current), code, current->line));
       }
@@ -1017,16 +1039,11 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
       push_scope(entry->data.classEntry.scope, scope_stack);
       push_node(init_node(sentinel), node_stack);
 
-      fprintf(out, "Inserted class entry.\n");
-
       for (int i = 0; i < current->numchildren; i++)
         push_node(current->children[i], node_stack);
       continue;
 
     } else if (current->type == funcdecl) {
-
-      fprintf(out, "Inserting function entry %s into scope %s ... ",
-              get_name(current), current_scope->scopeName);
 
       LangType currentType = get_type_enum(current);
       if (currentType == ID_TYPE) { // This does not work correctly!
@@ -1048,14 +1065,9 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
                      create_error(get_name(current), code, current->line));
       }
 
-      fprintf(out, "Exiting function insertion.\n");
-
     } else if (current->type == funcdef) {
 
       if (current_scope->type == GLOBAL_SCOPE) {
-
-        fprintf(out, "inserting free function %s into scope %s ...",
-                get_name(current), current_scope->scopeName);
 
         TableEntry *entry = create_func_entry(current, current_scope);
         err_code code = insert_entry(current_scope, entry);
@@ -1077,11 +1089,8 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
         for (int i = 0; i < funcbodynode->numchildren; i++) {
           push_node(funcbodynode->children[i], node_stack);
         }
-        fprintf(out, "inserted free function ...\n");
       }
       if (current_scope->type == CLASS_SCOPE) {
-
-        fprintf(out, "Defining member function %s ... ", get_name(current));
 
         const char *name = get_name(current);
         TableEntry *entry = get_entry(current_scope, name);
@@ -1130,9 +1139,6 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
           TypeInfo typeExpected = entry->data.funcEntry.returnType;
           TypeInfo typeReceived = tempFuncEntry->data.funcEntry.returnType;
 
-          fprintf(stderr, "TYPE EXPECTED %s TYPE RECEIVED %s \n",
-                  typeExpected.typeString, typeReceived.typeString);
-
           if (typeReceived.type != typeExpected.type) {
             insert_error(errors, create_error(get_name(current), err1412,
                                               current->line));
@@ -1147,7 +1153,6 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
             push_node(funcbodynode->children[i], node_stack);
           }
 
-          fprintf(out, "inserted and defined member function ... \n");
         } else {
           // We will "stem" the tree here, what we will do is remove the link to
           // this tree at the parent.
@@ -1178,7 +1183,6 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
     } else if (current->type == impldef) {
 
       const char *name = get_name(current);
-      fprintf(out, "Encountered impl with name %s ... ", name);
 
       int hash = FNV1a_hash(name, SIZE);
 
@@ -1210,27 +1214,6 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
 
       for (int i = 0; i < current->numchildren; i++)
         push_node(current->children[i], node_stack);
-
-      fprintf(out, "Found corresponding class with name %s .\n", name);
-
-    } else if (current->type == var) {
-
-      current->scope = current_scope;
-
-      // We must push the dimensions of the variable.
-      for (int i = 0; i < current->numchildren; i++) {
-        if (current->children[i]->type == dimlist) {
-          for (int j = 0; j < current->children[i]->numchildren; j++) {
-            push_node(current->children[i]->children[j], node_stack);
-          }
-        }
-      }
-      err_code code = validate_lookup(current, current_scope);
-
-      if (code == err111) {
-        insert_error(errors,
-                     create_error(get_name(current), err111, current->line));
-      }
 
     } else {
 

@@ -8,7 +8,7 @@ private let c: integer;
 
 private func overridden()->void;
 
-private let x: integer;
+private let x: float;
 private func x() -> void;
 private let y: A; //legal
 private func foo()->void; 
@@ -22,20 +22,15 @@ private func overridden(a:integer, b:integer)->void;
 private let a: float;
 private let b: B;
 private let c: D;
-private let x: A;
-private func foo(x:float) -> B;
+private let x: float;
+private func foo(x:float) -> A;
 
 };
-
 struct C inherits B{
-  private let a: D;
-  private let b: B;
-  private let c: float;
-
-  private func defined(a:A,b:B, c:C)-> B;
-  
+    public let a: B;
 
 };
+
 
 
 func foo()->integer{
@@ -119,10 +114,13 @@ func good_func()-> integer{
 
 func bad_func()->float{
     let x: float[1][2];
-    let y: A;
-    y.x(1,2);
+    let y: C;
+    let z: B;
 
-  
+
+
+    y.a.foo().x=x[1][2]; 
+
 
     return(x[1][0.3]);
   }
