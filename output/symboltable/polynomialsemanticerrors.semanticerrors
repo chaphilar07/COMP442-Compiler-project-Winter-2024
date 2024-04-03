@@ -11,7 +11,7 @@ SEMANTIC ERROR ON LINE 45: Invalid return type, float is the expected return typ
 SEMANTIC ERROR ON LINE 78: Error on operator *, cannot use * on two different types
 SEMANTIC ERROR ON LINE 81: Assignment cannot occur between a variable and an expression of another type, integer is not the expected type for the assignment.
 SEMANTIC ERROR ON LINE 82: Invalid return type, QUADRATIC is the expected return type from the function.
-SEMANTIC ERROR ON LINE 93: Cannot implement a member function that has not been declared, function ∞Åä∑j has not been declared.
+SEMANTIC ERROR ON LINE 93: Cannot implement a member function that has not been declared, function –tñ‹!ÿ has not been declared.
 SEMANTIC ERROR ON LINE 97: Duplicate use of identifier f in the same scope exiting
 SEMANTIC ERROR ON LINE 99: NON-VOID FUNCTION MUST RETURN A VALUE, FUNCTION f HAS NO RETURN STATEMENT.
 SEMANTIC ERROR ON LINE 99: Duplicate use of identifier f in the same scope exiting

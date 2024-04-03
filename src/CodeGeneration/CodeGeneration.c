@@ -11,9 +11,11 @@
  * semantic actions like for the semantic checking phase.
  */
 #include "CodeGeneration.h"
+#include "../SemanticAnalyzer/SemanticAnalyzer.h"
 #include "../parser/AST/AST_SymbolTable.h"
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 /*
  * This function will set the size and offsets of all of the classes and class
@@ -72,6 +74,91 @@ char *get_first_free_register() {
 }
 
 /*
+ * This function will create a temporary entry in the symbol table for the
+ * temporary results of operations.
+ *
+ * This function should be called when we encounter operation nodes in the ast
+ * traversal. In this case we get the types of the left and right nodes get the
+ * return type of the operation and we create a temporary table entry in the
+ * symbol table.
+ *
+ */
+
+TableEntry *create_temporary_entry(node *left, node *right,
+                                   const char *operator, ErrorArray * errors) {
+  if (!left || !right) {
+    return NULL;
+  }
+
+  Scope *scopePtr = left->scope;
+  if (scopePtr != right->scope) {
+    fprintf(stderr, "BIG PROBLEM!!\n");
+    return NULL;
+  }
+
+  while (scopePtr->type != GLOBAL_SCOPE)
+    scopePtr = scopePtr->parentScope;
+
+  TypeInfo leftInfo = get_type_expression(left, errors, scopePtr);
+
+  TableEntry *entry = malloc(sizeof(TableEntry));
+
+  if (!entry) {
+    fprintf(stderr, "ERROR - create_temporary_entry(): Could not allocate "
+                    "memory exiting.\n");
+    return NULL;
+  }
+
+  return NULL;
+}
+
+/*
+ * This function will be used to set the return type size of all of the
+ * functions in all of the scopes of the symbol table.
+ *
+ *
+ */
+
+void set_function_return_sizes(Scope *globalScope) {
+  if (!globalScope) {
+    fprintf(stderr, "ERROR - set_function_return_sizes(): Scope passed is "
+                    "null, exiting.\n");
+    return;
+  }
+
+  for (int i = 0; i < SIZE; i++) {
+    if (globalScope->entries[i].tableType == FUNCDEF_ENTRY) {
+
+      unsigned int runningSum = 0;
+      Scope *funcScope = globalScope->entries[i].data.funcEntry.scope;
+
+      for (int j = 0; j < SIZE; j++) {
+        runningSum += funcScope->entries[j].size;
+      }
+      globalScope->entries[i].size = runningSum;
+    }
+
+    if (globalScope->entries[i].tableType == CLASS_ENTRY) {
+      Scope *classScope = globalScope->entries[i].data.classEntry.scope;
+      unsigned int runningSum = 0;
+
+      for (int j = 0; j < SIZE; j++) {
+        if (classScope->entries[j].tableType == FUNCDEF_ENTRY) {
+
+          Scope *funcScope = classScope->entries[j].data.funcEntry.scope;
+
+          for (int k = 0; k < SIZE; k++) {
+
+            runningSum += funcScope->entries[k].size;
+          }
+          classScope->entries[j].size = runningSum;
+        }
+      }
+    }
+  }
+}
+
+/*
  * This function will be used to make a third traversal through the tree, this
  traversal will be used for performing the code generation.
  */
@@ -79,6 +166,17 @@ void code_gen_pass(node *root, Scope *globalScope) {
 
   semantic_stack *stack = init_stack();
   push_node(root, stack);
+
+  // Here we begin to generate the code. e
+  while (stack->size > 0) {
+    node *current = pop_node(stack);
+
+    if (current->numchildren > 0) {
+      for (int i = 0; i < current->numchildren; i++) {
+        push_node(current->children[i], stack);
+      }
+    }
+  }
   return;
 }
 

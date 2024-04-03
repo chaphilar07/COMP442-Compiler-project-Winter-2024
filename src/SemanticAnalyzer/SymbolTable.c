@@ -713,7 +713,6 @@ TableEntry *create_variable_entry(node *astnode, Scope *currentScope,
             ->size; // We get the size of the class being declared, so we will
                     // need to create the size of the classes as we go.
   } else {
-    // Error!
     return NULL;
   }
 

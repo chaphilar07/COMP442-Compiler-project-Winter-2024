@@ -9,6 +9,8 @@ PARSETEST=parsedriver
 ASTTEST=ASTDRIVER
 SYMBOLDRIVER=SYMBOLDRIVER
 
+CODEGEN = CODEGENDRIVER
+
 
 all: $(TARGET) 
 
@@ -45,9 +47,19 @@ testastgen:
 
 
 symboltabletest:
-	$(CC) $(CFLAGS) src/CodeGeneration/CodeGeneration.c src/SemanticAnalyzer/SemanticAnalyzer.c src/SemanticAnalyzer/SemanticError.c src/lexer/lexer.c src/utils/utils.c src/parser/parser.c src/parser/AST/AST_gen.c src/SemanticAnalyzer/SymbolTable.c src/SemanticAnalyzer/SemanticAnalyzerDriver.c -o $(SYMBOLDRIVER)
+	$(CC) $(CFLAGS)  src/SemanticAnalyzer/SemanticAnalyzer.c src/SemanticAnalyzer/SemanticError.c src/lexer/lexer.c src/utils/utils.c src/parser/parser.c src/parser/AST/AST_gen.c src/SemanticAnalyzer/SymbolTable.c src/SemanticAnalyzer/SemanticAnalyzerDriver.c -o $(SYMBOLDRIVER)
 	./$(SYMBOLDRIVER)
 	rm $(SYMBOLDRIVER)
 
 symboldriver:
-	$(CC) $(CFLAGS) src/CodeGeneration/CodeGeneration.c src/SemanticAnalyzer/SemanticAnalyzer.c src/SemanticAnalyzer/SemanticError.c src/lexer/lexer.c src/utils/utils.c src/parser/parser.c src/parser/AST/AST_gen.c src/SemanticAnalyzer/SymbolTable.c src/SemanticAnalyzer/SemanticAnalyzerDriver.c -o $(SYMBOLDRIVER)
+	$(CC) $(CFLAGS)  src/SemanticAnalyzer/SemanticAnalyzer.c src/SemanticAnalyzer/SemanticError.c src/lexer/lexer.c src/utils/utils.c src/parser/parser.c src/parser/AST/AST_gen.c src/SemanticAnalyzer/SymbolTable.c src/SemanticAnalyzer/SemanticAnalyzerDriver.c -o $(SYMBOLDRIVER)
+
+
+codegentest:
+	$(CC) $(CFLAGS) src/SemanticAnalyzer/SemanticAnalyzer.c src/SemanticAnalyzer/SemanticError.c src/lexer/lexer.c src/utils/utils.c src/parser/parser.c src/parser/AST/AST_gen.c src/SemanticAnalyzer/SymbolTable.c src/SemanticAnalyzer/SemanticAnalyzerDriver.c -o $(CODEGEN)
+	./$(CODEGEN)
+	rm $(CODEGEN)
+
+codegendriver:
+	$(CC) $(CFLAGS) src/SemanticAnalyzer/SemanticAnalyzer.c src/SemanticAnalyzer/SemanticError.c src/lexer/lexer.c src/utils/utils.c src/parser/parser.c src/parser/AST/AST_gen.c src/SemanticAnalyzer/SymbolTable.c src/SemanticAnalyzer/SemanticAnalyzerDriver.c -o $(CODEGEN)
+
