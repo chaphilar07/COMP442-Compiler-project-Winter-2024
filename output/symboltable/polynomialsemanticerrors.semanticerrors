@@ -11,27 +11,26 @@ SEMANTIC ERROR ON LINE 45: Invalid return type, float is the expected return typ
 SEMANTIC ERROR ON LINE 78: Error on operator *, cannot use * on two different types
 SEMANTIC ERROR ON LINE 81: Assignment cannot occur between a variable and an expression of another type, integer is not the expected type for the assignment.
 SEMANTIC ERROR ON LINE 82: Invalid return type, QUADRATIC is the expected return type from the function.
-SEMANTIC ERROR ON LINE 93: Cannot implement a member function that has not been declared, function ÄÆì5£~ has not been declared.
+SEMANTIC ERROR ON LINE 93: Cannot implement a member function that has not been declared, function ∞Åä∑j has not been declared.
 SEMANTIC ERROR ON LINE 97: Duplicate use of identifier f in the same scope exiting
-SEMANTIC ERROR ON LINE 99: Duplicate use of identifier f in the same scope exiting
 SEMANTIC ERROR ON LINE 99: NON-VOID FUNCTION MUST RETURN A VALUE, FUNCTION f HAS NO RETURN STATEMENT.
+SEMANTIC ERROR ON LINE 99: Duplicate use of identifier f in the same scope exiting
 SEMANTIC ERROR ON LINE 103: NON-VOID FUNCTION MUST RETURN A VALUE, FUNCTION f3 HAS NO RETURN STATEMENT.
 SEMANTIC ERROR ON LINE 109: Cannot declare variable with type that does not exist, declaration of variable a, with type that does not exist
 SEMANTIC ERROR ON LINE 114: Duplicate use of identifier counter in the same scope exiting
 SEMANTIC ERROR LINE 118: Cannot lookup variable/function before it has been declared/defined, on line 118, b used before declaration
 SEMANTIC ERROR ON LINE 118: No member called b belongs to the class being accessed
-SEMANTIC ERROR ON LINE 119: No member called f belongs to the class being accessed
 SEMANTIC ERROR ON LINE 119: Assignment cannot occur between a variable and an expression of another type, integer is not the expected type for the assignment.
+SEMANTIC ERROR ON LINE 120: Assignment cannot occur between a variable and an expression of another type, C is not the expected type for the assignment.
 SEMANTIC ERROR ON LINE 120: Invalid function call, function undefined is not defined in the source file.
-SEMANTIC ERROR ON LINE 120: Assignment cannot occur between a variable and an expression of another type, (null) is not the expected type for the assignment.
 SEMANTIC ERROR ON LINE 122: Function f called with the incorrect number of arguments .
 SEMANTIC ERROR ON LINE 122: Assignment cannot occur between a variable and an expression of another type, a is not the expected type for the assignment.
 SEMANTIC ERROR ON LINE 123: Function f called with the incorrect number of arguments .
 SEMANTIC ERROR ON LINE 125: Trying to access array variable i with variable/function call that is not of type integer.
 SEMANTIC ERROR ON LINE 126: Function f3 called  with incorrect type of arugments.
-SEMANTIC ERROR ON LINE 127: Cannot access a member from a non-class type or non-existent class type, counter is not a class type
 SEMANTIC ERROR LINE 127: Cannot lookup variable/function before it has been declared/defined, on line 127, x used before declaration
+SEMANTIC ERROR ON LINE 127: Cannot access a member from a non-class type or non-existent class type, counter is not a class type
 SEMANTIC ERROR ON LINE 128: Assignment cannot occur between a variable and an expression of another type, integer is not the expected type for the assignment.
 SEMANTIC ERROR ON LINE 131: Function evaluate called  with incorrect type of arugments.
 SEMANTIC ERROR ON LINE 132: Function evaluate called  with incorrect type of arugments.
-End of Error Report, total of 36 errors found.
+End of Error Report, total of 35 errors found.

@@ -18,7 +18,7 @@ WARNING! LINE 34 MEMBER VARIABLE a IS SHADOWING AN INHERITED MEMBER!
 SEMANTIC ERROR ON LINE 38: Error on operator *, cannot use * on two different types
 SEMANTIC ERROR ON LINE 39: Invalid return type, integer is the expected return type from the function.
 SEMANTIC ERROR ON LINE 48: Cannot implement functions for class that does not exist, class (null) does not exist cannot implement .
-SEMANTIC ERROR ON LINE 50: Cannot implement a member function that has not been declared, function €\’5£~ has not been declared.
+SEMANTIC ERROR ON LINE 50: Cannot implement a member function that has not been declared, function ÒŠ·j has not been declared.
 SEMANTIC ERROR ON LINE 57: FUNCTION foo BEING DEFIND WITH DIFFERENT NUMBER OF PARAMETERS ERROR !
 SEMANTIC ERROR ON LINE 57: NON-VOID FUNCTION MUST RETURN A VALUE, FUNCTION foo HAS NO RETURN STATEMENT.
 SEMANTIC ERROR ON LINE 57: FUNCTION foo HAS BEEN DEFINED WITH A DIFFERENT RETURN TYPE

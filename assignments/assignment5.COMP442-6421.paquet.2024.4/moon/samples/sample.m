@@ -2,6 +2,8 @@
  message db    "Hello, world!", 13, 10, 0
          org   217
          align
+         
+%s This is the start of the program.
          entry                  % Start here
          add   r2,r0,r0
  pri     lb    r3,message(r2)   % Get next char

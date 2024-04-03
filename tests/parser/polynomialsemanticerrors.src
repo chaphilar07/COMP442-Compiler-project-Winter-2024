@@ -117,7 +117,7 @@ func main() -> void
   f1 = f1.build(2, 3.5);
   f2 = f2.build(-2.0, 1.0, 0.0);
   c.b = 1;                                                          // 11.2
-  counter = c.f();                                                  // 11.3
+  counter = c ;                                                 // 11.3
   undefined();                                                      // 11.4
   counter = a;                                                      // 11.1
   f(1,1,1);                                                         // 12.1

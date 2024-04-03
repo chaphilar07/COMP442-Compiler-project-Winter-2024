@@ -120,8 +120,6 @@ err_code insert_entry(Scope *scope, TableEntry *entry) {
 
   unsigned int hash = FNV1a_hash(name, SIZE);
   if (existingEntry->tableType == EMPTY_ENTRY) {
-    fprintf(stderr, "INSERTING %s INTO SCOPE %s ... \n", name,
-            scope->scopeName);
     scope->entries[hash] = *entry;
     return ok;
 
@@ -873,8 +871,6 @@ TableEntry *create_class_entry(node *astnode, Scope *currentScope,
             get_entry(currentScope, inheritsNode->children[i]->value)
                 ->data.classEntry.scope;
       } else {
-        fprintf(stderr, "SEMANTIC ERROR: Cannot inherit a class that does not "
-                        "exist exiting\n");
         insert_error(arr, create_error(inheritsNode->children[i]->value, err200,
                                        inheritsNode->line));
       }
@@ -904,12 +900,7 @@ TableEntry *create_class_entry(node *astnode, Scope *currentScope,
  * 2. funccall
  */
 
-FILE *temp;
 Scope *create_program_scope(node *root, FILE *out, void *arr) {
-
-  char buffer[124];
-  snprintf(buffer, sizeof(buffer), "nodes%d.txt", rand());
-  temp = fopen(buffer, "w+");
 
   ErrorArray *errors = (ErrorArray *)arr;
 
@@ -966,9 +957,6 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
       else
         break;
     }
-
-    if (current_scope == NULL)
-      fprintf(stderr, "TRYING TO ASSIGN CURRENT SCOPE TO NULL!\n");
 
     current->scope = current_scope; // We set the scopes of the AST nodes
 

@@ -1,51 +1,51 @@
 digraph AST {
 node [shape=record];
 node [fontname=Sans];charset= " UTF-8" splines=true splines=spline rankdir =LR
-1335[label="prog | (null)"];
-1335 -> 1334
-1335 -> 1333
-1335 -> 1332
-1332[label="funcdef list | (null)"];
-1333[label="impldeflist | (null)"];
-1333 -> 1328
-1328[label="impldef | (null)"];
-1328 -> 1327
-1328 -> 1310
-1310[label="identifier | foo"];
-1327[label="funcdef | (null)"];
-1327 -> 1325
-1327 -> 1320
-1327 -> 1319
-1327 -> 1311
-1311[label="identifier | bar"];
-1319[label="fparams list | (null)"];
-1319 -> 1318
-1318[label="fparam | (null)"];
-1318 -> 1316
-1318 -> 1314
-1318 -> 1313
-1313[label="identifier | x"];
+1329[label="prog | (null)"];
+1329 -> 1328
+1329 -> 1327
+1329 -> 1326
+1326[label="funcdef list | (null)"];
+1327[label="impldeflist | (null)"];
+1327 -> 1322
+1322[label="impldef | (null)"];
+1322 -> 1321
+1322 -> 1304
+1304[label="identifier | foo"];
+1321[label="funcdef | (null)"];
+1321 -> 1319
+1321 -> 1314
+1321 -> 1313
+1321 -> 1305
+1305[label="identifier | bar"];
+1313[label="fparams list | (null)"];
+1313 -> 1312
+1312[label="fparam | (null)"];
+1312 -> 1310
+1312 -> 1308
+1312 -> 1307
+1307[label="identifier | x"];
+1308[label="type | integer"];
+1310[label="arraydims | (null)"];
 1314[label="type | integer"];
-1316[label="arraydims | (null)"];
-1320[label="type | integer"];
-1325[label="funcbody | (null)"];
-1325 -> 1324
-1324[label="return | (null)"];
-1324 -> 1322
-1322[label="intnum | 0"];
-1334[label="structdecl list | (null)"];
-1334 -> 1308
-1308[label="structdecl | (null)"];
-1308 -> 1307
-1308 -> 1301
-1301[label="identifier | foo"];
-1307[label="funcdecl | (null)"];
-1307 -> 1305
-1307 -> 1304
-1307 -> 1303
-1307 -> 1302
-1302[label="visibility | private"];
-1303[label="identifier | bar"];
-1304[label="fparams list | (null)"];
-1305[label="type | void"];
+1319[label="funcbody | (null)"];
+1319 -> 1318
+1318[label="return | (null)"];
+1318 -> 1316
+1316[label="intnum | 0"];
+1328[label="structdecl list | (null)"];
+1328 -> 1302
+1302[label="structdecl | (null)"];
+1302 -> 1301
+1302 -> 1295
+1295[label="identifier | foo"];
+1301[label="funcdecl | (null)"];
+1301 -> 1299
+1301 -> 1298
+1301 -> 1297
+1301 -> 1296
+1296[label="visibility | private"];
+1297[label="identifier | bar"];
+1298[label="fparams list | (null)"];
+1299[label="type | void"];
 }

@@ -72,7 +72,14 @@ char *get_first_free_register() {
 }
 
 /*
- * Just for testing the functions of this file.
+ * This function will be used to make a third traversal through the tree, this
+ traversal will be used for performing the code generation.
  */
+void code_gen_pass(node *root, Scope *globalScope) {
+
+  semantic_stack *stack = init_stack();
+  push_node(root, stack);
+  return;
+}
 
 // int main(int argc, char **argv) { return 0; }
