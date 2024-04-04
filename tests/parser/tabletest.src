@@ -108,12 +108,12 @@ return (x*y+z);
 func good_func()-> integer{
    let x: integer[1][2];
    let a: A;
-  return(x[1][2]);
+  return(x[1][2][3]);
   }
 
 
 func bad_func()->float{
-    let x: float[1][2];
+    let x: integer[1][2];
     let y: C;
     let z: B;
 
@@ -122,7 +122,7 @@ func bad_func()->float{
     y.a.foo().x=x[1][2]; 
 
 
-    return(x[1][0.3]);
+    return(x[1][2]);
   }
 
 

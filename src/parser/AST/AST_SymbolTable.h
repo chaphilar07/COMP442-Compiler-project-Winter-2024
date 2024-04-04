@@ -18,6 +18,8 @@ typedef enum ScopeType { GLOBAL_SCOPE, FUNCTION_SCOPE, CLASS_SCOPE } ScopeType;
 
 // Type of the table entries.
 typedef enum EntryType {
+  LITVAL_ENTRY,
+  TEMP_ENTRY,
   VARIABLE_ENTRY,
   FUNCDEF_ENTRY,
   CLASS_ENTRY,
@@ -26,6 +28,15 @@ typedef enum EntryType {
 
 } EntryType;
 
+typedef struct LITVAL_ENTRY {
+
+  const char *id;
+  const char *value;
+} LitValEntry;
+
+typedef struct TempVarEntry {
+  const char *name;
+} TempVarEntry;
 // Type in the actual langauge.
 typedef enum LangType {
 
@@ -117,6 +128,8 @@ typedef struct TableEntry {
   int line; // We will keep the line of the entry that corresponds to the entry
             // in the actual source code.
   union {
+    LitValEntry litval;
+    TempVarEntry TempVarEntry;
     VariableEntry varEntry;
     FuncdefEntry funcEntry;
     ClassEntry classEntry;
@@ -192,6 +205,9 @@ NodeType get_nodeType_enum(const char *name);
 
 // We embed the scope into the AST nodes.
 typedef struct node {
+  const char *entryName; // We use this to store a "key" for the corresponding
+                         // table entry, used for code gen expression handling.
+
   Scope *scope;      // The scope that the node the AST belongs to.
   unsigned int line; // We need to keep the line number for semantic reports.
   NodeType type;

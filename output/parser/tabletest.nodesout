@@ -154,10 +154,11 @@ Leaf token created of type identifier and value A
 Leaf token created of type identifier and value x 
 Leaf token created of type intnum and value 1 
 Leaf token created of type intnum and value 2 
+Leaf token created of type intnum and value 3 
 Leaf token created of type identifier and value bad_func 
 Leaf token created of type type and value float 
 Leaf token created of type identifier and value x 
-Leaf token created of type type and value float 
+Leaf token created of type type and value integer 
 Leaf token created of type intnum and value 1 
 Leaf token created of type intnum and value 2 
 Leaf token created of type identifier and value y 
@@ -173,7 +174,7 @@ Leaf token created of type intnum and value 1
 Leaf token created of type intnum and value 2 
 Leaf token created of type identifier and value x 
 Leaf token created of type intnum and value 1 
-Leaf token created of type floatnum and value 0.3 
+Leaf token created of type intnum and value 2 
 Leaf token created of type identifier and value main 
 Leaf token created of type type and value void 
 Leaf token created of type identifier and value counter 

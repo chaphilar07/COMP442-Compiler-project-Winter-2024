@@ -113,6 +113,11 @@ err_code insert_entry(Scope *scope, TableEntry *entry) {
     name = entry->data.classEntry.name;
   else if (entry->tableType == FPARAM_ENTRY)
     name = entry->data.fparamEntry.name;
+  else if (entry->tableType == LITVAL_ENTRY)
+    name = entry->data.litval.id;
+  else if (entry->tableType == TEMP_ENTRY) {
+    name = entry->data.TempVarEntry.name;
+  }
 
   // Now we must check if the entry is already occupied.
 
@@ -486,6 +491,15 @@ void print_entry(TableEntry *entry, FILE *out) {
     return;
   }
 
+  if (entry->tableType == TEMP_ENTRY) {
+    fprintf(out, "tempvar\tsize: %d\toffset: %d\tname: %s\t\n", entry->size,
+            entry->offset, entry->data.TempVarEntry.name);
+  }
+  if (entry->tableType == LITVAL_ENTRY) {
+    fprintf(out, "litval\tsize: %d\toffset: %d\t value: %s\tname: %s\n",
+            entry->size, entry->offset, entry->data.litval.value,
+            entry->data.litval.id);
+  }
   if (entry->tableType == VARIABLE_ENTRY) {
     if (entry->data.varEntry.vis != none) {
       fprintf(out, "%s ", get_vis_string(entry->data.varEntry.vis));
@@ -911,6 +925,7 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
   ScopeStack *scope_stack = init_scope_stack();
 
   push_node(root, node_stack);
+
   Scope *globalScope = init_scope(
       NULL, "Global", GLOBAL_SCOPE); // We want to keep a pointer to the global
                                      // scope can be useful for quick lookups.
@@ -941,7 +956,9 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
         for (int i = 0; i < SIZE; i++) {
 
           if (scopePtr->entries[i].tableType == VARIABLE_ENTRY ||
-              scopePtr->entries[i].tableType == FPARAM_ENTRY) {
+              scopePtr->entries[i].tableType == FPARAM_ENTRY ||
+              scopePtr->entries[i].tableType == LITVAL_ENTRY ||
+              scopePtr->entries[i].tableType == TEMP_ENTRY) {
 
             scopePtr->entries[i].offset = runningSum;
             runningSum += scopePtr->entries[i].size;
@@ -960,12 +977,47 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
 
     current->scope = current_scope; // We set the scopes of the AST nodes
 
-    // Note that because we want to have the function parameters also
-    // be entries in the function scopes table, we must make the same
-    // kind of
+    if (current->type == multop || current->type == addop ||
+        current->type == relexpr || current->type == assingop ||
+        current->type == write || current->type == read ||
+        current->type == returnnode) {
 
-    // Note for dots we will traverse the tree before we assign the scope so we
-    // must assign scopes now rather than later.
+      semantic_stack *stack = init_stack();
+      push_node(current, stack);
+
+      while (stack->size > 0) {
+        node *current_node = pop_node(stack);
+        if (current_node->type == floatnum || current_node->type == intnum) {
+          TableEntry *entry = create_litval_entry(current_node);
+          insert_entry(current_scope, entry);
+
+          current_node->entryName =
+              entry->data.litval.id; // We use this later on to get the
+                                     // variables offset quickly.
+        }
+        current_node->scope = current_scope;
+
+        if (current_node->numchildren > 0) {
+          for (int i = 0; i < current_node->numchildren; i++) {
+            push_node(current_node->children[i], stack);
+          }
+        }
+      }
+    }
+
+    if ((current->type == multop || current->type == addop ||
+         current->type == relop) &&
+        current->numchildren >= 2) {
+
+      TableEntry *entry = create_temp_entry(current, globalScope, errors);
+      insert_entry(current_scope, entry);
+      current->entryName =
+          entry->data.TempVarEntry
+              .name; // We set the current operator node to store the name of
+                     // the tempvar we will use this later, to get the offset
+                     // quickly.
+    }
+
     if (current->type == dot) {
       semantic_stack *stack = init_stack();
       push_node(current, stack);
