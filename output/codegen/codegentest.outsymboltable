@@ -1,0 +1,38 @@
+BEGINNING OF TABLE FOR:  global scope "Global"
+
+Table Entry 1 of "Global":func main -> void : 	size: 20	return type size: 0
+
+			BEGINNING OF TABLE FOR:  function scope "main"
+
+			Table Entry 1 of "main":var x integer	size: 4	offset: 4
+
+			Table Entry 2 of "main":litval	size: 4	offset: 8	 value: 3	name: literal102
+
+			Table Entry 3 of "main":var z integer[]	size: 4	offset: 12
+
+			Table Entry 4 of "main":var y integer	size: 4	offset: 16
+
+			END OF TABLE FOR SCOPE function scope "main"
+
+Table Entry 2 of "Global":func bar -> void : 	size: 12	return type size: 0
+
+			BEGINNING OF TABLE FOR:  function scope "bar"
+
+			Table Entry 1 of "bar":var x integer	size: 4	offset: 4
+
+			Table Entry 2 of "bar":litval	size: 4	offset: 8	 value: 4	name: literal101
+
+			END OF TABLE FOR SCOPE function scope "bar"
+
+Table Entry 3 of "Global":func foo -> void : 	size: 12	return type size: 0
+
+			BEGINNING OF TABLE FOR:  function scope "foo"
+
+			Table Entry 1 of "foo":var x integer	size: 4	offset: 4
+
+			Table Entry 2 of "foo":litval	size: 4	offset: 8	 value: 3	name: literal100
+
+			END OF TABLE FOR SCOPE function scope "foo"
+
+END OF TABLE FOR SCOPE global scope "Global"
+

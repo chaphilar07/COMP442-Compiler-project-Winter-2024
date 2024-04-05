@@ -35,7 +35,10 @@ int main(int argc, char *argv[]) {
       char src_path[124];            // Source file path
       char output_path[124];         // Path to the output code file.
       char semantic_error_path[124]; // Path to the semantic errors file.
+      char symbol_table_path[124];
 
+      snprintf(symbol_table_path, sizeof(symbol_table_path),
+               "output/codegen/%s.outsymboltable", name);
       snprintf(src_path, sizeof(src_path), "tests/codegen/%s.src", name);
       snprintf(output_path, sizeof(output_path), "output/codegen/%s.m", name);
       snprintf(semantic_error_path, sizeof(semantic_error_path),
@@ -44,13 +47,16 @@ int main(int argc, char *argv[]) {
       // Parse the file, get AST root node.
       node *result = parse(src_path);
 
+      FILE *symbol_table_output = fopen(symbol_table_path, "w+");
       FILE *output_file = fopen(output_path, "w+");
       FILE *semantic_error_file = fopen(semantic_error_path, "w+");
 
       if (result) {
+
         ErrorArray *errors = init_errors();
         Scope *globalScope = create_program_scope(result, errors);
         print_errors(semantic_error_file, errors);
+        print_scope(globalScope, symbol_table_output, 0);
         code_gen_pass(result, globalScope, output_file, errors);
 
       } else {

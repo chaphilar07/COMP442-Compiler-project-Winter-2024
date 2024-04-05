@@ -295,6 +295,23 @@ int get_function_size(node *astnode, ErrorArray *errors) {
        astnode == astnode->parent->children[1] &&
        astnode->parent->parent->type != dot)) {
 
+    Scope *scopePtr = astnode->scope;
+
+    while (scopePtr && scopePtr->type != GLOBAL_SCOPE) {
+      scopePtr = scopePtr->parentScope;
+      if (scopePtr == NULL) {
+        fprintf(stderr, "BIG PROBLEM!!!\n");
+      }
+      if (scopePtr->type == GLOBAL_SCOPE)
+        fprintf(stderr, "FOUND GLOBAL SCOPE!\n");
+    }
+
+    TableEntry *funcEntry = get_entry(scopePtr, name);
+
+    if (funcEntry->tableType == FUNCDEF_ENTRY) {
+      return funcEntry->size;
+    }
+
     return 0;
   } else {
     Scope *scopePtr = astnode->scope;
@@ -375,8 +392,6 @@ void handle_assignment_statement(node *astnode, ErrorArray *errors,
   fprintf(out, "addi\t%s,r0,%s\n", registerBeingUsed,
           valueAssignedNode->value); // We store the value in a register.
   fprintf(out, "addi\t%s,r0,%d\n", next_register, offset);
-  fprintf(out, "sw topofstackpointer(%s),%s\n", next_register,
-          registerBeingUsed);
 
   /*
    * 1. store the vaue in a register, the next free register.
@@ -384,6 +399,28 @@ void handle_assignment_statement(node *astnode, ErrorArray *errors,
    * 3.
    */
   return;
+}
+
+/*
+ * This function will be handleing the function calls as they are traversed.
+ *
+ * When we arrive at a function call we do the following we store the parameters
+ * in registers(1,2,..13 so max 13 parameters).
+ *
+ * we jump to that functions label.
+ *
+ * Right now we just want it work with the most basic function call with no
+ * function parameters.
+ */
+void handle_function_call(node *astnode, ErrorArray *errors, Scope *globalScope,
+                          FILE *out) {
+
+  const char *name = get_name(astnode);
+
+  int sizeOfFunction = get_function_size(astnode, errors);
+  fprintf(out, "addi r14,r14,-%d\n", sizeOfFunction);
+  fprintf(out, "jl r15,%s\n", name);
+  fprintf(out, "addi r14,r14,%d\n", sizeOfFunction);
 }
 
 /*
@@ -402,10 +439,6 @@ void code_gen_pass(node *root, Scope *globalScope, FILE *out,
   push_node(root, stack);
 
   // We intitialize the topofstackpointer, should be done for all files.
-
-  fprintf(out, "topofstackpointer res 4\n");
-  fprintf(out, "stackregion res 2048\n"); // Reserve 2048 bytes for the function
-                                          // call stack region.
 
   Scope *current_scope = root->scope; // This should be the global scope!
   if (current_scope->type != GLOBAL_SCOPE) {
@@ -427,8 +460,8 @@ void code_gen_pass(node *root, Scope *globalScope, FILE *out,
       // first 4 bytes (word).
 
       current_scope = current->scope;
-      fprintf(out, "lw r15, topofstackpointer(r0)\n");
-      fprintf(out, "jr r15\n");
+      fprintf(out, "lw r15, 0(r14)\n");
+      fprintf(out, "jr r15\n\n\n");
     }
 
     if (current->scope)
@@ -443,8 +476,8 @@ void code_gen_pass(node *root, Scope *globalScope, FILE *out,
                name);               // Create the label for the function.
       fprintf(out, "%s\n", buffer); // Print the label to the file.
       fprintf(out,
-              "sw topofstackpointer(r0),r15\n"); // We store the return address
-                                                 // at the top of the stack.
+              "sw 0(r14),r15\n"); // We store the stack return address at the
+                                  // first byte of the current stack frame.
     }
 
     if (current->type == multop || current->type == addop ||
@@ -452,17 +485,17 @@ void code_gen_pass(node *root, Scope *globalScope, FILE *out,
     }
 
     // If we get to a function call we must do the following:
-    // 1. get the size of the function, increment the topofstackpointer by this
-    // amount.
+    // 1. get the size of the function, increment the topofstackpointer by
+    // this amount.
     // 2. store the parameters in free_registers.
-    // 3. store the return address at the top of called functions stack frame so
-    // it knows where to return to.
+    // 3. store the return address at the top of called functions stack frame
+    // so it knows where to return to.
     //
     // To do this I will write a function that gets the size of the function
-    // call from the node, this will take on a similar structure to our previous
-    // functions that will get some data about a function call.
+    // call from the node, this will take on a similar structure to our
+    // previous functions that will get some data about a function call.
     if (current->type == funccall) {
-      // handle_function_call()
+      handle_function_call(current, errors, globalScope, out);
     }
 
     if (current->type == assingop) {
@@ -489,9 +522,10 @@ void code_gen_pass(node *root, Scope *globalScope, FILE *out,
     int mainFuncSize = mainFuncEntry->size;
 
     fprintf(out, "\nentry\n");
-    fprintf(out, "addi r14,r0,-%d\n", mainFuncSize);
-    fprintf(out, "sw topofstackpointer(r0),r14\n");
+    fprintf(out, "addi r14,r0,topaddr\n");
+    fprintf(out, "addi r14,r14,-%d\n", mainFuncSize);
     fprintf(out, "jl r15,main\n");
+    fprintf(out, "addi r14,r0,%d\n", mainFuncSize); // Pop of the stack.
     fprintf(out, "hlt\n");
   }
 
