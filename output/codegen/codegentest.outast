@@ -1,0 +1,67 @@
+digraph AST {
+node [shape=record];
+node [fontname=Sans];charset= " UTF-8" splines=true splines=spline rankdir =LR
+201[label="prog | (null)"];
+201 -> 200
+201 -> 199
+201 -> 198
+198[label="funcdef list | (null)"];
+198 -> 194
+194[label="funcdef | (null)"];
+194 -> 192
+194 -> 153
+194 -> 152
+194 -> 151
+151[label="identifier | main"];
+152[label="fparams list | (null)"];
+153[label="type | void"];
+192[label="funcbody | (null)"];
+192 -> 191
+192 -> 182
+192 -> 173
+192 -> 166
+192 -> 160
+160[label="vardecl | (null)"];
+160 -> 158
+160 -> 156
+160 -> 155
+155[label="identifier | x"];
+156[label="type | integer"];
+158[label="arraydims | (null)"];
+166[label="vardecl | (null)"];
+166 -> 164
+166 -> 162
+166 -> 161
+161[label="identifier | y"];
+162[label="type | integer"];
+164[label="arraydims | (null)"];
+173[label="vardecl | (null)"];
+173 -> 171
+173 -> 168
+173 -> 167
+167[label="identifier | z"];
+168[label="type | integer"];
+171[label="arraydims | (null)"];
+171 -> 170
+170[label="emptydim | nil"];
+182[label="assignop | (null)"];
+182 -> 180
+182 -> 179
+179[label="var | (null)"];
+179 -> 177
+179 -> 175
+175[label="identifier | y"];
+177[label="dimlist | (null)"];
+180[label="intnum | 3"];
+191[label="assignop | (null)"];
+191 -> 189
+191 -> 188
+188[label="var | (null)"];
+188 -> 186
+188 -> 184
+184[label="identifier | x"];
+186[label="dimlist | (null)"];
+189[label="intnum | 3"];
+199[label="impldeflist | (null)"];
+200[label="structdecl list | (null)"];
+}

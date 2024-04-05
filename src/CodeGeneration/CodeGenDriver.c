@@ -4,6 +4,7 @@
  * This source file will provide a driver that should produce an executable.
  */
 
+#include "../SemanticAnalyzer/SemanticError.h"
 #include "../parser/AST/AST_SymbolTable.h"
 #include "../parser/parser.h"
 #include "../utils/utils.h"
@@ -31,26 +32,33 @@ int main(int argc, char *argv[]) {
       char *file_name = entry->d_name;
       char *name = extractFileName(file_name);
 
-      char src_path[1024];
+      char src_path[124];            // Source file path
+      char output_path[124];         // Path to the output code file.
+      char semantic_error_path[124]; // Path to the semantic errors file.
+
       snprintf(src_path, sizeof(src_path), "tests/codegen/%s.src", name);
+      snprintf(output_path, sizeof(output_path), "output/codegen/%s.m", name);
+      snprintf(semantic_error_path, sizeof(semantic_error_path),
+               "output/symboltable/%s.src", name);
 
       // Parse the file, get AST root node.
       node *result = parse(src_path);
 
-      // Check if parse was succesfull.
-      if (result == NULL) {
+      FILE *output_file = fopen(output_path, "w+");
+      FILE *semantic_error_file = fopen(semantic_error_path, "w+");
 
-        printf("FAILURE\n");
+      if (result) {
+        ErrorArray *errors = init_errors();
+        Scope *globalScope = create_program_scope(result, errors);
+        print_errors(semantic_error_file, errors);
+        code_gen_pass(result, globalScope, output_file, errors);
 
       } else {
-
-        printf("SUCCESS\n");
+        fprintf(stderr, "FAILURE COULD NOT PARSE THE SOURCE FILE!\n");
+        continue;
       }
     }
-
-    printf("END OF FILE \n\n\n\n");
   }
 
-  printf("Done ... \n");
   return 0;
 }

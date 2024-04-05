@@ -13,7 +13,10 @@
 #include "../parser/AST/AST_SymbolTable.h"
 
 TableEntry *create_litval_entry(node *astnode);
+
 TableEntry *create_temp_entry(node *astnode, Scope *globalScope,
                               ErrorArray *errors);
 
+void code_gen_pass(node *root, Scope *globalScope, FILE *out,
+                   ErrorArray *errors);
 #endif // !CODE_GENERATION_DOT_H

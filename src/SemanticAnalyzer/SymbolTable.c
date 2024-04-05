@@ -437,6 +437,9 @@ int *get_arraydims(node *astnode) {
       if (numdims > 0) {
         for (int j = 0; j < numdims; j++) {
 
+          if (strcmp(astnode->children[i]->children[j]->value, "nil")) {
+            arrdims[j] = 1;
+          }
           arrdims[j] = atoi(astnode->children[i]->children[j]->value);
         }
         return arrdims;
@@ -445,7 +448,6 @@ int *get_arraydims(node *astnode) {
       }
     }
   }
-
   return NULL;
 }
 int get_number_of_dims(node *astnode) {
@@ -628,6 +630,8 @@ TableEntry *create_fparam_entry(node *astnode, Scope *currentScope) {
   if (entry->data.fparamEntry.type.numberofdims > 0 &&
       entry->data.fparamEntry.type.arraydims) {
     for (int i = 0; i < entry->data.fparamEntry.type.numberofdims; i++) {
+      if (entry->data.fparamEntry.type.arraydims[i] <= 0)
+        continue;
       varSize *= entry->data.fparamEntry.type.arraydims[i];
     }
   }
@@ -704,10 +708,8 @@ TableEntry *create_variable_entry(node *astnode, Scope *currentScope,
   entry->line = astnode->line;
   entry->scope = currentScope;
   entry->tableType = VARIABLE_ENTRY;
-
   entry->data.varEntry.type = get_type_info(astnode);
   entry->data.varEntry.name = get_name(astnode);
-
   entry->data.varEntry.vis = get_vis(astnode);
 
   unsigned int typeSize;
@@ -735,8 +737,14 @@ TableEntry *create_variable_entry(node *astnode, Scope *currentScope,
   unsigned int varSize = 1 * typeSize;
   if (entry->data.varEntry.type.numberofdims > 0 &&
       entry->data.varEntry.type.arraydims) {
+
     for (int i = 0; i < entry->data.varEntry.type.numberofdims; i++) {
-      varSize *= entry->data.varEntry.type.arraydims[i];
+
+      if (entry->data.varEntry.type.arraydims[i] == -1 ||
+          entry->data.varEntry.type.arraydims[i] == 0)
+        continue;
+      else
+        varSize *= entry->data.varEntry.type.arraydims[i];
     }
   }
   entry->size = varSize;
@@ -757,6 +765,7 @@ TableEntry *create_func_entry(node *astnode, Scope *scope) {
   }
 
   TableEntry *entry = malloc(sizeof(TableEntry));
+
   if (!entry) {
     fprintf(stderr, "ERROR - create_func_entry(): Cannot allocate function "
                     "entry, exiting\n");
@@ -914,7 +923,7 @@ TableEntry *create_class_entry(node *astnode, Scope *currentScope,
  * 2. funccall
  */
 
-Scope *create_program_scope(node *root, FILE *out, void *arr) {
+Scope *create_program_scope(node *root, void *arr) {
 
   ErrorArray *errors = (ErrorArray *)arr;
 
@@ -951,22 +960,48 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
         TableEntry *tempEntry =
             get_entry(scopePtr->parentScope, scopePtr->scopeName);
 
-        unsigned int runningSum = 0;
+        unsigned int runningSum;
 
-        for (int i = 0; i < SIZE; i++) {
+        if (scopePtr->type == FUNCTION_SCOPE) {
+          runningSum = 4; // We keep the first 4 bytes of a stack frame for the
+                          // return address, when we have a function.
+          for (int i = 0; i < SIZE; i++) {
 
-          if (scopePtr->entries[i].tableType == VARIABLE_ENTRY ||
-              scopePtr->entries[i].tableType == FPARAM_ENTRY ||
-              scopePtr->entries[i].tableType == LITVAL_ENTRY ||
-              scopePtr->entries[i].tableType == TEMP_ENTRY) {
+            if (scopePtr->entries[i].tableType == FPARAM_ENTRY) {
 
-            scopePtr->entries[i].offset = runningSum;
-            runningSum += scopePtr->entries[i].size;
+              scopePtr->entries[i].offset = runningSum;
+              runningSum += scopePtr->entries[i].size;
+            }
           }
-        }
+          for (int i = 0; i < SIZE; i++) {
 
-        tempEntry->size = runningSum;
+            if (scopePtr->entries[i].tableType == VARIABLE_ENTRY ||
+                scopePtr->entries[i].tableType == LITVAL_ENTRY ||
+                scopePtr->entries[i].tableType == TEMP_ENTRY) {
+
+              scopePtr->entries[i].offset = runningSum;
+              runningSum += scopePtr->entries[i].size;
+            }
+          }
+
+          tempEntry->size = runningSum;
+        } else {
+          runningSum = 0;
+          for (int i = 0; i < SIZE; i++) {
+
+            if (scopePtr->entries[i].tableType == VARIABLE_ENTRY ||
+                scopePtr->entries[i].tableType == LITVAL_ENTRY ||
+                scopePtr->entries[i].tableType == TEMP_ENTRY) {
+
+              scopePtr->entries[i].offset = runningSum;
+              runningSum += scopePtr->entries[i].size;
+            }
+          }
+
+          tempEntry->size = runningSum;
+        }
       }
+
       current_scope = peek_scope(scope_stack);
 
       if (node_stack->size > 0)
@@ -1011,14 +1046,11 @@ Scope *create_program_scope(node *root, FILE *out, void *arr) {
 
       TableEntry *entry = create_temp_entry(current, globalScope, errors);
       insert_entry(current_scope, entry);
-      current->entryName =
-          entry->data.TempVarEntry
-              .name; // We set the current operator node to store the name of
-                     // the tempvar we will use this later, to get the offset
-                     // quickly.
+      current->entryName = entry->data.TempVarEntry.name;
     }
 
     if (current->type == dot) {
+
       semantic_stack *stack = init_stack();
       push_node(current, stack);
 

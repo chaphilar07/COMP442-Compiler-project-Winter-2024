@@ -49,30 +49,18 @@ char *get_temp_var_name() {
 
   return strdup(buffer);
 }
+
 /*
  * This function will return a string that corresponds to the first free
  * register in the register pool.
  *
  */
-char *get_first_free_register() {
+int current_register_index = 0;
+
+char *get_next_free_register() {
 
   unsigned int registerNumber;
-  bool found = false;
-
-  for (int i = 0; i < 15; i++) {
-    if (free_registers[i]) {
-      registerNumber = i + 1;
-      found = true;
-      free_registers[i] =
-          false; // we must set it to false, when we call this function.
-      break;
-    }
-  }
-
-  if (!found) {
-    fprintf(stderr, "ERROR ALL REGISTERS ARE OCCUPIED!!!\n");
-    return NULL;
-  }
+  registerNumber = (++current_register_index) % 16;
 
   if (registerNumber > 9) {
     char buffer[4];
@@ -161,13 +149,352 @@ TableEntry *create_litval_entry(node *astnode) {
 }
 
 /*
+ * This function will get the offset from a variable, this is done by looking at
+ * the symbol tables entry.
+ *
+ * The offset of a variable depends on whether we are accessing a variable that
+ * was declared in the current scope, a class or if the variable is being
+ * accessed through a member object.
+ */
+int get_variable_offset(node *astnode, ErrorArray *errors) {
+  if (!astnode) {
+    fprintf(stderr, "ERROR - get_variable_offset(): Cannot get offset node is "
+                    "null, exiting\n");
+    return -1;
+  }
+
+  const char *name = get_name(astnode);
+
+  // Free variable lookup, we begin search in the current scope.
+  if (astnode->parent->type != dot ||
+      (astnode->parent->type == dot && astnode->parent->parent->type != dot &&
+       astnode->parent->children[1] == astnode)) {
+
+    Scope *scopePtr = astnode->scope;
+
+    TableEntry *entry = get_entry(scopePtr, name);
+
+    // If we find the entry we return the size of the entry?
+    if (entry->tableType == VARIABLE_ENTRY) {
+      return entry->offset;
+    }
+
+    while (scopePtr != NULL && scopePtr->type != GLOBAL_SCOPE) {
+      scopePtr = scopePtr->parentScope;
+
+      entry = get_entry(scopePtr, name);
+      if (entry->tableType == VARIABLE_ENTRY)
+        return entry->offset;
+
+      if (scopePtr->type == CLASS_SCOPE) {
+        // We have to check any inherited scopes as well.
+        TableEntry *classEntry =
+            get_entry(scopePtr->parentScope, scopePtr->scopeName);
+
+        if (classEntry->tableType == CLASS_ENTRY &&
+            classEntry->data.classEntry.inheritsCount > 0 &&
+            classEntry->data.classEntry.inheritedScopes) {
+          ScopeStack *stack = init_scope_stack();
+
+          for (int i = 0; i < classEntry->data.classEntry.inheritsCount; i++) {
+            push_scope(classEntry->data.classEntry.inheritedScopes[i], stack);
+          }
+
+          while (stack->size > 0) {
+            Scope *current_scope = pop_scope(stack);
+
+            entry = get_entry(current_scope, name);
+
+            if (entry->tableType == VARIABLE_ENTRY)
+              return entry->offset;
+
+            classEntry =
+                get_entry(current_scope->parentScope, current_scope->scopeName);
+            if (classEntry->tableType == CLASS_ENTRY &&
+                classEntry->data.classEntry.inheritsCount > 0 &&
+                classEntry->data.classEntry.inheritedScopes) {
+              for (int i = 0; i < classEntry->data.classEntry.inheritsCount;
+                   i++) {
+                push_scope(classEntry->data.classEntry.inheritedScopes[i],
+                           stack);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    return -1; // We could not find the variable in any of the offsets.
+  } else {
+    Scope *scopePtr = astnode->scope;
+
+    while (scopePtr != NULL && scopePtr->type != GLOBAL_SCOPE) {
+      scopePtr = scopePtr->parentScope;
+    }
+
+    TypeInfo leftInfo;
+
+    if (astnode == astnode->parent->children[1]) {
+      leftInfo = get_type_expression(astnode->parent->parent->children[1],
+                                     errors, scopePtr);
+    } else {
+      leftInfo =
+          get_type_expression(astnode->parent->children[1], errors, scopePtr);
+    }
+
+    TableEntry *classEntry = get_entry(scopePtr, leftInfo.typeString);
+
+    if (classEntry->tableType == CLASS_ENTRY) {
+      Scope *classScope = classEntry->data.classEntry.scope;
+
+      TableEntry *entry = get_entry(classScope, name);
+
+      if (entry->tableType == VARIABLE_ENTRY)
+        return entry->offset;
+
+      if (classEntry->data.classEntry.inheritsCount > 0 &&
+          classEntry->data.classEntry.inheritedScopes) {
+        ScopeStack *stack = init_scope_stack();
+
+        for (int i = 0; i < classEntry->data.classEntry.inheritsCount; i++)
+          push_scope(classEntry->data.classEntry.inheritedScopes[i], stack);
+
+        while (stack->size > 0) {
+          Scope *current_scope = pop_scope(stack);
+
+          entry = get_entry(current_scope, name);
+          if (entry->tableType == VARIABLE_ENTRY) {
+            return entry->offset;
+          }
+
+          classEntry =
+              get_entry(current_scope->parentScope, current_scope->scopeName);
+          if (classEntry->tableType == CLASS_ENTRY &&
+              classEntry->data.classEntry.inheritsCount > 0 &&
+              classEntry->data.classEntry.inheritedScopes) {
+
+            for (int i = 0; i < classEntry->data.classEntry.inheritsCount; i++)
+              push_scope(classEntry->data.classEntry.inheritedScopes[i], stack);
+          }
+        }
+      }
+    }
+    return -1;
+  }
+}
+
+int get_function_size(node *astnode, ErrorArray *errors) {
+  if (!astnode) {
+    return -1;
+  }
+
+  const char *name = get_name(astnode);
+
+  if (astnode->parent->type != dot ||
+      (astnode->parent->type == dot &&
+       astnode == astnode->parent->children[1] &&
+       astnode->parent->parent->type != dot)) {
+
+    return 0;
+  } else {
+    Scope *scopePtr = astnode->scope;
+
+    while (scopePtr && scopePtr->type != GLOBAL_SCOPE) {
+      scopePtr = scopePtr->parentScope;
+    }
+
+    TypeInfo leftInfo;
+
+    if (astnode->parent->children[1] == astnode) {
+      leftInfo = get_type_expression(astnode->parent->parent->children[1],
+                                     errors, scopePtr);
+    } else {
+      leftInfo =
+          get_type_expression(astnode->parent->children[1], errors, scopePtr);
+    }
+    TableEntry *classEntry = get_entry(scopePtr, leftInfo.typeString);
+
+    if (classEntry->tableType == CLASS_ENTRY) {
+      TableEntry *funcEntry =
+          get_entry(classEntry->data.classEntry.scope, name);
+
+      if (funcEntry->tableType == FUNCDEF_ENTRY) {
+        return funcEntry->size; // Return the size of the function
+      }
+    }
+
+    if (classEntry->tableType == CLASS_ENTRY &&
+        classEntry->data.classEntry.inheritedScopes &&
+        classEntry->data.classEntry.inheritsCount > 0) {
+      ScopeStack *stack = init_scope_stack();
+
+      while (stack->size > 0) {
+        Scope *current = pop_scope(stack);
+
+        TableEntry *funcEntry = get_entry(current, name);
+
+        if (funcEntry->tableType == FUNCDEF_ENTRY) {
+          return funcEntry->size;
+        }
+
+        classEntry = get_entry(current->parentScope, current->scopeName);
+
+        if (classEntry->tableType == CLASS_ENTRY &&
+            classEntry->data.classEntry.inheritsCount &&
+            classEntry->data.classEntry.inheritedScopes) {
+          for (int i = 0; i < classEntry->data.classEntry.inheritsCount; i++) {
+            push_scope(classEntry->data.classEntry.inheritedScopes[i], stack);
+          }
+        }
+      }
+    }
+    return 0;
+  }
+}
+
+/*
+ * We will create this first handle only simple assignments, so we cannot handle
+ * things like an exprssion on the RHS of assignment.
+ */
+void handle_assignment_statement(node *astnode, ErrorArray *errors,
+                                 Scope *globalScope, FILE *out) {
+
+  node *assigneeNode =
+      astnode->children[1]; // The value that we are assigning to.
+  node *valueAssignedNode =
+      astnode->children[0]; // The value that is being assigned.
+
+  // Right now we will assume that the RHS is a intnum or floatnum not an
+  // exprssion although it easily can be.
+  int offset = get_variable_offset(assigneeNode, errors);
+
+  // Now we print to the file the value of the offset with the
+  // topofstackpointer.
+  const char *registerBeingUsed = get_next_free_register();
+  const char *next_register = get_next_free_register();
+  fprintf(out, "addi\t%s,r0,%s\n", registerBeingUsed,
+          valueAssignedNode->value); // We store the value in a register.
+  fprintf(out, "addi\t%s,r0,%d\n", next_register, offset);
+  fprintf(out, "sw topofstackpointer(%s),%s\n", next_register,
+          registerBeingUsed);
+
+  /*
+   * 1. store the vaue in a register, the next free register.
+   * 2. store the value of the offset in another register.
+   * 3.
+   */
+  return;
+}
+
+/*
  * This function will be used to make a third traversal through the tree, this
  traversal will be used for performing the code generation.
+
+ Note that in this function we will create the strings and pass the file
+ pointers that are necessary for printing the assembly code.
+
+ We pass a file pointer for the code that we are producing.
  */
-void code_gen_pass(node *root, Scope *globalScope) {
+void code_gen_pass(node *root, Scope *globalScope, FILE *out,
+                   ErrorArray *errors) {
 
   semantic_stack *stack = init_stack();
   push_node(root, stack);
+
+  // We intitialize the topofstackpointer, should be done for all files.
+
+  fprintf(out, "topofstackpointer res 4\n");
+  fprintf(out, "stackregion res 2048\n"); // Reserve 2048 bytes for the function
+                                          // call stack region.
+
+  Scope *current_scope = root->scope; // This should be the global scope!
+  if (current_scope->type != GLOBAL_SCOPE) {
+    fprintf(stderr, "MAJOR PROBLEM!!!!\n");
+    exit(0);
+  }
+  while (stack->size > 0) {
+
+    node *current = pop_node(stack);
+
+    if (current->scope)
+      fprintf(stderr, "The current scope is %s and the new nodes scope is %s\n",
+              current_scope->scopeName, current->scope->scopeName);
+
+    if (current_scope->type == FUNCTION_SCOPE && current->scope &&
+        current->scope != current_scope) {
+      // We need to jump back to the correct stack frame location, to do this we
+      // get the address that is stored, at the top of the stack frame in the
+      // first 4 bytes (word).
+
+      current_scope = current->scope;
+      fprintf(out, "lw r15, topofstackpointer(r0)\n");
+      fprintf(out, "jr r15\n");
+    }
+
+    if (current->scope)
+      current_scope = current->scope;
+    if (current->type == funcdef) {
+
+      // We want to store the return address
+
+      const char *name = get_name(current);
+      char buffer[64];
+      snprintf(buffer, sizeof(buffer), "%s",
+               name);               // Create the label for the function.
+      fprintf(out, "%s\n", buffer); // Print the label to the file.
+      fprintf(out,
+              "sw topofstackpointer(r0),r15\n"); // We store the return address
+                                                 // at the top of the stack.
+    }
+
+    if (current->type == multop || current->type == addop ||
+        current->type == relexpr) {
+    }
+
+    // If we get to a function call we must do the following:
+    // 1. get the size of the function, increment the topofstackpointer by this
+    // amount.
+    // 2. store the parameters in free_registers.
+    // 3. store the return address at the top of called functions stack frame so
+    // it knows where to return to.
+    //
+    // To do this I will write a function that gets the size of the function
+    // call from the node, this will take on a similar structure to our previous
+    // functions that will get some data about a function call.
+    if (current->type == funccall) {
+      // handle_function_call()
+    }
+
+    if (current->type == assingop) {
+      handle_assignment_statement(current, errors, current->scope, out);
+    }
+
+    if (current->numchildren > 0) {
+      for (int i = 0; i < current->numchildren; i++) {
+        push_node(current->children[i], stack);
+      }
+    }
+  }
+
+  Scope *scopePtr = globalScope;
+  if (scopePtr && scopePtr->type != GLOBAL_SCOPE)
+    scopePtr = scopePtr->parentScope;
+
+  // Should be a main funciton if not the program is not exeuctable, just
+  // library.
+  TableEntry *mainFuncEntry = get_entry(scopePtr, "main");
+
+  if (mainFuncEntry->tableType == FUNCDEF_ENTRY) {
+
+    int mainFuncSize = mainFuncEntry->size;
+
+    fprintf(out, "\nentry\n");
+    fprintf(out, "addi r14,r0,-%d\n", mainFuncSize);
+    fprintf(out, "sw topofstackpointer(r0),r14\n");
+    fprintf(out, "jl r15,main\n");
+    fprintf(out, "hlt\n");
+  }
+
   return;
 }
 

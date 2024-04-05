@@ -211,9 +211,7 @@ void check_tables_for_shadowing(Scope *globalScope, ErrorArray *errors) {
     if (globalScope->entries[i].tableType == CLASS_ENTRY) {
 
       TableEntry currentClassEntry = globalScope->entries[i];
-      Scope *currentClassScope =
-          globalScope->entries[i]
-              .data.classEntry.scope; // Get the scope of the current class.
+      Scope *currentClassScope = globalScope->entries[i].data.classEntry.scope;
       Scope **inheritedEntries =
           currentClassEntry.data.classEntry.inheritedScopes;
       int numberOfScopes = currentClassEntry.data.classEntry.inheritsCount;
@@ -246,7 +244,6 @@ void check_tables_for_shadowing(Scope *globalScope, ErrorArray *errors) {
             currentMemberEntryType = VARIABLE_ENTRY;
           }
 
-          // We will use a scope stack to traverse teh inheritance hierarchy.
           ScopeStack *stack = init_scope_stack();
 
           for (int i = 0; i < numberOfScopes; i++) {
@@ -254,26 +251,18 @@ void check_tables_for_shadowing(Scope *globalScope, ErrorArray *errors) {
           }
 
           while (stack->size > 0) {
-            // here we need to check if the current member variable is being
-            // shadowed.
             Scope *currentScope = pop_scope(stack);
 
             TableEntry *currentEntry =
                 get_entry(currentScope, currentMemberName);
 
             if (currentEntry->tableType == currentMemberEntryType) {
-              // We have some kind of shadowing here, we need to check if we
-              // have a variable or a function.
               if (currentMemberEntryType == VARIABLE_ENTRY) {
                 insert_error(errors, create_error(currentMemberName, war100,
                                                   currentLine));
               }
 
               if (currentMemberEntryType == FUNCDEF_ENTRY) {
-                // We check that the parameters are the same, and that the
-                // return type is also the same.
-                // We need to check the function parameters of each entry and
-                // compare type and number.
 
                 insert_error(errors, create_error(currentMemberName, war101,
                                                   currentLine));
@@ -304,10 +293,6 @@ void check_tables_for_shadowing(Scope *globalScope, ErrorArray *errors) {
                 }
               }
             }
-
-            // Want to push the inherited scopes of this scope, how do we do
-            // this.
-
             TableEntry *classEntry =
                 get_entry(currentScope->parentScope, currentScope->scopeName);
 
@@ -331,6 +316,9 @@ void check_tables_for_shadowing(Scope *globalScope, ErrorArray *errors) {
   return;
 }
 
+/*
+ * this function will return the size of a dimlist node.
+ */
 int get_dimlist_count(node *astnode) {
   for (int i = 0; i < astnode->numchildren; i++) {
     if (astnode->children[i]->type == dimlist)
@@ -425,14 +413,13 @@ TypeInfo get_type_var(node *astnode, ErrorArray *arr, Scope *globalScope) {
           // We want to get the ith expression of aparamlist and get the type
           // enum.
         }
-      } else if (variableTypeInfo.numberofdims >
-                 varDimsCount) { // Called with less array dimensions than
-                                 // declared with in this case we are
-                                 // returning an array type.
+      } else if (variableTypeInfo.numberofdims > varDimsCount) {
+
         curVarTypeInfo.numberofdims =
             variableTypeInfo.numberofdims - varDimsCount;
         curVarTypeInfo.arraydims =
             malloc(sizeof(int) * curVarTypeInfo.numberofdims);
+
         for (int i = 0; i < curVarTypeInfo.numberofdims; i++) {
           curVarTypeInfo.arraydims[i] = variableTypeInfo.arraydims[i];
         }
@@ -548,15 +535,10 @@ TypeInfo get_type_var(node *astnode, ErrorArray *arr, Scope *globalScope) {
     TypeInfo info = {NONE_TYPE, "nil", NULL, 0};
     return info;
   } else { // We have a member access to the variable.
-    //
-    //
 
     TypeInfo leftInfo;
 
-    // Get the type information of the class being accessed from.
-    if (astnode->parent->children[0] ==
-        astnode) // In this case we have a class access and we are the right
-                 // child(bottom).
+    if (astnode->parent->children[0] == astnode)
       leftInfo =
           get_type_expression(astnode->parent->children[1], arr, globalScope);
     else
@@ -565,7 +547,6 @@ TypeInfo get_type_var(node *astnode, ErrorArray *arr, Scope *globalScope) {
 
     Scope *scopePtr = astnode->scope;
 
-    // Get the global scope.
     while (scopePtr->type != GLOBAL_SCOPE)
       scopePtr = scopePtr->parentScope;
 
@@ -573,7 +554,6 @@ TypeInfo get_type_var(node *astnode, ErrorArray *arr, Scope *globalScope) {
 
     TableEntry *entry = get_entry(classEntry->data.classEntry.scope, name);
 
-    // we found the entry
     if (entry->tableType == VARIABLE_ENTRY) {
       TypeInfo curVarInfo;
       TypeInfo tableEntryInfo;
@@ -930,7 +910,6 @@ TypeInfo get_type_expression(node *astnode, ErrorArray *arr,
   } else if (astnode->type == multop || astnode->type == addop ||
              astnode->type == relexpr) {
 
-    // Note that relops will have three children!
     node *left;
     if (astnode->type == relexpr)
       left = astnode->children[2];
@@ -974,7 +953,11 @@ void validate_functioncall(node *astnode, Scope *globalScope, ErrorArray *arr) {
       (astnode->parent->type == dot && astnode->parent->parent->type != dot &&
        astnode->parent->children[1] == astnode)) {
 
-    TableEntry *functionEntry = get_entry(globalScope, get_name(astnode));
+    Scope *scopePtr = globalScope;
+    while (scopePtr->type != GLOBAL_SCOPE) {
+      scopePtr = scopePtr->parentScope;
+    }
+    TableEntry *functionEntry = get_entry(scopePtr, get_name(astnode));
 
     if (functionEntry->tableType != FUNCDEF_ENTRY) {
       insert_error(arr,
@@ -1028,10 +1011,6 @@ void validate_functioncall(node *astnode, Scope *globalScope, ErrorArray *arr) {
 
     TableEntry *classEntry = get_entry(globalScope, classTypeInfo.typeString);
 
-    /*
-     * We need to refactor this as well what we should do is try to return the
-     * error after we have exhausted the search.
-     */
     if (classEntry->tableType == CLASS_ENTRY) {
 
       Scope *classScope = classEntry->data.classEntry.scope;
@@ -1280,7 +1259,6 @@ int validate_lookup(node *astnode, ErrorArray *errors, Scope *globalScope) {
  * This function will be used to check if an assignment is valid, both sides
  * must be of the same type.
  */
-FILE *temp;
 void second_pass_type_check(node *root, Scope *globalScope,
                             ErrorArray *errors) {
 
@@ -1291,7 +1269,6 @@ void second_pass_type_check(node *root, Scope *globalScope,
 
   push_node(root, stack);
 
-  temp = fopen("no-scopes.txt", "w+");
   while (stack->size > 0) {
     node *current = pop_node(stack);
 
@@ -1359,9 +1336,9 @@ void second_pass_type_check(node *root, Scope *globalScope,
     } else if (current->type == assingop) {
 
       TypeInfo LHSInfo =
-          get_type_expression(current->children[0], errors, globalScope);
-      TypeInfo RHSInfo =
           get_type_expression(current->children[1], errors, globalScope);
+      TypeInfo RHSInfo =
+          get_type_expression(current->children[0], errors, globalScope);
 
       if (!compare_type_info(LHSInfo, RHSInfo)) {
 

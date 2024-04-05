@@ -262,7 +262,7 @@ node *create_subtree_n_nodes(NodeType type, int len, semantic_stack *stack,
                              unsigned int line);
 void print_tree_dot(node *root, FILE *out);
 
-Scope *create_program_scope(node *root, FILE *out, void *arr);
+Scope *create_program_scope(node *root, void *arr);
 
 void empty_stack(semantic_stack *stack);
 

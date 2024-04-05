@@ -4,8 +4,8 @@
          align
          
 %s This is the start of the program.
-         entry                  % Start here
-         add   r2,r0,r0
+entry                  % Start here
+add   r2,r0,r0
  pri     lb    r3,message(r2)   % Get next char
          ceqi  r4,r3,0
          bnz    r4,pr2          % Finished if zero

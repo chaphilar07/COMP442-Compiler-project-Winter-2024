@@ -1,0 +1,12 @@
+/*
+ * This will be the first test that we attempt to pass, a simple program that assigns a value to an integr.
+ */
+
+func main()->void{
+    let x: integer;
+    let y: integer;
+    let z: integer[];
+
+    y=3;
+    x=3;
+  }
