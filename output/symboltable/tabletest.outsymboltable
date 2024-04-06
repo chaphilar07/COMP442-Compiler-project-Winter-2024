@@ -1,22 +1,24 @@
 BEGINNING OF TABLE FOR:  global scope "Global"
 
-Table Entry 1 of "Global":func bad_func -> float : 	size: 0	return type size: 8
+Table Entry 1 of "Global":func bad_func -> float : 	size: 80	return type size: 8
 
 			BEGINNING OF TABLE FOR:  function scope "bad_func"
 
 			Table Entry 1 of "bad_func":var x float[1][2]	size: 16	offset: 4
 
-			Table Entry 2 of "bad_func":litval	size: 4	offset: 20	 value: 2	name: literal129
+			Table Entry 2 of "bad_func":litval	size: 12	offset: 20	 value: function value	name: literal138
 
-			Table Entry 3 of "bad_func":var z B	size: 16	offset: 24
+			Table Entry 3 of "bad_func":litval	size: 4	offset: 32	 value: 1	name: literal136
 
-			Table Entry 4 of "bad_func":litval	size: 4	offset: 40	 value: 1	name: literal128
+			Table Entry 4 of "bad_func":var z B	size: 16	offset: 36
 
-			Table Entry 5 of "bad_func":litval	size: 4	offset: 44	 value: 2	name: literal127
+			Table Entry 5 of "bad_func":litval	size: 4	offset: 52	 value: 1	name: literal139
 
-			Table Entry 6 of "bad_func":litval	size: 4	offset: 48	 value: 1	name: literal126
+			Table Entry 6 of "bad_func":litval	size: 4	offset: 56	 value: 2	name: literal137
 
-			Table Entry 7 of "bad_func":var y C	size: 16	offset: 52
+			Table Entry 7 of "bad_func":litval	size: 4	offset: 60	 value: 2	name: literal140
+
+			Table Entry 8 of "bad_func":var y C	size: 16	offset: 64
 
 			END OF TABLE FOR SCOPE function scope "bad_func"
 
@@ -28,7 +30,7 @@ Table Entry 2 of "Global":class C inherits B, 	size: 16	offset: 0
 
 			END OF TABLE FOR SCOPE class scope "C"
 
-Table Entry 3 of "Global":func main -> void : 	size: 0	return type size: 0
+Table Entry 3 of "Global":func main -> void : 	size: 12	return type size: 0
 
 			BEGINNING OF TABLE FOR:  function scope "main"
 
@@ -56,7 +58,7 @@ Table Entry 4 of "Global":class B inherits A, 	size: 16	offset: 0
 
 			Table Entry 2 of "B":private var a float	size: 8	offset: 8
 
-			Table Entry 3 of "B":private func overridden -> void : a integer,b integer	size: 0	return type size: 0
+			Table Entry 3 of "B":private func overridden -> void : a integer,b integer	size: 12	return type size: 0
 
 						BEGINNING OF TABLE FOR:  function scope "overridden"
 
@@ -70,7 +72,7 @@ Table Entry 4 of "Global":class B inherits A, 	size: 16	offset: 0
 
 			Table Entry 5 of "B":private var b B	size: 0	offset: 16
 
-			Table Entry 6 of "B":private func foo -> A : x float	size: 0	return type size: 20
+			Table Entry 6 of "B":private func foo -> A : x float	size: 12	return type size: 20
 
 						BEGINNING OF TABLE FOR:  function scope "foo"
 
@@ -80,23 +82,27 @@ Table Entry 4 of "Global":class B inherits A, 	size: 16	offset: 0
 
 			END OF TABLE FOR SCOPE class scope "B"
 
-Table Entry 5 of "Global":func stillinvalid -> integer : 	size: 0	return type size: 4
+Table Entry 5 of "Global":func stillinvalid -> integer : 	size: 12	return type size: 4
 
 			BEGINNING OF TABLE FOR:  function scope "stillinvalid"
 
-			Table Entry 1 of "stillinvalid":litval	size: 8	offset: 4	 value: 0.0	name: literal123
+			Table Entry 1 of "stillinvalid":litval	size: 8	offset: 4	 value: 0.0	name: literal131
 
 			END OF TABLE FOR SCOPE function scope "stillinvalid"
 
-Table Entry 6 of "Global":func shouldbeok -> B : 	size: 0	return type size: 16
+Table Entry 6 of "Global":func shouldbeok -> B : 	size: 44	return type size: 16
 
 			BEGINNING OF TABLE FOR:  function scope "shouldbeok"
 
 			Table Entry 1 of "shouldbeok":var x B	size: 16	offset: 4
 
+			Table Entry 2 of "shouldbeok":litval	size: 12	offset: 20	 value: function value	name: literal132
+
+			Table Entry 3 of "shouldbeok":litval	size: 12	offset: 32	 value: function value	name: literal133
+
 			END OF TABLE FOR SCOPE function scope "shouldbeok"
 
-Table Entry 7 of "Global":func validfunc -> void : x float	size: 0	return type size: 0
+Table Entry 7 of "Global":func validfunc -> void : x float	size: 12	return type size: 0
 
 			BEGINNING OF TABLE FOR:  function scope "validfunc"
 
@@ -104,7 +110,7 @@ Table Entry 7 of "Global":func validfunc -> void : x float	size: 0	return type s
 
 			END OF TABLE FOR SCOPE function scope "validfunc"
 
-Table Entry 8 of "Global":func bar -> C : 	size: 0	return type size: 16
+Table Entry 8 of "Global":func bar -> C : 	size: 48	return type size: 16
 
 			BEGINNING OF TABLE FOR:  function scope "bar"
 
@@ -120,35 +126,37 @@ Table Entry 8 of "Global":func bar -> C : 	size: 0	return type size: 16
 
 			END OF TABLE FOR SCOPE function scope "bar"
 
-Table Entry 9 of "Global":func invalid -> float : x integer,y notatype	size: 0	return type size: 8
+Table Entry 9 of "Global":func invalid -> float : x integer,y notatype	size: 12	return type size: 8
 
 			BEGINNING OF TABLE FOR:  function scope "invalid"
 
 			Table Entry 1 of "invalid":fparam x integer	size: 4	offset: 4
 
-			Table Entry 2 of "invalid":litval	size: 4	offset: 8	 value: 0	name: literal122
+			Table Entry 2 of "invalid":litval	size: 4	offset: 8	 value: 0	name: literal130
 
 			Table Entry 3 of "invalid":fparam y notatype	size: 0	offset: 8
 
 			END OF TABLE FOR SCOPE function scope "invalid"
 
-Table Entry 10 of "Global":func good_func -> integer : 	size: 0	return type size: 4
+Table Entry 10 of "Global":func good_func -> integer : 	size: 40	return type size: 4
 
 			BEGINNING OF TABLE FOR:  function scope "good_func"
 
-			Table Entry 1 of "good_func":var x integer[1][2]	size: 8	offset: 4
+			Table Entry 1 of "good_func":litval	size: 4	offset: 4	 value: 1	name: literal134
 
-			Table Entry 2 of "good_func":var a A	size: 20	offset: 12
+			Table Entry 2 of "good_func":var x integer[1][2]	size: 8	offset: 8
 
-			Table Entry 3 of "good_func":litval	size: 4	offset: 32	 value: 1	name: literal124
+			Table Entry 3 of "good_func":var a A	size: 20	offset: 16
 
-			Table Entry 4 of "good_func":litval	size: 4	offset: 36	 value: 2	name: literal125
+			Table Entry 4 of "good_func":litval	size: 4	offset: 36	 value: 2	name: literal135
 
 			END OF TABLE FOR SCOPE function scope "good_func"
 
-Table Entry 11 of "Global":func somefunc -> A : 	size: 0	return type size: 20
+Table Entry 11 of "Global":func somefunc -> A : 	size: 4	return type size: 20
 
 			BEGINNING OF TABLE FOR:  function scope "somefunc"
+
+			Table Entry 1 of "somefunc":litval	size: 0	offset: 4	 value: function value	name: literal141
 
 			END OF TABLE FOR SCOPE function scope "somefunc"
 
@@ -170,7 +178,7 @@ Table Entry 12 of "Global":class A inherits 	size: 20	offset: 0
 
 			Table Entry 5 of "A":private var b integer	size: 4	offset: 16
 
-			Table Entry 6 of "A":private func foo -> void : 	size: 0	return type size: 0
+			Table Entry 6 of "A":private func foo -> void : 	size: 8	return type size: 0
 
 						BEGINNING OF TABLE FOR:  function scope "foo"
 
@@ -182,7 +190,7 @@ Table Entry 12 of "Global":class A inherits 	size: 20	offset: 0
 
 			END OF TABLE FOR SCOPE class scope "A"
 
-Table Entry 13 of "Global":func foo -> integer : 	size: 0	return type size: 4
+Table Entry 13 of "Global":func foo -> integer : 	size: 32	return type size: 4
 
 			BEGINNING OF TABLE FOR:  function scope "foo"
 

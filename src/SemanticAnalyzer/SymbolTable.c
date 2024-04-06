@@ -23,6 +23,129 @@
 #include <stdlib.h>
 #include <string.h>
 
+int get_class_size(const char *className, Scope *globalScope) {
+
+  Scope *scopePtr = globalScope;
+  if (scopePtr && scopePtr->type != GLOBAL_SCOPE) {
+
+    scopePtr = scopePtr->parentScope;
+  }
+
+  TableEntry *classEntry = get_entry(scopePtr, className);
+
+  return classEntry->size;
+}
+
+/*
+ * this function will get the size of a functions return type, this is supposed
+ * to be called on a funccall node, so that we can create a table entry with the
+ * size of the function callss return type, so we can store it in the stack
+ * frames.
+ */
+int get_return_size_of_function(node *astnode, Scope *globalScope,
+                                ErrorArray *errors) {
+
+  const char *functionName = get_name(astnode);
+  if (astnode->parent->type != dot ||
+      (astnode->parent->type == dot && astnode->parent->parent->type != dot &&
+       astnode->parent->children[1] == astnode)) {
+    Scope *scopePtr = globalScope;
+
+    while (scopePtr && scopePtr->type != GLOBAL_SCOPE) {
+      scopePtr = scopePtr->parentScope;
+    }
+
+    TableEntry *funcEntry = get_entry(scopePtr, functionName);
+
+    if (funcEntry->tableType == FUNCDEF_ENTRY) {
+      if (funcEntry->data.funcEntry.returnType.type == INT_TYPE)
+        return 4;
+      else if (funcEntry->data.funcEntry.returnType.type == FLOAT_TYPE)
+        return 8;
+      else if (funcEntry->data.funcEntry.returnType.type == ID_TYPE) {
+        return get_class_size(funcEntry->data.funcEntry.returnType.typeString,
+                              scopePtr);
+      } else {
+        return 0;
+      }
+    }
+
+  } else {
+    TypeInfo classInfo;
+
+    Scope *scopePtr = globalScope;
+    while (scopePtr && scopePtr->type != GLOBAL_SCOPE)
+      scopePtr = scopePtr->parentScope;
+
+    if (astnode == astnode->parent->children[0])
+      classInfo =
+          get_type_expression(astnode->parent->children[1], errors, scopePtr);
+    else
+      classInfo = get_type_expression(astnode->parent->parent->children[1],
+                                      errors, globalScope);
+
+    TableEntry *classEntry = get_entry(scopePtr, classInfo.typeString);
+    if (classEntry->tableType == CLASS_ENTRY) {
+      Scope *classScope = classEntry->data.classEntry.scope;
+
+      TableEntry *memberEntry = get_entry(classScope, functionName);
+      if (memberEntry->tableType == FUNCDEF_ENTRY) {
+        TypeInfo returnInfo = memberEntry->data.funcEntry.returnType;
+
+        if (returnInfo.type == INT_TYPE)
+          return 4;
+        else if (returnInfo.type == FLOAT_TYPE)
+          return 8;
+        else if (returnInfo.type == ID_TYPE)
+          return get_class_size(returnInfo.typeString, scopePtr);
+        else
+          return 0;
+      }
+
+      if (classEntry->tableType == CLASS_ENTRY &&
+          classEntry->data.classEntry.inheritsCount > 0 &&
+          classEntry->data.classEntry.inheritedScopes) {
+        ScopeStack *stack = init_scope_stack();
+        for (int i = 0; i < classEntry->data.classEntry.inheritsCount; i++)
+          push_scope(classEntry->data.classEntry.inheritedScopes[i], stack);
+
+        while (stack->size > 0) {
+          Scope *currentScope = pop_scope(stack);
+
+          memberEntry = get_entry(currentScope, functionName);
+
+          if (memberEntry->tableType == FUNCDEF_ENTRY) {
+            TypeInfo returnInfo = memberEntry->data.funcEntry.returnType;
+
+            if (returnInfo.type == INT_TYPE)
+              return 4;
+            else if (returnInfo.type == FLOAT_TYPE)
+              return 8;
+            else if (returnInfo.type == ID_TYPE)
+              return get_class_size(returnInfo.typeString, scopePtr);
+            else
+              return 0;
+          }
+
+          classEntry =
+              get_entry(currentScope->parentScope, currentScope->scopeName);
+
+          if (classEntry->tableType == CLASS_ENTRY &&
+              classEntry->data.classEntry.inheritsCount > 0 &&
+              classEntry->data.classEntry.inheritedScopes) {
+            for (int i = 0; i < classEntry->data.classEntry.inheritsCount;
+                 i++) {
+              push_scope(classEntry->data.classEntry.inheritedScopes[i], stack);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return 0;
+}
+
 TypeInfo get_type_info(node *astnode) {
   TypeInfo info = {get_type_enum(astnode), get_type_string(astnode),
                    get_arraydims(astnode), get_number_of_dims(astnode)};
@@ -86,7 +209,7 @@ unsigned int FNV1a_hash(const char *str, int size) {
 
 const char *get_entry_type_string(EntryType type);
 // This is the function that will insert the entry into the hash table.
-err_code insert_entry(Scope *scope, TableEntry *entry) {
+int insert_entry(Scope *scope, TableEntry *entry) {
   if (!scope) {
     fprintf(stderr, "ERROR - insert_entry(): Cannot insert entry scope has not "
                     "been allocated.\n");
@@ -1065,6 +1188,22 @@ Scope *create_program_scope(node *root, void *arr) {
           }
         }
       }
+    }
+
+    if (current->type == funccall &&
+        current->scope !=
+            NULL) { // We create symbol table entries for the functions.
+      TableEntry *litvalentry = (TableEntry *)malloc(sizeof(TableEntry));
+      litvalentry->tableType = LITVAL_ENTRY;
+      litvalentry->data.litval.id = random_id();
+      litvalentry->size =
+          get_return_size_of_function(current, globalScope, errors);
+      litvalentry->data.litval.value = "function value";
+      insert_entry(current_scope, litvalentry);
+      current->entryName = litvalentry->data.litval.id;
+
+      fprintf(stderr, "FUNCTION CALL %s HAS RETURN SIZE OF %d \n",
+              get_name(current), litvalentry->size);
     }
 
     if (current->type == var && current->scope != NULL) {

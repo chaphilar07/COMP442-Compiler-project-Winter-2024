@@ -989,9 +989,13 @@ void validate_functioncall(node *astnode, Scope *globalScope, ErrorArray *arr) {
         if (!compare_type_info(fparamInfo, argInfo)) {
           insert_error(arr,
                        create_error(get_name(astnode), err1403, astnode->line));
+          return;
         }
       }
     }
+
+    // If we are here we have found a valid entry.
+
   } else {
     Scope *scopePtr = globalScope;
 
@@ -1095,6 +1099,7 @@ void validate_functioncall(node *astnode, Scope *globalScope, ErrorArray *arr) {
                 if (!compare_type_info(fparamInfo, argInfo)) {
                   insert_error(arr, create_error(get_name(astnode), err1403,
                                                  astnode->line));
+                  return;
                 }
               }
             }
@@ -1117,6 +1122,7 @@ void validate_functioncall(node *astnode, Scope *globalScope, ErrorArray *arr) {
     } else { // The dot we are accessing from is not a class type! error
       insert_error(
           arr, create_error(classTypeInfo.typeString, err701, astnode->line));
+      return;
     }
   }
 }

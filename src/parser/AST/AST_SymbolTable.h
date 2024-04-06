@@ -321,4 +321,9 @@ TypeInfo get_type_info(node *astnode);
 
 void remove_child(node *parent, node *child);
 
+char *random_id();
+
+int get_function_size(node *astnode, void *errors);
+
+int insert_entry(Scope *scope, TableEntry *entry);
 #endif // !AST_GEN_H

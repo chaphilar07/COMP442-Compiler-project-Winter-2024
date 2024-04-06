@@ -17,6 +17,8 @@ TableEntry *create_litval_entry(node *astnode);
 TableEntry *create_temp_entry(node *astnode, Scope *globalScope,
                               ErrorArray *errors);
 
+void handle_function_call(node *astnode, ErrorArray *errors, Scope *globalScope,
+                          FILE *out);
 void code_gen_pass(node *root, Scope *globalScope, FILE *out,
                    ErrorArray *errors);
 #endif // !CODE_GENERATION_DOT_H

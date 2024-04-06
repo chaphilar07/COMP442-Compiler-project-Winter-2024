@@ -4,11 +4,11 @@ Table Entry 1 of "Global":class foo inherits 	size: 0	offset: 0
 
 			BEGINNING OF TABLE FOR:  class scope "foo"
 
-			Table Entry 1 of "foo":private func bar -> void : 	size: 0	return type size: 0
+			Table Entry 1 of "foo":private func bar -> void : 	size: 8	return type size: 0
 
 						BEGINNING OF TABLE FOR:  function scope "bar"
 
-						Table Entry 1 of "bar":litval	size: 4	offset: 4	 value: 0	name: literal121
+						Table Entry 1 of "bar":litval	size: 4	offset: 4	 value: 0	name: literal129
 
 						END OF TABLE FOR SCOPE function scope "bar"
 
