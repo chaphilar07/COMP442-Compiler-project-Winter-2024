@@ -1,26 +1,5 @@
-func foo()->void{
-let x: integer;
-
-x=3;
-
-}
-
-func bar()->void{
-let x: integer;
-
-foo();
-x=4;
-
-}
-
-func return3()->integer{
-    return(3);
-  }
-
 func main()->void{
-let x: integer;
-let y: integer;
-y=return3()+1+2+3+4+5*7;
-foo();
-bar();
-}
+    let x:integer;
+    read(x);
+    write(x);
+  }

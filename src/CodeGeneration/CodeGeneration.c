@@ -134,6 +134,11 @@ char *random_id() {
 TableEntry *create_litval_entry(node *astnode) {
 
   TableEntry *entry = malloc(sizeof(TableEntry));
+  if (!entry) {
+    fprintf(stderr, "ERROR - create_litval_entry():Cannot allocate memory for "
+                    "table entry\n ");
+    return NULL;
+  }
 
   if (!entry) {
     fprintf(stderr, "ERROR - create_temp_entry(): Cannot allocate memory for "
@@ -432,6 +437,17 @@ int get_offset(node *astnode, Scope *globalScope, ErrorArray *errors,
 }
 
 /*
+ * This function is used for handling dots, when we have a dot we have class
+ * member access. To deal with class member access what we must do is get the
+ * offset of the variable that we are accessing, If we access a functioncall we
+ * must get the offset of that function call.
+ *
+ */
+
+void handle_dots(node *astnode, Scope *globalScope, ErrorArray *errors,
+                 FILE *out) {}
+
+/*
  *
  * How would we handle an expression that uses
  */
@@ -483,7 +499,7 @@ int handle_expression(node *astnode, ErrorArray *errors, FILE *out,
     fprintf(
         out, "%s %s,%s,%s\n", operationBuffer,
         operation_register, // perform the operation and store it in a buffer.
-        right_register, left_register);
+        left_register, right_register);
     fprintf(
         out, "sw %d(r14),%s\n", operationOffset,
         operation_register); // Store the word in the operations given offset.
@@ -499,6 +515,7 @@ int handle_expression(node *astnode, ErrorArray *errors, FILE *out,
 
     int functionOffset = get_offset(astnode, globalScope, errors, out);
 
+    // We store the return value here.
     fprintf(out, "sw %d(r14),r13\n", functionOffset);
     return functionOffset;
   }
@@ -578,6 +595,7 @@ void code_gen_pass(node *root, Scope *globalScope, FILE *out,
     fprintf(stderr, "MAJOR PROBLEM!!!!\n");
     exit(0);
   }
+
   while (stack->size > 0) {
 
     node *current = pop_node(stack);
@@ -619,7 +637,6 @@ void code_gen_pass(node *root, Scope *globalScope, FILE *out,
     // 2. store the parameters in free_registers.
     // 3. store the return address at the top of called functions stack frame
     // so it knows where to return to.
-    //
     // To do this I will write a function that gets the size of the function
     // call from the node, this will take on a similar structure to our
     // previous functions that will get some data about a function call.
@@ -635,6 +652,34 @@ void code_gen_pass(node *root, Scope *globalScope, FILE *out,
       for (int i = 0; i < current->numchildren; i++) {
         push_node(current->children[i], stack);
       }
+    }
+
+    if (current->type == read) {
+      // Here we must get the offset of the variable that we will be assigning
+      // into.
+      int offset =
+          handle_expression(current->children[0], errors, out, globalScope);
+      // Note that we do not have to store any information for a read function
+      // besides the space needed to store the return address!
+
+      fprintf(out, "addi r14,r14,-4\n");
+      fprintf(out, "jl r15,read\n");
+      fprintf(out, "addi r14,r14,4\n");
+      fprintf(out, "sw %d(r14),r13\n", offset);
+    }
+    if (current->type == write) {
+
+      node *valueNode = current->children[0];
+
+      int offset = handle_expression(
+          valueNode, errors, out,
+          globalScope); // We get the offset of this value and we return the
+                        // value that is stored at that position.
+
+      fprintf(out, "lw r13, %d(r14)\n", offset);
+      fprintf(out, "addi r14,r14,-%d\n", 8);
+      fprintf(out, "jl r15, write\n");
+      fprintf(out, "addi r14,r14, %d\n", 8);
     }
 
     if (current->type ==
@@ -665,17 +710,122 @@ void code_gen_pass(node *root, Scope *globalScope, FILE *out,
     fprintf(out, "jl r15,main\n");
     fprintf(out, "addi r14,r14,%d\n", mainFuncSize); // Pop of the stack.
     fprintf(out, "hlt\n");
+
+    fprintf(out, "\n\n\n\n");
+    read_subtroutine(out);
+    fprintf(out, "\n\n\n\n");
+    write_subroutine(out);
   }
 
   return;
 }
 
-// int main(int argc, char **argv) { return 0; }
-//
-
 /*
  * For expressions what we can do is do a dfs of the root of each expression
  * tree, store the values of litvals in there corresponding memory offsets.
- *
  * If we do not have a litval then we have a variable that itself must
+ * Note that a read statement will read the value of what is passed in the
+ * console into a variable. The write statement will write the variable out to
+ * the console.
+ *
+ * Tomorrow the first thing that we should work on is the print statement and
+ * read statements, this is actuall really very simple, during the time we use a
+ *
+ * How will we deal with this?
+ *
+ * We will begin with our print statements and see how we can make this work?
  */
+
+/*
+ * This function will read a variable from the console and store it in the
+ * correct variable.
+ *
+ */
+
+/*
+ * This subroutine we call whenever the read function is called.
+ */
+void read_subtroutine(FILE *out) {
+
+  fprintf(out, "read\n");
+  fprintf(out, "sw 0(r14),r15\n");
+
+  const char *value_register = get_next_free_register();
+  const char *stding_register = get_next_free_register();
+  const char *compare_register = get_next_free_register();
+
+  fprintf(out, "addi %s,r0,0\n", value_register);
+  fprintf(out, "getdigit\n");
+  fprintf(out, "getc %s\n", stding_register);
+  fprintf(out, "ceqi %s,%s,10\n", compare_register, stding_register);
+  fprintf(out, "subi %s,%s,48\n", stding_register, stding_register);
+  fprintf(out, "bnz %s,done\n", compare_register);
+  fprintf(out, "muli %s,%s,10\n", value_register, value_register);
+  fprintf(out, "add %s,%s,%s\n", value_register, stding_register,
+          value_register);
+  fprintf(out, "j getdigit\n");
+  // Note that we have to store the value in a register.
+
+  // Store the word in the correct register and return it to the calling
+  // function.
+  fprintf(out, "done\n");
+  fprintf(out, "add r13, r0, %s\n", value_register);
+  fprintf(out, "lw r15, 0(r14)\n");
+  fprintf(out, "jr r15\n");
+}
+
+/*
+ * This function we call whenever we have a write statement, we treat this as
+ * it's own subroutine that creates a stack frame.
+ *
+ * What is the actual algorithm that we will be usign to print the statement.
+ * 1. we store the value in an offset in the stack frame. We will use 4(r14),
+ * this makes sense because the first four bytes are for the return address and
+ * the next however many bytes will store the integer that we are going to print
+ * to the console.
+ */
+void write_subroutine(FILE *out) {
+
+  const char *valueRegister =
+      get_next_free_register(); // This will be the register that we hold the
+                                // value in.
+  const char *printRegister =
+      get_next_free_register(); // This register we will use to hold the actual
+
+  const char *magnitudeRegister = get_next_free_register();
+
+  const char *tempValRegister = get_next_free_register();
+
+  fprintf(out, "align\n");
+  fprintf(out, "write\n");
+  fprintf(out, "sw 0(r14),r15\n"); // Store the return address.
+  fprintf(out, "sw 4(r14), r13\n");
+  fprintf(out, "lw %s, 4(r14)\n", valueRegister);
+  fprintf(out, "addi %s,r0,1\n", magnitudeRegister);
+  fprintf(out, "mag\n"); // This part is subroutine that will get the magnitude
+                         // of the integer.
+  fprintf(out, "div %s,%s,%s\n", tempValRegister, valueRegister,
+          magnitudeRegister);
+  fprintf(out, "cgei %s,%s,10\n", printRegister, tempValRegister);
+  fprintf(out, "bz %s,print\n", printRegister);
+  fprintf(out, "muli %s,%s,10\n", magnitudeRegister, magnitudeRegister);
+  fprintf(out, "j mag\n");
+
+  fprintf(out, "print\n");
+  fprintf(out, "div %s,%s,%s\n", tempValRegister, valueRegister,
+          magnitudeRegister);
+  fprintf(out, "addi %s,%s,48\n", tempValRegister, tempValRegister);
+  fprintf(out, "putc %s\n", tempValRegister);
+  fprintf(out, "subi %s,%s,48\n", tempValRegister, tempValRegister);
+  fprintf(out, "mul %s,%s,%s\n", printRegister, tempValRegister,
+          magnitudeRegister);
+  fprintf(out, "sub %s, %s, %s\n", valueRegister, valueRegister, printRegister);
+  fprintf(out, "divi %s,%s,10\n", magnitudeRegister, magnitudeRegister);
+  fprintf(out, "ceqi %s,%s,0\n", tempValRegister, magnitudeRegister);
+  fprintf(out, "bz %s, print\n", tempValRegister);
+
+  fprintf(out, "lw r15,0(r14)\n");
+  fprintf(out, "jr r15\n");
+
+  fprintf(out, "\n\n\n");
+}
