@@ -38,6 +38,8 @@ bool free_registers[15] = {
 
 unsigned int temp_variable_number = 100;
 unsigned int literal_entry_number = 100;
+unsigned int if_numbers = 100;
+unsigned int while_numbers = 100;
 
 /*
  * This function will get the name of the next available temporary register.
@@ -50,6 +52,64 @@ char *get_temp_var_name() {
   return strdup(buffer);
 }
 
+/*
+ * this function will just return a string for the label of an if
+ */
+char *get_next_if_label() {
+  char buffer[64];
+  snprintf(buffer, sizeof(buffer), "%s%d", "endif", if_numbers);
+
+  return strdup(buffer);
+}
+
+/*
+ * This function will get the else label
+ */
+char *get_next_else_label() {
+  char buffer[64];
+  snprintf(buffer, sizeof(buffer), "%s%d", "else",
+           if_numbers++); // Note that we only increment it at the else block.
+  return strdup(buffer);
+}
+
+/*
+ * This function is used to handle statements inside of any kind of statbody or
+ * function body node.
+ */
+void handle_statement(node *astnode, ErrorArray *errors, Scope *globalScope,
+                      FILE *out) {}
+/*
+ * This function will deal with an if statement, we want to DFS through the file
+ * and basically do the same things that the code_gen_pass function would do and
+ * at the end, we put labels infront of each of the
+ */
+void handle_if_statment(node *astnode, Scope *globalScope, ErrorArray *errors,
+                        FILE *out) {
+
+  node *expressionNode = astnode->children[2];
+  node *thenNode = astnode->children[1];
+  node *elseNode = astnode->children[0];
+
+  int expressionOffset =
+      handle_expression(expressionNode, errors, out, globalScope);
+
+  char *comp_regiseter = get_next_free_register();
+  fprintf(out, "lw %s,%d(r14)\n", comp_regiseter, expressionOffset);
+
+  const char *if_label = get_next_if_label();
+  const char *else_label = get_next_else_label();
+
+  fprintf(out, "bz %s,%s\n", comp_regiseter, else_label);
+  code_gen_pass(thenNode, globalScope, out, errors);
+  fprintf(out, "j %s\n", if_label);
+
+  fprintf(out, "%s\n", else_label);
+  code_gen_pass(elseNode, globalScope, out, errors);
+
+  fprintf(out, "%s\n",
+          if_label); // The problem is somewhere else, something is printing the
+                     // same thing afer we have passed?
+}
 /*
  * This function will return a string that corresponds to the first free
  * register in the register pool.
@@ -518,6 +578,48 @@ int handle_expression(node *astnode, ErrorArray *errors, FILE *out,
     // We store the return value here.
     fprintf(out, "sw %d(r14),r13\n", functionOffset);
     return functionOffset;
+  } else if (astnode->type == sign) {
+    return handle_expression(astnode->children[0], errors, out, globalScope);
+
+  } else if (astnode->type == notnode) {
+    return handle_expression(astnode->children[0], errors, out, globalScope);
+
+  } else if (astnode->type == relexpr) {
+
+    node *leftOperand = astnode->children[2];
+    node *operationNode = astnode->children[1];
+    node *rightNode = astnode->children[0];
+
+    const char *operationValue = operationNode->value;
+
+    int operationOffset = get_offset(astnode, globalScope, errors, out);
+    int leftOffset = handle_expression(leftOperand, errors, out, globalScope);
+    int rightOffset = handle_expression(rightNode, errors, out, globalScope);
+
+    const char *instructionOperation = NULL;
+    if (!strcmp(operationValue, "eq"))
+      instructionOperation = "ceq";
+    else if (!strcmp(operationValue, "neq"))
+      instructionOperation = "cne";
+    else if (!strcmp(operationValue, "lt"))
+      instructionOperation = "clt";
+    else if (!strcmp(operationValue, "gt"))
+      instructionOperation = "cgt";
+    else if (!strcmp(operationValue, "geq"))
+      instructionOperation = "cge";
+    else if (!strcmp(operationValue, "leq"))
+      instructionOperation = "cle";
+
+    const char *right_register = get_next_free_register();
+    const char *left_register = get_next_free_register();
+    const char *opertion_register = get_next_free_register();
+
+    fprintf(out, "lw %s,%d(r14)\n", left_register, leftOffset);
+    fprintf(out, "lw %s, %d(r14)\n", right_register, rightOffset);
+    fprintf(out, "%s %s,%s,%s\n", instructionOperation, opertion_register,
+            left_register, right_register);
+    fprintf(out, "sw %d(r14), %s\n", operationOffset, opertion_register);
+    return operationOffset;
   }
 
   return 0;
@@ -588,13 +690,10 @@ void code_gen_pass(node *root, Scope *globalScope, FILE *out,
   semantic_stack *stack = init_stack();
   push_node(root, stack);
 
+  bool main_found = false;
   // We intitialize the topofstackpointer, should be done for all files.
 
   Scope *current_scope = root->scope; // This should be the global scope!
-  if (current_scope->type != GLOBAL_SCOPE) {
-    fprintf(stderr, "MAJOR PROBLEM!!!!\n");
-    exit(0);
-  }
 
   while (stack->size > 0) {
 
@@ -643,6 +742,9 @@ void code_gen_pass(node *root, Scope *globalScope, FILE *out,
     if (current->type == funccall) {
       handle_function_call(current, errors, globalScope, out);
     }
+    if (current->type == funcdef && strcmp(get_name(current), "main") == 0) {
+      main_found = true;
+    }
 
     if (current->type == assingop) {
       handle_assignment_statement(current, errors, current->scope, out);
@@ -682,6 +784,10 @@ void code_gen_pass(node *root, Scope *globalScope, FILE *out,
       fprintf(out, "addi r14,r14, %d\n", 8);
     }
 
+    if (current->type == ifnode) {
+      //     handle_if_statment(current, globalScope, errors, out);
+      continue; // Dont push the children.
+    }
     if (current->type ==
         returnnode) { // Note that we do NOT DO ANY CHECKING FOR THE CODE GEN!!!
 
@@ -703,20 +809,16 @@ void code_gen_pass(node *root, Scope *globalScope, FILE *out,
   if (mainFuncEntry->tableType == FUNCDEF_ENTRY) {
 
     int mainFuncSize = mainFuncEntry->size;
-
-    fprintf(out, "\nentry\n");
-    fprintf(out, "addi r14,r0,topaddr\n");
-    fprintf(out, "addi r14,r14,-%d\n", mainFuncSize);
-    fprintf(out, "jl r15,main\n");
-    fprintf(out, "addi r14,r14,%d\n", mainFuncSize); // Pop of the stack.
-    fprintf(out, "hlt\n");
-
-    fprintf(out, "\n\n\n\n");
-    read_subtroutine(out);
-    fprintf(out, "\n\n\n\n");
-    write_subroutine(out);
+    if (main_found) {
+      fprintf(out, "\nentry\n");
+      fprintf(out, "addi r14,r0,topaddr\n");
+      fprintf(out, "addi r14,r14,-%d\n", mainFuncSize);
+      fprintf(out, "jl r15,main\n");
+      fprintf(out, "addi r14,r14,%d\n", mainFuncSize); // Pop of the stack.
+      fprintf(out, "hlt\n");
+      fprintf(out, "\n\n\n");
+    }
   }
-
   return;
 }
 
@@ -823,6 +925,10 @@ void write_subroutine(FILE *out) {
   fprintf(out, "divi %s,%s,10\n", magnitudeRegister, magnitudeRegister);
   fprintf(out, "ceqi %s,%s,0\n", tempValRegister, magnitudeRegister);
   fprintf(out, "bz %s, print\n", tempValRegister);
+
+  char *temp_reg = get_next_free_register();
+  fprintf(out, "addi %s,r0, 10\n", temp_reg);
+  fprintf(out, "putc %s\n", temp_reg);
 
   fprintf(out, "lw r15,0(r14)\n");
   fprintf(out, "jr r15\n");

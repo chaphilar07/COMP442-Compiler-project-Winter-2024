@@ -59,6 +59,10 @@ int main(int argc, char *argv[]) {
         print_scope(globalScope, symbol_table_output, 0);
         code_gen_pass(result, globalScope, output_file, errors);
 
+        read_subtroutine(output_file);
+        fprintf(output_file, "\n\n\n");
+        write_subroutine(output_file);
+
       } else {
         fprintf(stderr, "FAILURE COULD NOT PARSE THE SOURCE FILE!\n");
         continue;

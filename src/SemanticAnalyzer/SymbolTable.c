@@ -1164,12 +1164,14 @@ Scope *create_program_scope(node *root, void *arr) {
     }
 
     if ((current->type == multop || current->type == addop ||
-         current->type == relop) &&
+         current->type == relexpr) &&
         current->numchildren >= 2) {
 
       TableEntry *entry = create_temp_entry(current, globalScope, errors);
       insert_entry(current_scope, entry);
-      current->entryName = entry->data.TempVarEntry.name;
+      current->entryName =
+          entry->data.TempVarEntry.name; // So we will keep some temporary
+                                         // variable for the values here.
     }
 
     if (current->type == dot) {

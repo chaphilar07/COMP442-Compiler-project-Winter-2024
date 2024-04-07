@@ -48,7 +48,7 @@ Table Entry 4 of "Global":class C inherits 	size: 4	offset: 0
 
 			END OF TABLE FOR SCOPE class scope "C"
 
-Table Entry 5 of "Global":func main -> void : 	size: 464	return type size: 0
+Table Entry 5 of "Global":func main -> void : 	size: 256	return type size: 0
 
 			BEGINNING OF TABLE FOR:  function scope "main"
 
@@ -58,63 +58,65 @@ Table Entry 5 of "Global":func main -> void : 	size: 464	return type size: 0
 
 			Table Entry 3 of "main":litval	size: 8	offset: 8	 value: 1.0	name: literal111
 
-			Table Entry 4 of "main":litval	size: 28	offset: 16	 value: function value	name: literal124
+			Table Entry 4 of "main":litval	size: 4	offset: 16	 value: function value	name: literal124
 
-			Table Entry 5 of "main":litval	size: 36	offset: 44	 value: function value	name: literal109
+			Table Entry 5 of "main":litval	size: 16	offset: 20	 value: function value	name: literal109
 
-			Table Entry 6 of "main":var f2 QUADRATIC	size: 24	offset: 80
+			Table Entry 6 of "main":var f2 QUADRATIC	size: 24	offset: 36
 
-			Table Entry 7 of "main":var j integer[1][2][3]	size: 24	offset: 104
+			Table Entry 7 of "main":var j integer[1][2][3]	size: 24	offset: 60
 
-			Table Entry 8 of "main":litval	size: 12	offset: 128	 value: function value	name: literal116
+			Table Entry 8 of "main":litval	size: 0	offset: 84	 value: function value	name: literal116
 
-			Table Entry 9 of "main":litval	size: 4	offset: 140	 value: 2	name: literal123
+			Table Entry 9 of "main":litval	size: 4	offset: 84	 value: 2	name: literal123
 
-			Table Entry 10 of "main":litval	size: 4	offset: 144	 value: 2	name: literal107
+			Table Entry 10 of "main":litval	size: 4	offset: 88	 value: 2	name: literal107
 
-			Table Entry 11 of "main":litval	size: 4	offset: 148	 value: 2	name: literal118
+			Table Entry 11 of "main":litval	size: 4	offset: 92	 value: 2	name: literal118
 
-			Table Entry 12 of "main":litval	size: 8	offset: 152	 value: 3.5	name: literal108
+			Table Entry 12 of "main":litval	size: 8	offset: 96	 value: 3.5	name: literal108
 
-			Table Entry 13 of "main":var z integer	size: 4	offset: 160
+			Table Entry 13 of "main":var z integer	size: 4	offset: 104
 
-			Table Entry 14 of "main":var c C	size: 4	offset: 164
+			Table Entry 14 of "main":tempvar	size: 4	offset: 108	name: temp108	
 
-			Table Entry 15 of "main":litval	size: 4	offset: 168	 value: 10	name: literal128
+			Table Entry 15 of "main":var c C	size: 4	offset: 112
 
-			Table Entry 16 of "main":litval	size: 12	offset: 172	 value: function value	name: literal117
+			Table Entry 16 of "main":litval	size: 4	offset: 116	 value: 10	name: literal128
 
-			Table Entry 17 of "main":litval	size: 8	offset: 184	 value: 1.3	name: literal122
+			Table Entry 17 of "main":litval	size: 0	offset: 120	 value: function value	name: literal117
 
-			Table Entry 18 of "main":litval	size: 8	offset: 192	 value: 0.0	name: literal112
+			Table Entry 18 of "main":litval	size: 8	offset: 120	 value: 1.3	name: literal122
 
-			Table Entry 19 of "main":litval	size: 44	offset: 200	 value: function value	name: literal127
+			Table Entry 19 of "main":litval	size: 8	offset: 128	 value: 0.0	name: literal112
 
-			Table Entry 20 of "main":litval	size: 4	offset: 244	 value: 1	name: literal119
+			Table Entry 20 of "main":litval	size: 8	offset: 136	 value: function value	name: literal127
 
-			Table Entry 21 of "main":var f1 LINEAR	size: 16	offset: 248
+			Table Entry 21 of "main":litval	size: 4	offset: 144	 value: 1	name: literal119
 
-			Table Entry 22 of "main":var i integer[2][3]	size: 24	offset: 264
+			Table Entry 22 of "main":var f1 LINEAR	size: 16	offset: 148
 
-			Table Entry 23 of "main":var counter integer	size: 4	offset: 288
+			Table Entry 23 of "main":var i integer[2][3]	size: 24	offset: 164
 
-			Table Entry 24 of "main":litval	size: 4	offset: 292	 value: 1	name: literal114
+			Table Entry 24 of "main":var counter integer	size: 4	offset: 188
 
-			Table Entry 25 of "main":litval	size: 4	offset: 296	 value: 2	name: literal121
+			Table Entry 25 of "main":litval	size: 4	offset: 192	 value: 1	name: literal114
 
-			Table Entry 26 of "main":litval	size: 88	offset: 300	 value: function value	name: literal113
+			Table Entry 26 of "main":litval	size: 4	offset: 196	 value: 2	name: literal121
 
-			Table Entry 27 of "main":litval	size: 52	offset: 388	 value: function value	name: literal126
+			Table Entry 27 of "main":litval	size: 24	offset: 200	 value: function value	name: literal113
 
-			Table Entry 28 of "main":var y float	size: 8	offset: 440
+			Table Entry 28 of "main":litval	size: 8	offset: 224	 value: function value	name: literal126
 
-			Table Entry 29 of "main":litval	size: 0	offset: 448	 value: function value	name: literal115
+			Table Entry 29 of "main":var y float	size: 8	offset: 232
 
-			Table Entry 30 of "main":litval	size: 4	offset: 448	 value: 1	name: literal120
+			Table Entry 30 of "main":litval	size: 0	offset: 240	 value: function value	name: literal115
 
-			Table Entry 31 of "main":litval	size: 8	offset: 452	 value: 2.0	name: literal110
+			Table Entry 31 of "main":litval	size: 4	offset: 240	 value: 1	name: literal120
 
-			Table Entry 32 of "main":litval	size: 4	offset: 460	 value: 1	name: literal125
+			Table Entry 32 of "main":litval	size: 8	offset: 244	 value: 2.0	name: literal110
+
+			Table Entry 33 of "main":litval	size: 4	offset: 252	 value: 1	name: literal125
 
 			END OF TABLE FOR SCOPE function scope "main"
 

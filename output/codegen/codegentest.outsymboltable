@@ -1,12 +1,78 @@
 BEGINNING OF TABLE FOR:  global scope "Global"
 
-Table Entry 1 of "Global":func main -> void : 	size: 8	return type size: 0
+Table Entry 1 of "Global":func main -> void : 	size: 72	return type size: 0
 
 			BEGINNING OF TABLE FOR:  function scope "main"
 
-			Table Entry 1 of "main":var x integer	size: 4	offset: 4
+			Table Entry 1 of "main":litval	size: 4	offset: 4	 value: 3	name: literal105
+
+			Table Entry 2 of "main":var x integer	size: 4	offset: 8
+
+			Table Entry 3 of "main":tempvar	size: 4	offset: 12	name: temp101	
+
+			Table Entry 4 of "main":litval	size: 4	offset: 16	 value: 2	name: literal111
+
+			Table Entry 5 of "main":litval	size: 4	offset: 20	 value: 5	name: literal104
+
+			Table Entry 6 of "main":litval	size: 4	offset: 24	 value: function value	name: literal109
+
+			Table Entry 7 of "main":litval	size: 4	offset: 28	 value: 3	name: literal107
+
+			Table Entry 8 of "main":litval	size: 4	offset: 32	 value: function value	name: literal108
+
+			Table Entry 9 of "main":var z integer	size: 4	offset: 36
+
+			Table Entry 10 of "main":tempvar	size: 4	offset: 40	name: temp102	
+
+			Table Entry 11 of "main":litval	size: 4	offset: 44	 value: 1	name: literal112
+
+			Table Entry 12 of "main":litval	size: 4	offset: 48	 value: 3	name: literal106
+
+			Table Entry 13 of "main":tempvar	size: 4	offset: 52	name: temp103	
+
+			Table Entry 14 of "main":litval	size: 4	offset: 56	 value: 3	name: literal114
+
+			Table Entry 15 of "main":litval	size: 4	offset: 60	 value: 3	name: literal113
+
+			Table Entry 16 of "main":var y integer	size: 4	offset: 64
+
+			Table Entry 17 of "main":tempvar	size: 4	offset: 68	name: temp100	
+
+			Table Entry 18 of "main":litval	size: 0	offset: 72	 value: function value	name: literal110
 
 			END OF TABLE FOR SCOPE function scope "main"
+
+Table Entry 2 of "Global":func return2 -> integer : 	size: 8	return type size: 4
+
+			BEGINNING OF TABLE FOR:  function scope "return2"
+
+			Table Entry 1 of "return2":litval	size: 4	offset: 4	 value: 2	name: literal101
+
+			END OF TABLE FOR SCOPE function scope "return2"
+
+Table Entry 3 of "Global":func return1 -> integer : 	size: 8	return type size: 4
+
+			BEGINNING OF TABLE FOR:  function scope "return1"
+
+			Table Entry 1 of "return1":litval	size: 4	offset: 4	 value: 1	name: literal100
+
+			END OF TABLE FOR SCOPE function scope "return1"
+
+Table Entry 4 of "Global":func bar -> void : 	size: 8	return type size: 0
+
+			BEGINNING OF TABLE FOR:  function scope "bar"
+
+			Table Entry 1 of "bar":litval	size: 4	offset: 4	 value: 10101	name: literal102
+
+			END OF TABLE FOR SCOPE function scope "bar"
+
+Table Entry 5 of "Global":func foo -> void : 	size: 4	return type size: 0
+
+			BEGINNING OF TABLE FOR:  function scope "foo"
+
+			Table Entry 1 of "foo":litval	size: 0	offset: 4	 value: function value	name: literal103
+
+			END OF TABLE FOR SCOPE function scope "foo"
 
 END OF TABLE FOR SCOPE global scope "Global"
 

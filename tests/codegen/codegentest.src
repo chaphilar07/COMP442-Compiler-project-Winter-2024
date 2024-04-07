@@ -1,5 +1,39 @@
+func return1()->integer{
+return(1);
+}
+
+func return2()->integer{
+return(2);
+}
+
+func bar()->void{
+write(10101);
+}
+
+func foo()->void{
+bar();
+}
+
+
+
 func main()->void{
-    let x:integer;
-    read(x);
-    write(x);
-  }
+let x:integer;
+let y: integer;
+let z:integer;
+x=5;
+y=3;
+z=return1()+return2()+3;
+
+write(z);
+
+foo();
+
+
+if(x>y+3) then {
+write(1);
+}else{
+write(2);
+};
+
+
+}

@@ -49,7 +49,7 @@ node *create_leaf_node(NodeType type, semantic_stack *stack, const char *value,
     temp->value = strdup("lt");
   if (strcmp(temp->value, "<=") == 0)
     temp->value = strdup("leq");
-  if (strcmp(temp->value, "=") == 0)
+  if (strcmp(temp->value, "==") == 0)
     temp->value = strdup("eq");
 
   if (!stack) {

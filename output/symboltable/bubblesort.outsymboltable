@@ -1,70 +1,72 @@
 BEGINNING OF TABLE FOR:  global scope "Global"
 
-Table Entry 1 of "Global":func main -> void : 	size: 276	return type size: 0
+Table Entry 1 of "Global":func main -> void : 	size: 88	return type size: 0
 
 			BEGINNING OF TABLE FOR:  function scope "main"
 
 			Table Entry 1 of "main":var arr integer[7]	size: 28	offset: 4
 
-			Table Entry 2 of "main":litval	size: 4	offset: 32	 value: 34	name: literal176
+			Table Entry 2 of "main":litval	size: 4	offset: 32	 value: 90	name: literal176
 
-			Table Entry 3 of "main":litval	size: 4	offset: 36	 value: 5	name: literal183
+			Table Entry 3 of "main":litval	size: 4	offset: 36	 value: 4	name: literal171
 
-			Table Entry 4 of "main":litval	size: 4	offset: 40	 value: 11	name: literal184
+			Table Entry 4 of "main":litval	size: 4	offset: 40	 value: 2	name: literal167
 
-			Table Entry 5 of "main":litval	size: 36	offset: 44	 value: function value	name: literal189
+			Table Entry 5 of "main":litval	size: 4	offset: 44	 value: 3	name: literal169
 
-			Table Entry 6 of "main":litval	size: 4	offset: 80	 value: 2	name: literal177
+			Table Entry 6 of "main":litval	size: 0	offset: 48	 value: function value	name: literal177
 
-			Table Entry 7 of "main":litval	size: 4	offset: 84	 value: 22	name: literal182
+			Table Entry 7 of "main":litval	size: 4	offset: 48	 value: 22	name: literal172
 
-			Table Entry 8 of "main":litval	size: 36	offset: 88	 value: function value	name: literal187
+			Table Entry 8 of "main":litval	size: 4	offset: 52	 value: 34	name: literal166
 
-			Table Entry 9 of "main":litval	size: 4	offset: 124	 value: 25	name: literal178
+			Table Entry 9 of "main":litval	size: 4	offset: 56	 value: 0	name: literal163
 
-			Table Entry 10 of "main":litval	size: 116	offset: 128	 value: function value	name: literal188
+			Table Entry 10 of "main":litval	size: 0	offset: 60	 value: function value	name: literal178
 
-			Table Entry 11 of "main":litval	size: 4	offset: 244	 value: 0	name: literal173
+			Table Entry 11 of "main":litval	size: 4	offset: 60	 value: 25	name: literal168
 
-			Table Entry 12 of "main":litval	size: 4	offset: 248	 value: 90	name: literal186
+			Table Entry 12 of "main":litval	size: 4	offset: 64	 value: 5	name: literal173
 
-			Table Entry 13 of "main":litval	size: 4	offset: 252	 value: 3	name: literal179
+			Table Entry 13 of "main":litval	size: 4	offset: 68	 value: 1	name: literal165
 
-			Table Entry 14 of "main":litval	size: 4	offset: 256	 value: 64	name: literal174
+			Table Entry 14 of "main":litval	size: 0	offset: 72	 value: function value	name: literal179
 
-			Table Entry 15 of "main":litval	size: 4	offset: 260	 value: 4	name: literal181
+			Table Entry 15 of "main":litval	size: 4	offset: 72	 value: 11	name: literal174
 
-			Table Entry 16 of "main":litval	size: 4	offset: 264	 value: 1	name: literal175
+			Table Entry 16 of "main":litval	size: 4	offset: 76	 value: 64	name: literal164
 
-			Table Entry 17 of "main":litval	size: 4	offset: 268	 value: 12	name: literal180
+			Table Entry 17 of "main":litval	size: 4	offset: 80	 value: 6	name: literal175
 
-			Table Entry 18 of "main":litval	size: 4	offset: 272	 value: 6	name: literal185
+			Table Entry 18 of "main":litval	size: 4	offset: 84	 value: 12	name: literal170
 
 			END OF TABLE FOR SCOPE function scope "main"
 
-Table Entry 2 of "Global":func printArray -> void : arr integer[],size integer	size: 36	return type size: 0
+Table Entry 2 of "Global":func printArray -> void : arr integer[],size integer	size: 40	return type size: 0
 
 			BEGINNING OF TABLE FOR:  function scope "printArray"
 
 			Table Entry 1 of "printArray":fparam arr integer[]	size: 4	offset: 4
 
-			Table Entry 2 of "printArray":litval	size: 4	offset: 12	 value: 1	name: literal171
+			Table Entry 2 of "printArray":fparam size integer	size: 4	offset: 8
 
-			Table Entry 3 of "printArray":fparam size integer	size: 4	offset: 8
+			Table Entry 3 of "printArray":tempvar	size: 4	offset: 12	name: temp127	
 
-			Table Entry 4 of "printArray":litval	size: 4	offset: 16	 value: 1	name: literal172
+			Table Entry 4 of "printArray":tempvar	size: 4	offset: 16	name: temp128	
 
-			Table Entry 5 of "printArray":tempvar	size: 4	offset: 20	name: temp128	
+			Table Entry 5 of "printArray":litval	size: 4	offset: 20	 value: 1	name: literal162
 
 			Table Entry 6 of "printArray":var n integer	size: 4	offset: 24
 
-			Table Entry 7 of "printArray":var i integer	size: 4	offset: 28
+			Table Entry 7 of "printArray":litval	size: 4	offset: 28	 value: 1	name: literal161
 
-			Table Entry 8 of "printArray":litval	size: 4	offset: 32	 value: 0	name: literal170
+			Table Entry 8 of "printArray":var i integer	size: 4	offset: 32
+
+			Table Entry 9 of "printArray":litval	size: 4	offset: 36	 value: 0	name: literal160
 
 			END OF TABLE FOR SCOPE function scope "printArray"
 
-Table Entry 3 of "Global":func bubbleSort -> void : arr integer[],size integer	size: 116	return type size: 0
+Table Entry 3 of "Global":func bubbleSort -> void : arr integer[],size integer	size: 124	return type size: 0
 
 			BEGINNING OF TABLE FOR:  function scope "bubbleSort"
 
@@ -72,57 +74,61 @@ Table Entry 3 of "Global":func bubbleSort -> void : arr integer[],size integer	s
 
 			Table Entry 2 of "bubbleSort":tempvar	size: 4	offset: 12	name: temp126	
 
-			Table Entry 3 of "bubbleSort":litval	size: 4	offset: 16	 value: 1	name: literal167
+			Table Entry 3 of "bubbleSort":tempvar	size: 4	offset: 16	name: temp117	
 
 			Table Entry 4 of "bubbleSort":tempvar	size: 4	offset: 20	name: temp121	
 
-			Table Entry 5 of "bubbleSort":litval	size: 4	offset: 24	 value: 0	name: literal157
+			Table Entry 5 of "bubbleSort":litval	size: 4	offset: 24	 value: 1	name: literal157
 
-			Table Entry 6 of "bubbleSort":litval	size: 4	offset: 28	 value: 1	name: literal169
+			Table Entry 6 of "bubbleSort":litval	size: 4	offset: 28	 value: 1	name: literal149
 
 			Table Entry 7 of "bubbleSort":fparam size integer	size: 4	offset: 8
 
-			Table Entry 8 of "bubbleSort":tempvar	size: 4	offset: 32	name: temp127	
+			Table Entry 8 of "bubbleSort":litval	size: 4	offset: 32	 value: 1	name: literal151
 
-			Table Entry 9 of "bubbleSort":litval	size: 4	offset: 36	 value: 1	name: literal166
+			Table Entry 9 of "bubbleSort":tempvar	size: 4	offset: 36	name: temp122	
 
-			Table Entry 10 of "bubbleSort":tempvar	size: 4	offset: 40	name: temp122	
+			Table Entry 10 of "bubbleSort":litval	size: 4	offset: 40	 value: 1	name: literal154
 
-			Table Entry 11 of "bubbleSort":litval	size: 4	offset: 44	 value: 1	name: literal163
+			Table Entry 11 of "bubbleSort":var j integer	size: 4	offset: 44
 
-			Table Entry 12 of "bubbleSort":litval	size: 4	offset: 48	 value: 1	name: literal168
+			Table Entry 12 of "bubbleSort":tempvar	size: 4	offset: 48	name: temp119	
 
-			Table Entry 13 of "bubbleSort":var j integer	size: 4	offset: 52
+			Table Entry 13 of "bubbleSort":litval	size: 4	offset: 52	 value: 1	name: literal148
 
-			Table Entry 14 of "bubbleSort":litval	size: 4	offset: 56	 value: 1	name: literal165
+			Table Entry 14 of "bubbleSort":litval	size: 4	offset: 56	 value: 0	name: literal145
 
 			Table Entry 15 of "bubbleSort":tempvar	size: 4	offset: 60	name: temp123	
 
-			Table Entry 16 of "bubbleSort":litval	size: 4	offset: 64	 value: 0	name: literal155
+			Table Entry 16 of "bubbleSort":litval	size: 4	offset: 64	 value: 1	name: literal155
 
-			Table Entry 17 of "bubbleSort":litval	size: 4	offset: 68	 value: 1	name: literal162
+			Table Entry 17 of "bubbleSort":litval	size: 4	offset: 68	 value: 1	name: literal158
 
-			Table Entry 18 of "bubbleSort":litval	size: 4	offset: 72	 value: 1	name: literal158
+			Table Entry 18 of "bubbleSort":tempvar	size: 4	offset: 72	name: temp118	
 
 			Table Entry 19 of "bubbleSort":var n integer	size: 4	offset: 76
 
-			Table Entry 20 of "bubbleSort":litval	size: 4	offset: 80	 value: 1	name: literal164
+			Table Entry 20 of "bubbleSort":tempvar	size: 4	offset: 80	name: temp124	
 
-			Table Entry 21 of "bubbleSort":tempvar	size: 4	offset: 84	name: temp124	
+			Table Entry 21 of "bubbleSort":litval	size: 4	offset: 84	 value: 1	name: literal152
 
-			Table Entry 22 of "bubbleSort":litval	size: 4	offset: 88	 value: 1	name: literal161
+			Table Entry 22 of "bubbleSort":litval	size: 4	offset: 88	 value: 1	name: literal159
 
-			Table Entry 23 of "bubbleSort":litval	size: 4	offset: 92	 value: 1	name: literal159
+			Table Entry 23 of "bubbleSort":var i integer	size: 4	offset: 92
 
-			Table Entry 24 of "bubbleSort":var i integer	size: 4	offset: 96
+			Table Entry 24 of "bubbleSort":litval	size: 4	offset: 96	 value: 0	name: literal147
 
 			Table Entry 25 of "bubbleSort":tempvar	size: 4	offset: 100	name: temp125	
 
-			Table Entry 26 of "bubbleSort":litval	size: 4	offset: 104	 value: 1	name: literal160
+			Table Entry 26 of "bubbleSort":litval	size: 4	offset: 104	 value: 1	name: literal153
 
-			Table Entry 27 of "bubbleSort":litval	size: 4	offset: 108	 value: 0	name: literal156
+			Table Entry 27 of "bubbleSort":tempvar	size: 4	offset: 108	name: temp120	
 
-			Table Entry 28 of "bubbleSort":var temp integer	size: 4	offset: 112
+			Table Entry 28 of "bubbleSort":litval	size: 4	offset: 112	 value: 1	name: literal156
+
+			Table Entry 29 of "bubbleSort":litval	size: 4	offset: 116	 value: 0	name: literal146
+
+			Table Entry 30 of "bubbleSort":var temp integer	size: 4	offset: 120
 
 			END OF TABLE FOR SCOPE function scope "bubbleSort"
 

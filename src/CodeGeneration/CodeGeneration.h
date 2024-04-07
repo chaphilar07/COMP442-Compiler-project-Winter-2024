@@ -23,7 +23,10 @@ void handle_function_call(node *astnode, ErrorArray *errors, Scope *globalScope,
                           FILE *out);
 void code_gen_pass(node *root, Scope *globalScope, FILE *out,
                    ErrorArray *errors);
-
+char *get_next_free_register();
 void read_subtroutine(FILE *out);
 void write_subroutine(FILE *out);
+
+int handle_expression(node *astnode, ErrorArray *errors, FILE *out,
+                      Scope *globalScope);
 #endif // !CODE_GENERATION_DOT_H

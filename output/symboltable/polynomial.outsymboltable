@@ -10,7 +10,7 @@ Table Entry 1 of "Global":class POLYNOMIAL inherits 	size: 0	offset: 0
 
 						Table Entry 1 of "evaluate":fparam x float	size: 8	offset: 4
 
-						Table Entry 2 of "evaluate":litval	size: 8	offset: 12	 value: 0.0	name: literal142
+						Table Entry 2 of "evaluate":litval	size: 8	offset: 12	 value: 0.0	name: literal132
 
 						END OF TABLE FOR SCOPE function scope "evaluate"
 
@@ -24,37 +24,39 @@ Table Entry 2 of "Global":func test -> QUADRATIC : 	size: 28	return type size: 2
 
 			END OF TABLE FOR SCOPE function scope "test"
 
-Table Entry 3 of "Global":func main -> void : 	size: 288	return type size: 0
+Table Entry 3 of "Global":func main -> void : 	size: 168	return type size: 0
 
 			BEGINNING OF TABLE FOR:  function scope "main"
 
-			Table Entry 1 of "main":litval	size: 52	offset: 4	 value: function value	name: literal150
+			Table Entry 1 of "main":litval	size: 4	offset: 4	 value: 2	name: literal134
 
-			Table Entry 2 of "main":litval	size: 8	offset: 56	 value: 0.0	name: literal149
+			Table Entry 2 of "main":litval	size: 8	offset: 8	 value: function value	name: literal142
 
-			Table Entry 3 of "main":litval	size: 8	offset: 64	 value: 1.0	name: literal151
+			Table Entry 3 of "main":litval	size: 8	offset: 16	 value: 3.5	name: literal135
 
-			Table Entry 4 of "main":var f2 QUADRATIC	size: 24	offset: 72
+			Table Entry 4 of "main":tempvar	size: 8	offset: 24	name: temp116	
 
-			Table Entry 5 of "main":litval	size: 8	offset: 96	 value: 10.0	name: literal154
+			Table Entry 5 of "main":var f2 QUADRATIC	size: 24	offset: 32
 
-			Table Entry 6 of "main":litval	size: 8	offset: 104	 value: 1.0	name: literal148
+			Table Entry 6 of "main":litval	size: 8	offset: 56	 value: 1.0	name: literal138
 
-			Table Entry 7 of "main":litval	size: 8	offset: 112	 value: 3.5	name: literal145
+			Table Entry 7 of "main":litval	size: 16	offset: 64	 value: function value	name: literal136
 
-			Table Entry 8 of "main":litval	size: 4	offset: 120	 value: 2	name: literal144
+			Table Entry 8 of "main":litval	size: 8	offset: 80	 value: 0.0	name: literal139
 
-			Table Entry 9 of "main":litval	size: 52	offset: 124	 value: function value	name: literal152
+			Table Entry 9 of "main":litval	size: 8	offset: 88	 value: 10.0	name: literal144
 
-			Table Entry 10 of "main":var f1 LINEAR	size: 16	offset: 176
+			Table Entry 10 of "main":litval	size: 8	offset: 96	 value: 1.0	name: literal141
 
-			Table Entry 11 of "main":litval	size: 8	offset: 192	 value: 2.0	name: literal147
+			Table Entry 11 of "main":litval	size: 8	offset: 104	 value: 2.0	name: literal137
 
-			Table Entry 12 of "main":var counter float	size: 8	offset: 200
+			Table Entry 12 of "main":var f1 LINEAR	size: 16	offset: 112
 
-			Table Entry 13 of "main":litval	size: 44	offset: 208	 value: function value	name: literal153
+			Table Entry 13 of "main":var counter float	size: 8	offset: 128
 
-			Table Entry 14 of "main":litval	size: 36	offset: 252	 value: function value	name: literal146
+			Table Entry 14 of "main":litval	size: 24	offset: 136	 value: function value	name: literal140
+
+			Table Entry 15 of "main":litval	size: 8	offset: 160	 value: function value	name: literal143
 
 			END OF TABLE FOR SCOPE function scope "main"
 
@@ -84,13 +86,13 @@ Table Entry 4 of "Global":class LINEAR inherits POLYNOMIAL, 	size: 16	offset: 0
 
 						Table Entry 1 of "evaluate":fparam x float	size: 8	offset: 4
 
-						Table Entry 2 of "evaluate":tempvar	size: 8	offset: 12	name: temp119	
+						Table Entry 2 of "evaluate":litval	size: 8	offset: 12	 value: 0.0	name: literal133
 
-						Table Entry 3 of "evaluate":var result float	size: 8	offset: 20
+						Table Entry 3 of "evaluate":tempvar	size: 8	offset: 20	name: temp115	
 
-						Table Entry 4 of "evaluate":tempvar	size: 8	offset: 28	name: temp120	
+						Table Entry 4 of "evaluate":var result float	size: 8	offset: 28
 
-						Table Entry 5 of "evaluate":litval	size: 8	offset: 36	 value: 0.0	name: literal143
+						Table Entry 5 of "evaluate":tempvar	size: 8	offset: 36	name: temp114	
 
 						END OF TABLE FOR SCOPE function scope "evaluate"
 
@@ -126,15 +128,15 @@ Table Entry 5 of "Global":class QUADRATIC inherits POLYNOMIAL, 	size: 24	offset:
 
 						Table Entry 1 of "evaluate":fparam x float	size: 8	offset: 4
 
-						Table Entry 2 of "evaluate":tempvar	size: 8	offset: 12	name: temp117	
+						Table Entry 2 of "evaluate":tempvar	size: 8	offset: 12	name: temp110	
 
-						Table Entry 3 of "evaluate":tempvar	size: 8	offset: 20	name: temp116	
+						Table Entry 3 of "evaluate":tempvar	size: 8	offset: 20	name: temp113	
 
-						Table Entry 4 of "evaluate":tempvar	size: 8	offset: 28	name: temp118	
+						Table Entry 4 of "evaluate":tempvar	size: 8	offset: 28	name: temp112	
 
-						Table Entry 5 of "evaluate":tempvar	size: 8	offset: 36	name: temp115	
+						Table Entry 5 of "evaluate":var result float	size: 8	offset: 36
 
-						Table Entry 6 of "evaluate":var result float	size: 8	offset: 44
+						Table Entry 6 of "evaluate":tempvar	size: 8	offset: 44	name: temp111	
 
 						END OF TABLE FOR SCOPE function scope "evaluate"
 
