@@ -1135,34 +1135,17 @@ Scope *create_program_scope(node *root, void *arr) {
 
     current->scope = current_scope; // We set the scopes of the AST nodes
 
-    if (current->type == multop || current->type == addop ||
-        current->type == relexpr || current->type == assingop ||
-        current->type == write || current->type == read ||
-        current->type == returnnode) {
+    if ((current->type == floatnum || current->type == intnum) &&
+        current->parent->type != arraydims) {
+      // Create a literal entry.
 
-      semantic_stack *stack = init_stack();
-      push_node(current, stack);
+      TableEntry *entry = create_litval_entry(current);
+      insert_entry(current_scope, entry);
+      current->entryName = entry->data.litval.id;
 
-      while (stack->size > 0) {
-        node *current_node = pop_node(stack);
-        if (current_node->type == floatnum || current_node->type == intnum) {
-          TableEntry *entry = create_litval_entry(current_node);
-          insert_entry(current_scope, entry);
-
-          current_node->entryName =
-              entry->data.litval.id; // We use this later on to get the
-                                     // variables offset quickly.
-        }
-        current_node->scope = current_scope;
-
-        if (current_node->numchildren > 0) {
-          for (int i = 0; i < current_node->numchildren; i++) {
-            push_node(current_node->children[i], stack);
-          }
-        }
-      }
+      fprintf(stderr, "CREATED LITERAL VAL ENTRY %s WITH VALUE %s \n",
+              current->entryName, current->value);
     }
-
     if ((current->type == multop || current->type == addop ||
          current->type == relexpr) &&
         current->numchildren >= 2) {

@@ -1,18 +1,18 @@
 func return1()->integer{
-return(1);
-}
+    return(1);
+  }
 
 func return2()->integer{
-return(2);
-}
+    return(2);
+  }
 
 func bar()->void{
-write(10101);
-}
-
+    write(10101);
+  }
 func foo()->void{
-bar();
-}
+    bar();
+  }
+
 
 
 
@@ -22,18 +22,40 @@ let y: integer;
 let z:integer;
 x=5;
 y=3;
-z=return1()+return2()+3;
-
-write(z);
-
-foo();
 
 
-if(x>y+3) then {
-write(1);
+
+if(1<2) then {
+  write(1);
+  if(1*2*3*4*5>y+1+2+3+4+5) then {
+write(2);
+    }else{
+write(3);
+      };
+
 }else{
 write(2);
+  if(x*y+return1()+return2() >= x*y) then{
+      write(4);
+    }else{
+        write(5);
+      };
 };
 
+let a: integer;
+let b: integer;
 
-}
+a=1;
+
+while(a<=10){
+    write(a);
+    while(b<=10){
+        write(b);
+        b=b+1;
+      };
+      a=a+1;
+  };
+
+
+
+} 

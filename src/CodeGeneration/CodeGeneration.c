@@ -82,6 +82,9 @@ void handle_statement(node *astnode, ErrorArray *errors, Scope *globalScope,
  * This function will deal with an if statement, we want to DFS through the file
  * and basically do the same things that the code_gen_pass function would do and
  * at the end, we put labels infront of each of the
+ *
+ * How should we do this what is causing this problem?
+ * The problem occurs when we have neste
  */
 void handle_if_statment(node *astnode, Scope *globalScope, ErrorArray *errors,
                         FILE *out) {
@@ -110,6 +113,54 @@ void handle_if_statment(node *astnode, Scope *globalScope, ErrorArray *errors,
           if_label); // The problem is somewhere else, something is printing the
                      // same thing afer we have passed?
 }
+
+/*
+ * this functio will get the next while label.
+ */
+char *get_while_label() {
+  char buffer[64];
+  snprintf(buffer, sizeof(buffer), "%s%d", "while", while_numbers);
+  return strdup(buffer);
+}
+
+/*
+ * This function returns a label to the end of a while loop used for creating
+ * the instrucions for a while loop.
+ */
+char *get_end_while_label() {
+  char buffer[64];
+  snprintf(buffer, sizeof(buffer), "%s%d", "endwhile", while_numbers++);
+  return strdup(buffer);
+}
+
+/*This function will be used to handle while nodes in the code.
+ */
+
+void handle_while_statement(node *astnode, Scope *globalScope,
+                            ErrorArray *errors, FILE *out) {
+
+  node *expressionNode = astnode->children[1];
+  node *bodyNode = astnode->children[0];
+
+  char *whilelabele = get_while_label();
+  char *enwhilelabel = get_end_while_label();
+
+  fprintf(out, "%s\n", whilelabele);
+  int expressionOffset =
+      handle_expression(expressionNode, errors, out, globalScope);
+
+  fprintf(stderr, "the value produced by the expression for the offset %d \n",
+          expressionOffset);
+  char *comp_regiseter = get_next_free_register();
+  fprintf(out, "lw %s, %d(r14)\n", comp_regiseter, expressionOffset);
+  fprintf(out, "bz %s,%s\n", comp_regiseter, enwhilelabel);
+  code_gen_pass(bodyNode, globalScope, out,
+                errors); // Note that we call thefunction recursively here, we
+                         // call from the within a code_gen_pass call.
+  fprintf(out, "j %s\n", whilelabele);
+  fprintf(out, "%s\n", enwhilelabel);
+}
+
 /*
  * This function will return a string that corresponds to the first free
  * register in the register pool.
@@ -468,19 +519,24 @@ int get_function_size(node *astnode, void *arr) {
 
 int get_offset(node *astnode, Scope *globalScope, ErrorArray *errors,
                FILE *out) {
+
   if (astnode->type == var) {
     return get_variable_offset(astnode, errors);
+
   } else if (astnode->type == intnum || astnode->type == floatnum) {
     const char *name = astnode->entryName;
     TableEntry *entry = get_entry(astnode->scope, name);
+
     if (entry->tableType == LITVAL_ENTRY)
       return entry->offset;
     else
       return 0;
   } else if (astnode->type == multop || astnode->type == addop ||
              astnode->type == relexpr) {
+
     const char *name = astnode->entryName;
     TableEntry *entry = get_entry(astnode->scope, name);
+
     if (entry->tableType == TEMP_ENTRY)
       return entry->offset;
     else
@@ -513,10 +569,12 @@ void handle_dots(node *astnode, Scope *globalScope, ErrorArray *errors,
  */
 int handle_expression(node *astnode, ErrorArray *errors, FILE *out,
                       Scope *globalScope) {
+
   if (astnode->type == floatnum || astnode->type == intnum) {
 
-    fprintf(stderr, "HERE\n");
-    int offset = get_offset(astnode, globalScope, errors, out);
+    int offset = get_offset(astnode, astnode->scope, errors, out);
+    fprintf(stderr, "THE OFFSET OBTAINED %d FOR A NODE WITH VALUE %s  \n\n",
+            offset, astnode->value);
     const char *registerBeingUsed = get_next_free_register();
     fprintf(out, "addi %s,r0,%s\n", registerBeingUsed,
             astnode->value); // We store the value in a register.
@@ -529,12 +587,12 @@ int handle_expression(node *astnode, ErrorArray *errors, FILE *out,
 
   } else if (astnode->type == multop || astnode->type == addop) {
 
-    int leftOffset =
-        handle_expression(astnode->children[1], errors, out, globalScope);
-    int rightOffset =
-        handle_expression(astnode->children[0], errors, out, globalScope);
+    int leftOffset = handle_expression(astnode->children[1], errors, out,
+                                       astnode->children[1]->scope);
+    int rightOffset = handle_expression(astnode->children[0], errors, out,
+                                        astnode->children[0]->scope);
 
-    int operationOffset = get_offset(astnode, globalScope, errors, out);
+    int operationOffset = get_offset(astnode, astnode->scope, errors, out);
 
     char operationBuffer[16];
 
@@ -699,10 +757,6 @@ void code_gen_pass(node *root, Scope *globalScope, FILE *out,
 
     node *current = pop_node(stack);
 
-    if (current->scope)
-      fprintf(stderr, "The current scope is %s and the new nodes scope is %s\n",
-              current_scope->scopeName, current->scope->scopeName);
-
     if (current_scope->type == FUNCTION_SCOPE && current->scope &&
         current->scope != current_scope) {
       // We need to jump back to the correct stack frame location, to do this we
@@ -716,29 +770,15 @@ void code_gen_pass(node *root, Scope *globalScope, FILE *out,
 
     if (current->scope)
       current_scope = current->scope;
-    if (current->type == funcdef) {
 
-      // We want to store the return address
+    if (current->type == funcdef) {
 
       const char *name = get_name(current);
       char buffer[64];
-      snprintf(buffer, sizeof(buffer), "%s",
-               name);                      // Create the label for the function.
-      fprintf(out, "align\n%s\n", buffer); // Print the label to the file.
-      fprintf(out,
-              "sw 0(r14),r15\n"); // We store the stack return address at the
-                                  // first byte of the current stack frame.
+      snprintf(buffer, sizeof(buffer), "%s", name);
+      fprintf(out, "align\n%s\n", buffer);
+      fprintf(out, "sw 0(r14),r15\n");
     }
-
-    // If we get to a function call we must do the following:
-    // 1. get the size of the function, increment the topofstackpointer by
-    // this amount.
-    // 2. store the parameters in free_registers.
-    // 3. store the return address at the top of called functions stack frame
-    // so it knows where to return to.
-    // To do this I will write a function that gets the size of the function
-    // call from the node, this will take on a similar structure to our
-    // previous functions that will get some data about a function call.
     if (current->type == funccall) {
       handle_function_call(current, errors, globalScope, out);
     }
@@ -750,19 +790,9 @@ void code_gen_pass(node *root, Scope *globalScope, FILE *out,
       handle_assignment_statement(current, errors, current->scope, out);
     }
 
-    if (current->numchildren > 0) {
-      for (int i = 0; i < current->numchildren; i++) {
-        push_node(current->children[i], stack);
-      }
-    }
-
     if (current->type == read) {
-      // Here we must get the offset of the variable that we will be assigning
-      // into.
       int offset =
           handle_expression(current->children[0], errors, out, globalScope);
-      // Note that we do not have to store any information for a read function
-      // besides the space needed to store the return address!
 
       fprintf(out, "addi r14,r14,-4\n");
       fprintf(out, "jl r15,read\n");
@@ -773,10 +803,7 @@ void code_gen_pass(node *root, Scope *globalScope, FILE *out,
 
       node *valueNode = current->children[0];
 
-      int offset = handle_expression(
-          valueNode, errors, out,
-          globalScope); // We get the offset of this value and we return the
-                        // value that is stored at that position.
+      int offset = handle_expression(valueNode, errors, out, globalScope);
 
       fprintf(out, "lw r13, %d(r14)\n", offset);
       fprintf(out, "addi r14,r14,-%d\n", 8);
@@ -785,16 +812,25 @@ void code_gen_pass(node *root, Scope *globalScope, FILE *out,
     }
 
     if (current->type == ifnode) {
-      //     handle_if_statment(current, globalScope, errors, out);
-      continue; // Dont push the children.
+      handle_if_statment(current, globalScope, errors, out);
+      continue;
     }
-    if (current->type ==
-        returnnode) { // Note that we do NOT DO ANY CHECKING FOR THE CODE GEN!!!
+    if (current->type == returnnode) {
 
       node *return_value_node = current->children[0];
       int offset =
           handle_expression(return_value_node, errors, out, globalScope);
       fprintf(out, "lw r13,%d(r14)\n", offset);
+    }
+    if (current->type == whilenode) {
+      handle_while_statement(current, globalScope, errors, out);
+      continue;
+    }
+
+    if (current->numchildren > 0) {
+      for (int i = 0; i < current->numchildren; i++) {
+        push_node(current->children[i], stack);
+      }
     }
   }
 

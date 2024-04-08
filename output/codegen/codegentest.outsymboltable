@@ -1,6 +1,6 @@
 BEGINNING OF TABLE FOR:  global scope "Global"
 
-Table Entry 1 of "Global":func main -> void : 	size: 72	return type size: 0
+Table Entry 1 of "Global":func main -> void : 	size: 212	return type size: 0
 
 			BEGINNING OF TABLE FOR:  function scope "main"
 
@@ -8,37 +8,105 @@ Table Entry 1 of "Global":func main -> void : 	size: 72	return type size: 0
 
 			Table Entry 2 of "main":var x integer	size: 4	offset: 8
 
-			Table Entry 3 of "main":tempvar	size: 4	offset: 12	name: temp101	
+			Table Entry 3 of "main":tempvar	size: 4	offset: 12	name: temp117	
 
-			Table Entry 4 of "main":litval	size: 4	offset: 16	 value: 2	name: literal111
+			Table Entry 4 of "main":tempvar	size: 4	offset: 16	name: temp110	
 
-			Table Entry 5 of "main":litval	size: 4	offset: 20	 value: 5	name: literal104
+			Table Entry 5 of "main":tempvar	size: 4	offset: 20	name: temp101	
 
-			Table Entry 6 of "main":litval	size: 4	offset: 24	 value: function value	name: literal109
+			Table Entry 6 of "main":tempvar	size: 4	offset: 24	name: temp104	
 
-			Table Entry 7 of "main":litval	size: 4	offset: 28	 value: 3	name: literal107
+			Table Entry 7 of "main":var a integer	size: 4	offset: 28
 
-			Table Entry 8 of "main":litval	size: 4	offset: 32	 value: function value	name: literal108
+			Table Entry 8 of "main":litval	size: 4	offset: 32	 value: 3	name: literal111
 
-			Table Entry 9 of "main":var z integer	size: 4	offset: 36
+			Table Entry 9 of "main":litval	size: 4	offset: 36	 value: 2	name: literal124
 
-			Table Entry 10 of "main":tempvar	size: 4	offset: 40	name: temp102	
+			Table Entry 10 of "main":litval	size: 4	offset: 40	 value: 5	name: literal104
 
-			Table Entry 11 of "main":litval	size: 4	offset: 44	 value: 1	name: literal112
+			Table Entry 11 of "main":litval	size: 4	offset: 44	 value: function value	name: literal109
 
-			Table Entry 12 of "main":litval	size: 4	offset: 48	 value: 3	name: literal106
+			Table Entry 12 of "main":tempvar	size: 4	offset: 48	name: temp116	
 
-			Table Entry 13 of "main":tempvar	size: 4	offset: 52	name: temp103	
+			Table Entry 13 of "main":tempvar	size: 4	offset: 52	name: temp113	
 
-			Table Entry 14 of "main":litval	size: 4	offset: 56	 value: 3	name: literal114
+			Table Entry 14 of "main":tempvar	size: 4	offset: 56	name: temp105	
 
-			Table Entry 15 of "main":litval	size: 4	offset: 60	 value: 3	name: literal113
+			Table Entry 15 of "main":tempvar	size: 4	offset: 60	name: temp119	
 
-			Table Entry 16 of "main":var y integer	size: 4	offset: 64
+			Table Entry 16 of "main":litval	size: 4	offset: 64	 value: 10	name: literal129
 
-			Table Entry 17 of "main":tempvar	size: 4	offset: 68	name: temp100	
+			Table Entry 17 of "main":litval	size: 4	offset: 68	 value: 2	name: literal116
 
-			Table Entry 18 of "main":litval	size: 0	offset: 72	 value: function value	name: literal110
+			Table Entry 18 of "main":litval	size: 4	offset: 72	 value: 1	name: literal123
+
+			Table Entry 19 of "main":litval	size: 4	offset: 76	 value: 4	name: literal107
+
+			Table Entry 20 of "main":litval	size: 4	offset: 80	 value: 5	name: literal118
+
+			Table Entry 21 of "main":litval	size: 4	offset: 84	 value: function value	name: literal108
+
+			Table Entry 22 of "main":var z integer	size: 4	offset: 88
+
+			Table Entry 23 of "main":tempvar	size: 4	offset: 92	name: temp108	
+
+			Table Entry 24 of "main":tempvar	size: 4	offset: 96	name: temp112	
+
+			Table Entry 25 of "main":tempvar	size: 4	offset: 100	name: temp102	
+
+			Table Entry 26 of "main":tempvar	size: 4	offset: 104	name: temp118	
+
+			Table Entry 27 of "main":litval	size: 4	offset: 108	 value: 1	name: literal128
+
+			Table Entry 28 of "main":litval	size: 4	offset: 112	 value: 1	name: literal117
+
+			Table Entry 29 of "main":litval	size: 4	offset: 116	 value: 1	name: literal122
+
+			Table Entry 30 of "main":litval	size: 4	offset: 120	 value: 2	name: literal112
+
+			Table Entry 31 of "main":litval	size: 4	offset: 124	 value: 5	name: literal106
+
+			Table Entry 32 of "main":litval	size: 4	offset: 128	 value: 1	name: literal127
+
+			Table Entry 33 of "main":litval	size: 4	offset: 132	 value: 4	name: literal119
+
+			Table Entry 34 of "main":tempvar	size: 4	offset: 136	name: temp109	
+
+			Table Entry 35 of "main":tempvar	size: 4	offset: 140	name: temp115	
+
+			Table Entry 36 of "main":tempvar	size: 4	offset: 144	name: temp103	
+
+			Table Entry 37 of "main":tempvar	size: 4	offset: 148	name: temp106	
+
+			Table Entry 38 of "main":var b integer	size: 4	offset: 152
+
+			Table Entry 39 of "main":litval	size: 4	offset: 156	 value: 4	name: literal114
+
+			Table Entry 40 of "main":litval	size: 4	offset: 160	 value: 2	name: literal121
+
+			Table Entry 41 of "main":litval	size: 4	offset: 164	 value: 5	name: literal113
+
+			Table Entry 42 of "main":litval	size: 4	offset: 168	 value: 10	name: literal130
+
+			Table Entry 43 of "main":litval	size: 4	offset: 172	 value: 1	name: literal126
+
+			Table Entry 44 of "main":var y integer	size: 4	offset: 176
+
+			Table Entry 45 of "main":tempvar	size: 4	offset: 180	name: temp114	
+
+			Table Entry 46 of "main":tempvar	size: 4	offset: 184	name: temp111	
+
+			Table Entry 47 of "main":tempvar	size: 4	offset: 188	name: temp100	
+
+			Table Entry 48 of "main":tempvar	size: 4	offset: 192	name: temp107	
+
+			Table Entry 49 of "main":litval	size: 4	offset: 196	 value: 3	name: literal115
+
+			Table Entry 50 of "main":litval	size: 4	offset: 200	 value: 3	name: literal120
+
+			Table Entry 51 of "main":litval	size: 4	offset: 204	 value: 2	name: literal110
+
+			Table Entry 52 of "main":litval	size: 4	offset: 208	 value: 1	name: literal125
 
 			END OF TABLE FOR SCOPE function scope "main"
 

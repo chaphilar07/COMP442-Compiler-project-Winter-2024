@@ -2188,6 +2188,9 @@ STATEMENT -> id STATEMENTBODY
             |read lpar VARIABLE rpar semi
             |write lpar EXPR rpar semi
             |return lpar EXPR rpar semi .
+
+            Note that we cannot have any varaible declarations inside of a while
+or if block so there is no point of giving scopes!
  */
 int STATEMENTBODY();
 int VARIABLE();
