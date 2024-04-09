@@ -1156,7 +1156,6 @@ Scope *create_program_scope(node *root, void *arr) {
           entry->data.TempVarEntry.name; // So we will keep some temporary
                                          // variable for the values here.
     }
-
     if (current->type == dot) {
 
       semantic_stack *stack = init_stack();
