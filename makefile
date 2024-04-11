@@ -58,3 +58,6 @@ codegentest:
 	$(CC) $(CFLAGS) src/CodeGeneration/CodeGeneration.c src/CodeGeneration/CodeGenDriver.c src/SemanticAnalyzer/SemanticAnalyzer.c src/SemanticAnalyzer/SemanticError.c src/lexer/lexer.c src/utils/utils.c src/parser/parser.c src/parser/AST/AST_gen.c src/SemanticAnalyzer/SymbolTable.c -o $(CODEGENDRIVER)
 	./$(CODEGENDRIVER)
 	rm $(CODEGENDRIVER)
+
+codegendriver:
+	$(CC) $(CFLAGS) src/CodeGeneration/CodeGeneration.c src/CodeGeneration/CodeGenDriver.c src/SemanticAnalyzer/SemanticAnalyzer.c src/SemanticAnalyzer/SemanticError.c src/lexer/lexer.c src/utils/utils.c src/parser/parser.c src/parser/AST/AST_gen.c src/SemanticAnalyzer/SymbolTable.c -o $(CODEGENDRIVER)

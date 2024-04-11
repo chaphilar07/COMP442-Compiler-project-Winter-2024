@@ -70,6 +70,7 @@ typedef struct VariableEntry {
 
 typedef struct FparamEntry {
 
+  int id; // Used for the order that it was inserted used to get the offset.
   TypeInfo type;
   const char *name;
 
@@ -296,7 +297,8 @@ void print_entry(TableEntry *entry, FILE *out);
 
 Scope **get_inherited_scopes(node *astnode, Scope *globalScope);
 
-TableEntry *create_fparam_entry(node *astnode, Scope *currentScope);
+TableEntry *create_fparam_entry(node *astnode, Scope *currentScope,
+                                int fparamNumber);
 
 TableEntry **get_fparams_list(node *astnode, Scope *currentscope);
 
@@ -324,6 +326,8 @@ void remove_child(node *parent, node *child);
 char *random_id();
 
 int get_function_size(node *astnode, void *errors);
+
+int get_class_size(const char *className, Scope *globalScope);
 
 int insert_entry(Scope *scope, TableEntry *entry);
 #endif // !AST_GEN_H

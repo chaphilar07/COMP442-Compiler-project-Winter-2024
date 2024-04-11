@@ -1,0 +1,16 @@
+//This source file will be used for testing class functionality.
+
+struct A{
+   private let a:integer;
+   private let b:integer;
+   private let c:integer;
+
+   private func init()->void;
+   private func sum()->integer;
+  };
+
+impl A{
+  func sum(){
+      return(a+b+c);
+    }
+  }

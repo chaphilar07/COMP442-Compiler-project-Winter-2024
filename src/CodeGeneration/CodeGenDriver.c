@@ -63,6 +63,9 @@ int main(int argc, char *argv[]) {
         fprintf(output_file, "\n\n\n");
         write_subroutine(output_file);
 
+        fprintf(output_file, "parameterstorage res 512\n");
+        fprintf(output_file, "indexstorage res 256 \n");
+
       } else {
         fprintf(stderr, "FAILURE COULD NOT PARSE THE SOURCE FILE!\n");
         continue;

@@ -641,8 +641,9 @@ void print_entry(TableEntry *entry, FILE *out) {
     fprintf(out, "\n");
   }
   if (entry->tableType == FPARAM_ENTRY) {
-    fprintf(out, "fparam %s %s", entry->data.fparamEntry.name,
-            entry->data.fparamEntry.type.typeString);
+    fprintf(out, "fparam %s %s Number: %d", entry->data.fparamEntry.name,
+            entry->data.fparamEntry.type.typeString,
+            entry->data.fparamEntry.id);
     for (int i = entry->data.fparamEntry.type.numberofdims - 1; i >= 0; i--) {
       if (entry->data.fparamEntry.type.arraydims[i] > 0)
         fprintf(out, "[%d]", entry->data.fparamEntry.type.arraydims[i]);
@@ -706,7 +707,8 @@ void print_entry(TableEntry *entry, FILE *out) {
 // nodes in the AST.
 //
 //
-TableEntry *create_fparam_entry(node *astnode, Scope *currentScope) {
+TableEntry *create_fparam_entry(node *astnode, Scope *currentScope,
+                                int parameterNumber) {
   if (!astnode) {
     fprintf(stderr, "ERROR - get_arraydims(): Cannot get arraydims node is "
                     "null, terminating\n");
@@ -720,12 +722,11 @@ TableEntry *create_fparam_entry(node *astnode, Scope *currentScope) {
   }
 
   entry->line = astnode->line;
-
   entry->scope = currentScope;
   entry->tableType = FPARAM_ENTRY;
-
   entry->data.fparamEntry.type = get_type_info(astnode);
   entry->data.fparamEntry.name = get_name(astnode);
+  entry->data.fparamEntry.id = parameterNumber;
 
   unsigned int typeSize;
 
@@ -784,8 +785,10 @@ TableEntry **get_fparams_list(node *astnode, Scope *currentscope) {
 
       for (int j = 0; j < astnode->children[i]->numchildren; j++) {
 
-        fparams[j] = create_fparam_entry(astnode->children[i]->children[j],
-                                         currentscope);
+        fparams[j] =
+            create_fparam_entry(astnode->children[i]->children[j], currentscope,
+                                j); // We assign the number as the number
+                                    // that it is found in the ast
       }
 
       return fparams;
@@ -1164,6 +1167,9 @@ Scope *create_program_scope(node *root, void *arr) {
       while (stack->size > 0) {
         node *currentNode = pop_node(stack);
 
+        if (currentNode->type == funccall) {
+          // We create litval for it.
+        }
         currentNode->scope = current_scope;
 
         if (currentNode->numchildren > 0) {
@@ -1174,20 +1180,26 @@ Scope *create_program_scope(node *root, void *arr) {
       }
     }
 
-    if (current->type == funccall &&
-        current->scope !=
-            NULL) { // We create symbol table entries for the functions.
+    if (current->type ==
+        funccall) { // We create symbol table entries for the functions.
       TableEntry *litvalentry = (TableEntry *)malloc(sizeof(TableEntry));
+      fprintf(stderr,
+              "CRREATING A FUNCTION LITERAL VALUE FOR %s the parent of foo is "
+              "a node of type %s  ... \n",
+              get_name(current), get_type_string(current->parent));
       litvalentry->tableType = LITVAL_ENTRY;
       litvalentry->data.litval.id = random_id();
       litvalentry->size =
           get_return_size_of_function(current, globalScope, errors);
       litvalentry->data.litval.value = "function value";
       insert_entry(current_scope, litvalentry);
-      current->entryName = litvalentry->data.litval.id;
 
-      fprintf(stderr, "FUNCTION CALL %s HAS RETURN SIZE OF %d \n",
-              get_name(current), litvalentry->size);
+      fprintf(stderr,
+              "INSERTED FUNCTION LITERAL VALUE %s INTO SCOPE %s WITH ID NUMBER "
+              "%s ...\n",
+              get_name(current), current_scope->scopeName,
+              litvalentry->data.litval.id);
+      current->entryName = litvalentry->data.litval.id;
     }
 
     if (current->type == var && current->scope != NULL) {

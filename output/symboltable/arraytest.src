@@ -1,0 +1,8 @@
+SEMANTIC ERROR ON LINE 32: Error on operator *, cannot use * on two different types
+SEMANTIC ERROR ON LINE 36: Cannot call function that has not been defined, function foo has not been defined 
+SEMANTIC ERROR ON LINE 36: Cannot call function that has not been defined, function foo has not been defined 
+SEMANTIC ERROR ON LINE 36: Cannot call function that has not been defined, function foo has not been defined 
+SEMANTIC ERROR ON LINE 36: Cannot call function that has not been defined, function foo has not been defined 
+SEMANTIC ERROR ON LINE 36: Cannot call function that has not been defined, function foo has not been defined 
+SEMANTIC ERROR ON LINE 36: Cannot call function that has not been defined, function foo has not been defined 
+End of Error Report, total of 7 errors found.

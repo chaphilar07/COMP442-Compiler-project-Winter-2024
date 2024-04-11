@@ -32,15 +32,57 @@
 /*
  * A register is free if it is true so we will set to true.
  */
-bool free_registers[15] = {
-    true, true, true, true, true, true, true, true,
-    true, true, true, true, true, true, true}; // We will keep an array of free
 
 unsigned int temp_variable_number = 100;
 unsigned int literal_entry_number = 100;
 unsigned int if_numbers = 100;
 unsigned int while_numbers = 100;
 
+// This pointer will be used to access data that needs to be stored inside of
+// the indexstorage.
+int index_store_pointer = 0;
+int index_load_pointer = 0;
+
+int param_stack_load_pointer =
+    0; // We load the function parameters at this address.
+int param_stack_store_pointer =
+    0; // We store the function paraeters at this address.
+
+bool free_buffers[] = {true, true, true, true, true, true,
+                       true, true, true, true, true, true};
+
+/*
+ * Helper function gets a number from a string.
+ */
+int extract_number_from_string(const char *str) {
+  if (str == NULL) {
+    return -1; // Return -1 or appropriate error code if input is NULL
+  }
+
+  // Assuming the string is always formatted correctly with 'r' followed by
+  // numbers
+  int num;
+  char c;
+
+  // Check if the first character is 'r' and the following is a number
+  if (sscanf(str, "%c%d", &c, &num) == 2 && c == 'r') {
+    return num;
+  } else {
+    return -1; // Return -1 or appropriate error code if parsing fails
+  }
+}
+
+/*
+ * This function is called to free a register once it is used.
+ */
+void free_register(const char *register_name) {
+  int register_number = extract_number_from_string(register_name);
+  register_number -= 1;
+
+  free_buffers[register_number] = true;
+  fprintf(stderr, "FREEING REGISTER %d \n", register_number + 1);
+  free((void *)register_name);
+}
 /*
  * This function will get the name of the next available temporary register.
  */
@@ -97,12 +139,15 @@ void handle_if_statment(node *astnode, Scope *globalScope, ErrorArray *errors,
       handle_expression(expressionNode, errors, out, globalScope);
 
   char *comp_regiseter = get_next_free_register();
+
   fprintf(out, "lw %s,%d(r14)\n", comp_regiseter, expressionOffset);
 
   const char *if_label = get_next_if_label();
   const char *else_label = get_next_else_label();
 
   fprintf(out, "bz %s,%s\n", comp_regiseter, else_label);
+  free_register(comp_regiseter);
+
   code_gen_pass(thenNode, globalScope, out, errors);
   fprintf(out, "j %s\n", if_label);
 
@@ -112,6 +157,7 @@ void handle_if_statment(node *astnode, Scope *globalScope, ErrorArray *errors,
   fprintf(out, "%s\n",
           if_label); // The problem is somewhere else, something is printing the
                      // same thing afer we have passed?
+  //
 }
 
 /*
@@ -154,6 +200,7 @@ void handle_while_statement(node *astnode, Scope *globalScope,
   char *comp_regiseter = get_next_free_register();
   fprintf(out, "lw %s, %d(r14)\n", comp_regiseter, expressionOffset);
   fprintf(out, "bz %s,%s\n", comp_regiseter, enwhilelabel);
+  free_register(comp_regiseter);
   code_gen_pass(bodyNode, globalScope, out,
                 errors); // Note that we call thefunction recursively here, we
                          // call from the within a code_gen_pass call.
@@ -168,25 +215,39 @@ void handle_while_statement(node *astnode, Scope *globalScope,
  * Note we do not use a register pool, we just use the next register and then
  * store any temporary values in the memory of the stack frame.
  *
+ * Now whenever we call get_next_free_register we neeed to call this function to
+ * free the register.
  */
-int current_register_index = 0;
 
 char *get_next_free_register() {
 
-  unsigned int registerNumber;
-  registerNumber = (++current_register_index) %
-                   12; // Note that we only have a single free register.
-  ++registerNumber;
+  int register_selected = -1;
 
-  if (registerNumber > 9) {
-    char buffer[4];
-    snprintf(buffer, sizeof(buffer), "r%d", registerNumber);
+  for (int i = 0; i < 12; i++) {
+    if (free_buffers[i] == true) {
+      free_buffers[i] = false;
+
+      register_selected = i + 1;
+
+      fprintf(stderr, "SELECTED REGISTER %d NO LONGER FREE \n",
+              register_selected);
+      break;
+    }
+  }
+
+  if (register_selected < 0) {
+    fprintf(stderr, "BIG PROBLEM NO FREE REGISTERS!!!\n");
+    return NULL; // NO FREE REGISTERS BIG PROBLEM!!!
+  }
+
+  if (register_selected < 9) {
+    char buffer[3];
+    snprintf(buffer, sizeof(buffer), "r%d", register_selected);
     return strdup(buffer);
   } else {
-    char buffer[3];
-    snprintf(buffer, sizeof(buffer), "r%d", registerNumber);
-    return strdup(buffer); // Note that we must call strdup to put the memory on
-                           // the heap so it persists after function call.
+    char buffer[4];
+    snprintf(buffer, sizeof(buffer), "r%d", register_selected);
+    return strdup(buffer);
   }
 }
 
@@ -211,7 +272,6 @@ TableEntry *create_temp_entry(node *astnode, Scope *globalScope,
     leftInfo = get_type_expression(astnode->children[1], errors, globalScope);
     rightInfo = get_type_expression(astnode->children[0], errors, globalScope);
   }
-
   // If either is a float the result gets promoted to a float.
   if (leftInfo.type == FLOAT_TYPE || rightInfo.type == FLOAT_TYPE)
     entry->size = 8;
@@ -292,7 +352,7 @@ TableEntry *create_litval_entry(node *astnode) {
  * we will use this plus the offset to the variable in the symbol table for the
  * memory access.
  */
-int get_variable_offset(node *astnode, ErrorArray *errors) {
+int get_variable_offset(node *astnode, ErrorArray *errors, FILE *out) {
   if (!astnode) {
     fprintf(stderr, "ERROR - get_variable_offset(): Cannot get offset node is "
                     "null, exiting\n");
@@ -300,6 +360,9 @@ int get_variable_offset(node *astnode, ErrorArray *errors) {
   }
 
   const char *name = get_name(astnode);
+
+  node *dimlistNode = astnode->children[0];
+  int arrayDims = dimlistNode->numchildren;
 
   // Free variable lookup, we begin search in the current scope.
   if (astnode->parent->type != dot ||
@@ -312,7 +375,112 @@ int get_variable_offset(node *astnode, ErrorArray *errors) {
 
     // If we find the entry we return the size of the entry?
     if (entry->tableType == VARIABLE_ENTRY) {
-      return entry->offset;
+      int typeSize;
+
+      if (entry->data.varEntry.type.type == INT_TYPE) {
+        typeSize = 4;
+      } else if (entry->data.varEntry.type.type == FLOAT_TYPE)
+        typeSize = 8;
+      else if (entry->data.varEntry.type.type == ID_TYPE) {
+        typeSize =
+            get_class_size(entry->data.varEntry.type.typeString, scopePtr);
+      } else {
+        typeSize = 0;
+      }
+
+      int variableOffset = entry->offset;
+      if (arrayDims) {
+
+        const char *accumulator = get_next_free_register();
+
+        fprintf(out, "addi %s,r0,%d %%s accumulator register is %s \n",
+                accumulator, variableOffset, accumulator);
+
+        for (int i = dimlistNode->numchildren - 1; i >= 0; i--) {
+          if (i > 0) {
+            int size_of_columns_to_add =
+                entry->data.varEntry.type.arraydims[i - 1] * typeSize;
+
+            int indexOffset = handle_expression(dimlistNode->children[i],
+                                                errors, out, scopePtr);
+
+            const char *index_reg = get_next_free_register();
+            const char *column_size_reg = get_next_free_register();
+            if (indexOffset == 0) {
+              const char *temp = get_next_free_register();
+              fprintf(out, "addi %s,r0,%d \n", temp, index_load_pointer);
+
+              index_store_pointer -= 4;
+              if (index_store_pointer > 0)
+                index_load_pointer = index_store_pointer - 4;
+
+              fprintf(out, "lw %s, indexstorage(%s)\n", temp, temp);
+              fprintf(out, "add %s,%s,r14\n", temp, temp);
+              fprintf(out, "lw %s, 0(%s)\n", index_reg, temp);
+              free_register(temp);
+            } else {
+              fprintf(out, "lw %s, %d(r14)\n", index_reg, indexOffset);
+            }
+            fprintf(out, "addi %s,r0,%d %%s problem here\n", column_size_reg,
+                    size_of_columns_to_add);
+
+            fprintf(out, "mul %s,%s,%s\n", index_reg, index_reg,
+                    column_size_reg);
+            fprintf(out, "add %s,%s,%s\n", accumulator, accumulator, index_reg);
+
+            free_register(index_reg);
+            free_register(column_size_reg);
+
+          } else {
+            // We need to add the immediate to the accumulator.
+
+            int indexExpression = handle_expression(dimlistNode->children[i],
+                                                    errors, out, scopePtr);
+            // Note that the index itself can be an array so we have to check
+            // for this as well.
+            const char *index_reg = get_next_free_register();
+            if (indexExpression == 0) {
+              const char *temp = get_next_free_register();
+              fprintf(out, "addi %s,r0,%d \n", temp, index_load_pointer);
+
+              index_store_pointer -= 4;
+              if (index_store_pointer > 0)
+                index_load_pointer = index_store_pointer - 4;
+
+              fprintf(out, "lw %s, indexstorage(%s)\n", temp, temp);
+              fprintf(out, "add %s,%s,r14\n", temp, temp);
+              fprintf(out, "lw %s, 0(%s)\n", index_reg, temp);
+              free_register(temp);
+
+            } else {
+              fprintf(out, "lw %s,%d(r14)\n", index_reg, indexExpression);
+            }
+            fprintf(out, "muli %s,%s,%d\n", index_reg, index_reg, typeSize);
+            fprintf(out, "add %s,%s,%s\n", accumulator, accumulator, index_reg);
+            free_register(index_reg);
+          }
+        }
+
+        const char *temp = get_next_free_register();
+        fprintf(out, "addi %s, r0, %d \n", temp, index_store_pointer);
+        fprintf(out, "sw indexstorage(%s), %s\n", temp, accumulator);
+
+        index_store_pointer += 4;
+        index_load_pointer = index_store_pointer - 4;
+
+        free_register(temp);
+        free_register(accumulator);
+        fprintf(stderr,
+                "VALUE OF THE LOADING POINTER %d VALUE OF THE STORING POINTER "
+                "%d ... \n",
+                index_load_pointer, index_store_pointer);
+
+        return 0;
+
+      } else {
+        return entry->offset; // If not we just return the offset as we
+                              // normally would.
+      }
     }
 
     while (scopePtr != NULL && scopePtr->type != GLOBAL_SCOPE) {
@@ -321,7 +489,79 @@ int get_variable_offset(node *astnode, ErrorArray *errors) {
       entry = get_entry(scopePtr, name);
       if (entry->tableType == VARIABLE_ENTRY) {
 
-        return entry->offset;
+        int typeSize;
+
+        if (entry->data.varEntry.type.type == INT_TYPE) {
+          typeSize = 4;
+        } else if (entry->data.varEntry.type.type == FLOAT_TYPE)
+          typeSize = 8;
+        else if (entry->data.varEntry.type.type == ID_TYPE) {
+          typeSize =
+              get_class_size(entry->data.varEntry.type.typeString, scopePtr);
+        } else {
+          typeSize = 0;
+        }
+
+        int variableOffset = entry->offset;
+        if (arrayDims) {
+
+          const char *accumulator = get_next_free_register();
+
+          fprintf(out, "addi %s,r0,%d %%s accumulator register is %s \n",
+                  accumulator, variableOffset, accumulator);
+
+          const char *type_size_register = get_next_free_register();
+
+          fprintf(out, "addi %s,r0,%d %%s the type size register is %s \n",
+                  type_size_register, typeSize, type_size_register);
+
+          for (int i = dimlistNode->numchildren - 1; i >= 0; i--) {
+            if (i > 0) {
+              const char *index_reg = get_next_free_register();
+              int size_of_columns_to_add =
+                  entry->data.varEntry.type.arraydims[i - 1] * typeSize;
+
+              const char *column_size_reg = get_next_free_register();
+              int indexOffset = handle_expression(dimlistNode->children[i],
+                                                  errors, out, scopePtr);
+
+              fprintf(out, "lw %s, %d(r14)\n", index_reg, indexOffset);
+              fprintf(out, "addi %s,r0,%d\n", column_size_reg,
+                      size_of_columns_to_add);
+
+              fprintf(out, "mul %s,%s,%s\n", index_reg, index_reg,
+                      column_size_reg);
+              fprintf(out, "add %s,%s,%s\n", accumulator, accumulator,
+                      index_reg);
+            } else {
+
+              int indexExpression = handle_expression(dimlistNode->children[i],
+                                                      errors, out, scopePtr);
+              const char *index_reg = get_next_free_register();
+              fprintf(out, "lw %s,%d(r14)\n", index_reg, indexExpression);
+              fprintf(out, "mul %s,%s,%s\n", index_reg, index_reg,
+                      type_size_register);
+              fprintf(out, "add %s,%s,%s\n", accumulator, accumulator,
+                      index_reg);
+            }
+          }
+
+          const char *temp = get_next_free_register();
+          fprintf(out, "addi %s, r0, %d %%s PRoblem here\n", temp,
+                  index_store_pointer);
+          fprintf(out, "sw indexstorage(%s), %s\n", temp, accumulator);
+          index_store_pointer += 4;
+          index_load_pointer =
+              index_load_pointer -
+              4; // We want a pointer to the last accessible byte.
+
+          return 0; // We indicate to the calling function that we are returning
+                    // the offset for an array type so we should look in the
+                    // "indexstorage" section that we have reserved.
+        } else {
+          return entry->offset; // If not we just return the offset as we
+                                // normally would.
+        }
       }
 
       if (scopePtr->type == CLASS_SCOPE) {
@@ -343,8 +583,83 @@ int get_variable_offset(node *astnode, ErrorArray *errors) {
 
             entry = get_entry(current_scope, name);
 
-            if (entry->tableType == VARIABLE_ENTRY)
-              return entry->offset;
+            if (entry->tableType == VARIABLE_ENTRY) {
+              int typeSize;
+
+              if (entry->data.varEntry.type.type == INT_TYPE) {
+                typeSize = 4;
+              } else if (entry->data.varEntry.type.type == FLOAT_TYPE)
+                typeSize = 8;
+              else if (entry->data.varEntry.type.type == ID_TYPE) {
+                typeSize = get_class_size(entry->data.varEntry.type.typeString,
+                                          scopePtr);
+              } else {
+                typeSize = 0;
+              }
+
+              int variableOffset = entry->offset;
+              if (arrayDims) {
+
+                const char *accumulator = get_next_free_register();
+
+                fprintf(out, "addi %s,r0,%d %%s accumulator register is %s \n",
+                        accumulator, variableOffset, accumulator);
+
+                const char *type_size_register = get_next_free_register();
+
+                fprintf(out,
+                        "addi %s,r0,%d %%s the type size register is %s \n",
+                        type_size_register, typeSize, type_size_register);
+
+                for (int i = dimlistNode->numchildren - 1; i >= 0; i--) {
+                  if (i > 0) {
+                    const char *index_reg = get_next_free_register();
+                    int size_of_columns_to_add =
+                        entry->data.varEntry.type.arraydims[i - 1] * typeSize;
+
+                    const char *column_size_reg = get_next_free_register();
+                    int indexOffset = handle_expression(
+                        dimlistNode->children[i], errors, out, scopePtr);
+
+                    fprintf(out, "lw %s, %d(r14)\n", index_reg, indexOffset);
+                    fprintf(out, "addi %s,r0,%d\n", column_size_reg,
+                            size_of_columns_to_add);
+
+                    fprintf(out, "mul %s,%s,%s\n", index_reg, index_reg,
+                            column_size_reg);
+                    fprintf(out, "add %s,%s,%s\n", accumulator, accumulator,
+                            index_reg);
+                  } else {
+                    // We need to add the immediate to the accumulator.
+
+                    int indexExpression = handle_expression(
+                        dimlistNode->children[i], errors, out, scopePtr);
+                    const char *index_reg = get_next_free_register();
+                    fprintf(out, "lw %s,%d(r14)\n", index_reg, indexExpression);
+                    fprintf(out, "mul %s,%s,%s\n", index_reg, index_reg,
+                            type_size_register);
+                    fprintf(out, "add %s,%s,%s\n", accumulator, accumulator,
+                            index_reg);
+                  }
+                }
+
+                const char *temp = get_next_free_register();
+                fprintf(out, "addi %s, r0, %d\n", temp, index_store_pointer);
+                fprintf(out, "sw indexstorage(%s), %s\n", temp, accumulator);
+                index_store_pointer += 4;
+                index_load_pointer =
+                    index_load_pointer -
+                    4;    // We want a pointer to the last accessible byte.
+                          // predictable place in memory.
+                return 0; // We indicate to the calling function that we are
+                          // returning the offset for an array type so we should
+                          // look in the "indexstorage" section that we have
+                          // reserved.
+              } else {
+                return entry->offset; // If not we just return the offset as we
+                                      // normally would.
+              }
+            }
 
             classEntry =
                 get_entry(current_scope->parentScope, current_scope->scopeName);
@@ -387,8 +702,81 @@ int get_variable_offset(node *astnode, ErrorArray *errors) {
 
       TableEntry *entry = get_entry(classScope, name);
 
-      if (entry->tableType == VARIABLE_ENTRY)
-        return entry->offset;
+      if (entry->tableType == VARIABLE_ENTRY) {
+        int typeSize;
+
+        if (entry->data.varEntry.type.type == INT_TYPE) {
+          typeSize = 4;
+        } else if (entry->data.varEntry.type.type == FLOAT_TYPE)
+          typeSize = 8;
+        else if (entry->data.varEntry.type.type == ID_TYPE) {
+          typeSize =
+              get_class_size(entry->data.varEntry.type.typeString, scopePtr);
+        } else {
+          typeSize = 0;
+        }
+
+        int variableOffset = entry->offset;
+        if (arrayDims) {
+
+          const char *accumulator = get_next_free_register();
+
+          fprintf(out, "addi %s,r0,%d %%s accumulator register is %s \n",
+                  accumulator, variableOffset, accumulator);
+
+          const char *type_size_register = get_next_free_register();
+
+          fprintf(out, "addi %s,r0,%d %%s the type size register is %s \n",
+                  type_size_register, typeSize, type_size_register);
+
+          for (int i = dimlistNode->numchildren - 1; i >= 0; i--) {
+            if (i > 0) {
+              const char *index_reg = get_next_free_register();
+              int size_of_columns_to_add =
+                  entry->data.varEntry.type.arraydims[i - 1] * typeSize;
+
+              const char *column_size_reg = get_next_free_register();
+              int indexOffset = handle_expression(dimlistNode->children[i],
+                                                  errors, out, scopePtr);
+
+              fprintf(out, "lw %s, %d(r14)\n", index_reg, indexOffset);
+              fprintf(out, "addi %s,r0,%d\n", column_size_reg,
+                      size_of_columns_to_add);
+
+              fprintf(out, "mul %s,%s,%s\n", index_reg, index_reg,
+                      column_size_reg);
+              fprintf(out, "add %s,%s,%s\n", accumulator, accumulator,
+                      index_reg);
+            } else {
+              // We need to add the immediate to the accumulator.
+
+              int indexExpression = handle_expression(dimlistNode->children[i],
+                                                      errors, out, scopePtr);
+              const char *index_reg = get_next_free_register();
+              fprintf(out, "lw %s,%d(r14)\n", index_reg, indexExpression);
+              fprintf(out, "mul %s,%s,%s\n", index_reg, index_reg,
+                      type_size_register);
+              fprintf(out, "add %s,%s,%s\n", accumulator, accumulator,
+                      index_reg);
+            }
+          }
+
+          const char *temp = get_next_free_register();
+          fprintf(out, "addi %s, r0, %d\n", temp, index_store_pointer);
+          fprintf(out, "sw indexstorage(%s), %s\n", temp, accumulator);
+          index_store_pointer += 4;
+          index_load_pointer =
+              index_load_pointer -
+              4; // We want a pointer to the last accessible byte.
+
+          return 0; // We indicate to the calling function that we are
+                    // returning the offset for an array type so we should
+                    // look in the "indexstorage" section that we have reserved.
+        } else {
+          return entry->offset; // If not we just return the offset as we
+                                // normally would.
+        }
+      }
 
       if (classEntry->data.classEntry.inheritsCount > 0 &&
           classEntry->data.classEntry.inheritedScopes) {
@@ -402,7 +790,81 @@ int get_variable_offset(node *astnode, ErrorArray *errors) {
 
           entry = get_entry(current_scope, name);
           if (entry->tableType == VARIABLE_ENTRY) {
-            return entry->offset;
+            int typeSize;
+
+            if (entry->data.varEntry.type.type == INT_TYPE) {
+              typeSize = 4;
+            } else if (entry->data.varEntry.type.type == FLOAT_TYPE)
+              typeSize = 8;
+            else if (entry->data.varEntry.type.type == ID_TYPE) {
+              typeSize = get_class_size(entry->data.varEntry.type.typeString,
+                                        scopePtr);
+            } else {
+              typeSize = 0;
+            }
+
+            int variableOffset = entry->offset;
+            if (arrayDims) {
+
+              const char *accumulator = get_next_free_register();
+
+              fprintf(out, "addi %s,r0,%d %%s accumulator register is %s \n",
+                      accumulator, variableOffset, accumulator);
+
+              const char *type_size_register = get_next_free_register();
+
+              fprintf(out, "addi %s,r0,%d %%s the type size register is %s \n",
+                      type_size_register, typeSize, type_size_register);
+
+              for (int i = dimlistNode->numchildren - 1; i >= 0; i--) {
+                if (i > 0) {
+                  const char *index_reg = get_next_free_register();
+                  int size_of_columns_to_add =
+                      entry->data.varEntry.type.arraydims[i - 1] * typeSize;
+
+                  const char *column_size_reg = get_next_free_register();
+                  int indexOffset = handle_expression(dimlistNode->children[i],
+                                                      errors, out, scopePtr);
+
+                  fprintf(out, "lw %s, %d(r14)\n", index_reg, indexOffset);
+                  fprintf(out, "addi %s,r0,%d\n", column_size_reg,
+                          size_of_columns_to_add);
+
+                  fprintf(out, "mul %s,%s,%s\n", index_reg, index_reg,
+                          column_size_reg);
+                  fprintf(out, "add %s,%s,%s\n", accumulator, accumulator,
+                          index_reg);
+                } else {
+                  // We need to add the immediate to the accumulator.
+
+                  int indexExpression = handle_expression(
+                      dimlistNode->children[i], errors, out, scopePtr);
+                  const char *index_reg = get_next_free_register();
+                  fprintf(out, "lw %s,%d(r14)\n", index_reg, indexExpression);
+                  fprintf(out, "mul %s,%s,%s\n", index_reg, index_reg,
+                          type_size_register);
+                  fprintf(out, "add %s,%s,%s\n", accumulator, accumulator,
+                          index_reg);
+                }
+              }
+
+              const char *temp = get_next_free_register();
+              fprintf(out, "addi %s, r0, %d\n", temp, index_store_pointer);
+              fprintf(out, "sw indexstorage(%s), %s\n", temp, accumulator);
+              index_store_pointer += 4;
+              index_load_pointer =
+                  index_store_pointer -
+                  4; // We want a pointer to the last accessible
+                     // byte. predictable place in memory.
+
+              return 0; // We indicate to the calling function that we are
+                        // returning the offset for an array type so we should
+                        // look in the "indexstorage" section that we have
+                        // reserved.
+            } else {
+              return entry->offset; // If not we just return the offset as we
+                                    // normally would.
+            }
           }
 
           classEntry =
@@ -410,7 +872,6 @@ int get_variable_offset(node *astnode, ErrorArray *errors) {
           if (classEntry->tableType == CLASS_ENTRY &&
               classEntry->data.classEntry.inheritsCount > 0 &&
               classEntry->data.classEntry.inheritedScopes) {
-
             for (int i = 0; i < classEntry->data.classEntry.inheritsCount; i++)
               push_scope(classEntry->data.classEntry.inheritedScopes[i], stack);
           }
@@ -419,11 +880,7 @@ int get_variable_offset(node *astnode, ErrorArray *errors) {
     }
     return -1;
   }
-}
-
-/*
- * Gets the size of a class.
- */
+} // End of the get_variable_offset function.
 
 /*
  * This function will return the size of a function, we use this to push a frame
@@ -521,7 +978,7 @@ int get_offset(node *astnode, Scope *globalScope, ErrorArray *errors,
                FILE *out) {
 
   if (astnode->type == var) {
-    return get_variable_offset(astnode, errors);
+    return get_variable_offset(astnode, errors, out);
 
   } else if (astnode->type == intnum || astnode->type == floatnum) {
     const char *name = astnode->entryName;
@@ -553,15 +1010,36 @@ int get_offset(node *astnode, Scope *globalScope, ErrorArray *errors,
 }
 
 /*
- * This function is used for handling dots, when we have a dot we have class
- * member access. To deal with class member access what we must do is get the
- * offset of the variable that we are accessing, If we access a functioncall we
- * must get the offset of that function call.
+ * This function will return the offset to of a class member access.
+ * Note that all that we have to do is get the offset from the class symbol
+ * table then add it to the offset of the variable, if we have a function that
+ * returns a class object that also has
  *
+ * This will basically be getting the offset of a class member.
+ *
+ * Note that we are always going to be in the same stack frame.
  */
 
-void handle_dots(node *astnode, Scope *globalScope, ErrorArray *errors,
-                 FILE *out) {}
+/*
+int handle_dots(node *astnode, Scope *globalScope, ErrorArray *errors,
+                FILE *out) {
+
+  node *right = astnode->children[0];
+  node *left = astnode->children[1];
+
+  Scope *scopePtr = globalScope;
+  while (scopePtr && scopePtr->type != GLOBAL_SCOPE) {
+    scopePtr = scopePtr->parentScope;
+  }
+  // We need to get the offset of the left handside.
+  if (right->type != dot) {
+  }
+
+  while (right->type == dot) {
+    TypeInfo classInfo = get_type_expression(left, errors, left->scope);
+  }
+}
+*/
 
 /*
  *
@@ -573,26 +1051,32 @@ int handle_expression(node *astnode, ErrorArray *errors, FILE *out,
   if (astnode->type == floatnum || astnode->type == intnum) {
 
     int offset = get_offset(astnode, astnode->scope, errors, out);
-    fprintf(stderr, "THE OFFSET OBTAINED %d FOR A NODE WITH VALUE %s  \n\n",
-            offset, astnode->value);
     const char *registerBeingUsed = get_next_free_register();
-    fprintf(out, "addi %s,r0,%s\n", registerBeingUsed,
+
+    fprintf(out, "addi %s,r0,%s \n", registerBeingUsed,
             astnode->value); // We store the value in a register.
     fprintf(out, "sw %d(r14),%s\n", offset,
             registerBeingUsed); // Store the value that is being stored in the
                                 // register in the corresponding offset.
+    free_register(registerBeingUsed);
 
-    fprintf(stderr, "HERE\n");
     return offset;
 
   } else if (astnode->type == multop || astnode->type == addop) {
 
-    int leftOffset = handle_expression(astnode->children[1], errors, out,
-                                       astnode->children[1]->scope);
-    int rightOffset = handle_expression(astnode->children[0], errors, out,
-                                        astnode->children[0]->scope);
+    node *left = astnode->children[1];
+    node *right = astnode->children[0];
+
+    // We get the offsets note that if either is zero we need to get the offsets
+    // that are stored
+    int rightOffset = handle_expression(right, errors, out, globalScope);
+    int leftOffset = handle_expression(left, errors, out, globalScope);
 
     int operationOffset = get_offset(astnode, astnode->scope, errors, out);
+
+    const char *left_register = get_next_free_register();
+    const char *right_register = get_next_free_register();
+    const char *operation_register = get_next_free_register();
 
     char operationBuffer[16];
 
@@ -604,24 +1088,78 @@ int handle_expression(node *astnode, ErrorArray *errors, FILE *out,
       snprintf(operationBuffer, sizeof(operationBuffer), "sub");
     else if (!strcmp(astnode->value, "/"))
       snprintf(operationBuffer, sizeof(operationBuffer), "div");
+    else if (!strcmp(astnode->value, "|"))
+      snprintf(operationBuffer, sizeof(operationBuffer), "or");
+    else if (!strcmp(astnode->value, "&"))
+      snprintf(operationBuffer, sizeof(operationBuffer), "and");
 
-    const char *left_register = get_next_free_register();
-    const char *right_register = get_next_free_register();
-    const char *operation_register = get_next_free_register();
+    if (rightOffset) {
+      fprintf(out, "lw %s,%d(r14)\n", right_register, rightOffset);
+    } else {
+      const char *temp = get_next_free_register();
 
-    fprintf(out, "lw %s,%d(r14)\n", left_register,
-            leftOffset); // Load the value of the left operand.
-    fprintf(out, "lw %s,%d(r14)\n", right_register,
-            rightOffset); // Load the value of the right operand.
+      fprintf(stderr, "LOADING OFFSET FROM LOAD POINTER OF VALUE %d\n",
+              index_load_pointer);
+      fprintf(out, "addi %s,r0,%d\n", temp,
+              index_load_pointer); // Get the value of the offset into the haep
+
+      index_store_pointer -= 4;
+      if (index_store_pointer == 0)
+        index_load_pointer = 0;
+      else
+        index_load_pointer = index_store_pointer - 4;
+
+      fprintf(out, "lw %s, indexstorage(%s) %%s HERE1!!\n", temp,
+              temp); // Load the value of the offset into the indexstorage.
+      fprintf(out, "add %s,r14,%s\n", temp,
+              temp); // Add the stack frame pointer to this value.
+      fprintf(out, "lw %s, 0(%s)\n", right_register,
+              temp); // Load the value of the offset into the stack
+                     // frame into the left operand register.
+      free_register(temp);
+    }
+    if (leftOffset) {
+      fprintf(out, "lw %s, %d(r14)\n", left_register, leftOffset);
+    } else {
+
+      fprintf(stderr, "LOADING OFFSET FROM LOAD POINTER OF VALUE %d\n",
+              index_load_pointer);
+      const char *temp = get_next_free_register();
+
+      fprintf(out, "addi %s,r0,%d\n", temp,
+              index_load_pointer); // Get the value of the offset into the haep
+
+      index_store_pointer -= 4;
+      if (index_store_pointer == 0)
+        index_load_pointer = 0;
+      else
+        index_load_pointer = index_store_pointer - 4;
+      fprintf(stderr, "IN THE LEFT OFFSET THE VALUE OF LOAD %d \n",
+              index_load_pointer);
+
+      fprintf(out, "lw %s, indexstorage(%s) %%s HERE2 !!!\n", temp,
+              temp); // Load the value of the offset into the indexstorage.
+      fprintf(out, "add %s,r14,%s\n", temp,
+              temp); // Add the stack frame pointer to this value.
+      fprintf(out, "lw %s, 0(%s)\n", left_register,
+              temp); // Load the value of the offset into the stack
+                     // frame into the left operand register.
+      free_register(temp);
+    }
 
     fprintf(
-        out, "%s %s,%s,%s\n", operationBuffer,
+        out, "%s %s,%s,%s %%s operation %s performed \n", operationBuffer,
         operation_register, // perform the operation and store it in a buffer.
-        left_register, right_register);
+        left_register, right_register, operationBuffer);
+
+    free_register(left_register);
+    free_register(right_register);
+
     fprintf(
         out, "sw %d(r14),%s\n", operationOffset,
         operation_register); // Store the word in the operations given offset.
 
+    free_register(operation_register);
     return operationOffset;
   } else if (astnode->type == var) {
 
@@ -672,11 +1210,15 @@ int handle_expression(node *astnode, ErrorArray *errors, FILE *out,
     const char *left_register = get_next_free_register();
     const char *opertion_register = get_next_free_register();
 
-    fprintf(out, "lw %s,%d(r14)\n", left_register, leftOffset);
+    fprintf(out, "lw %s,%d(r14) %%s relexpr\n", left_register, leftOffset);
     fprintf(out, "lw %s, %d(r14)\n", right_register, rightOffset);
     fprintf(out, "%s %s,%s,%s\n", instructionOperation, opertion_register,
             left_register, right_register);
     fprintf(out, "sw %d(r14), %s\n", operationOffset, opertion_register);
+
+    free_register(left_register);
+    free_register(right_register);
+    free_register(opertion_register);
     return operationOffset;
   }
 
@@ -690,23 +1232,141 @@ int handle_expression(node *astnode, ErrorArray *errors, FILE *out,
  * Note that for an assignment all that we will need is the offset of the value
  * that is being assigned after this we can get that data and store it again
  * using that offset.
+ *
+ * We need to reorganize this part, now that we have the ability to retrn
+ * arrays, an array being return is denoted with an offset of zero being
+ * returned, this means that we must first look into the indexstorage and find
+ * the data that we are looking for at indexstorage(r0).
+ *
+ * So what we need to do is the following.
+ *
  */
 void handle_assignment_statement(node *astnode, ErrorArray *errors,
                                  Scope *globalScope, FILE *out) {
 
-  int assignemnt_offset =
-      get_offset(astnode->children[1], globalScope, errors, out);
   int value_offset =
-      handle_expression(astnode->children[0], errors, out,
-                        globalScope); // We need to handle whatever is on the
-                                      // left-hand side of the equality.
+      handle_expression(astnode->children[0], errors, out, globalScope);
+  int assignment_offset =
+      get_offset(astnode->children[1], globalScope, errors, out);
 
-  const char *register_for_assignment = get_next_free_register();
-  const char *register_for_value = get_next_free_register();
+  const char *value_register = get_next_free_register();
+  if (value_offset) {
+    fprintf(out, "lw %s,%d(r14)\n", value_register, value_offset);
+  } else {
+    // we need to get the offset from the indexstorage.
+    const char *temp = get_next_free_register();
 
-  fprintf(out, "lw %s,%d(r14)\n", register_for_value, value_offset);
-  fprintf(out, "add %s,r0,%s\n", register_for_assignment, register_for_value);
-  fprintf(out, "sw %d(r14),%s\n", assignemnt_offset, register_for_assignment);
+    fprintf(stderr, "LOADING OFFSET FROM LOAD POINTER OF VALUE %d\n",
+            index_load_pointer);
+    fprintf(out, "addi %s,r0,%d\n", temp, index_load_pointer);
+    index_store_pointer -= 4;
+    if (index_store_pointer > 0)
+      index_load_pointer = index_store_pointer - 4;
+    else
+      index_load_pointer = 0;
+    fprintf(out, "lw %s, indexstorage(%s) %%s here !!!\n", temp, temp);
+    fprintf(out, "add %s,r14,%s\n", temp, temp);
+    fprintf(out, "lw %s, 0(%s)\n", value_register, temp);
+    free_register(temp);
+  }
+
+  // After this the value register has been loaded with the correct values.
+  if (assignment_offset) {
+    fprintf(out, "sw %d(r14),%s\n", assignment_offset, value_register);
+    free_register(value_register);
+  } else {
+
+    fprintf(stderr, "LOADING OFFSET FROM LOAD POINTER OF VALUE %d\n",
+            index_load_pointer);
+    const char *temp = get_next_free_register();
+    fprintf(out, "addi %s,r0,%d\n", temp, index_load_pointer);
+    index_store_pointer -= 4;
+    if (index_store_pointer > 0)
+      index_load_pointer = index_store_pointer - 4;
+    else
+      index_load_pointer = 0;
+    fprintf(out, "lw %s, indexstorage(%s) %%s HERE !!\n", temp, temp);
+    fprintf(out, "add %s,r14,%s\n", temp, temp);
+    fprintf(out, "sw 0(%s),%s\n", temp, value_register);
+    free_register(value_register);
+    free_register(temp);
+  }
+}
+
+/*
+ * This function gets function parameters list from a function call node.
+ */
+TableEntry *get_function_entry(Scope *currentScope, node *functionNode) {
+  Scope *scopePtr = currentScope;
+
+  const char *name = get_name(functionNode);
+
+  if (scopePtr && scopePtr->type != GLOBAL_SCOPE)
+    scopePtr = scopePtr->parentScope;
+
+  if (functionNode->parent->type != dot ||
+      (functionNode->parent->type == dot &&
+       functionNode->parent->parent->type != dot &&
+       functionNode->parent->children[1] == functionNode)) {
+
+    TableEntry *funcEntry = get_entry(scopePtr, name);
+    if (funcEntry->tableType == FUNCDEF_ENTRY) {
+      return funcEntry;
+    } else {
+      return NULL;
+    }
+  } else {
+
+    scopePtr = functionNode->scope;
+
+    while (scopePtr && scopePtr->type != GLOBAL_SCOPE) {
+      TableEntry *funcEntry = get_entry(scopePtr, name);
+
+      if (funcEntry->tableType == FUNCDEF_ENTRY)
+        return funcEntry;
+
+      if (scopePtr->type == CLASS_SCOPE) {
+        TableEntry *classEntry =
+            get_entry(scopePtr->parentScope, scopePtr->scopeName);
+
+        if (classEntry->tableType == CLASS_ENTRY &&
+            classEntry->data.classEntry.inheritsCount > 0 &&
+            classEntry->data.classEntry.inheritedScopes) {
+
+          ScopeStack *stack = init_scope_stack();
+
+          for (int i = 0; i < classEntry->data.classEntry.inheritsCount; i++) {
+            push_scope(classEntry->data.classEntry.inheritedScopes[i], stack);
+          }
+
+          while (stack->size > 0) {
+            Scope *current_scope = pop_scope(stack);
+
+            funcEntry = get_entry(current_scope, name);
+
+            if (funcEntry->tableType == FUNCDEF_ENTRY)
+              return funcEntry;
+
+            classEntry =
+                get_entry(current_scope->parentScope, current_scope->scopeName);
+
+            if (classEntry && classEntry->tableType == CLASS_ENTRY &&
+                classEntry->data.classEntry.inheritsCount &&
+                classEntry->data.classEntry.inheritedScopes) {
+              for (int i = 0; i < classEntry->data.classEntry.inheritsCount;
+                   i++) {
+                push_scope(classEntry->data.classEntry.inheritedScopes[i],
+                           stack);
+              }
+            }
+          }
+        }
+      }
+      scopePtr = scopePtr->parentScope;
+    }
+    return NULL;
+  }
+  return NULL;
 }
 
 /*
@@ -724,13 +1384,36 @@ void handle_function_call(node *astnode, ErrorArray *errors, Scope *globalScope,
                           FILE *out) {
 
   const char *name = get_name(astnode);
+  /*
+    TableEntry *funcEntry = get_function_entry(astnode->scope, astnode);
+    int params_count = funcEntry->data.funcEntry.numfparams;
+    node *paramsNode = astnode->children[0];
 
+    // We load the values of the parameters into the heap portion that we have
+    // reserved for this purpose
+
+    for (int i = 0; i < paramsNode->numchildren; i++) {
+      int paramOffset =
+          handle_expression(paramsNode->children[i], errors, out, globalScope);
+      // Store the word in the heap
+
+      if (paramOffset) {
+      } else {
+      }
+    }
+  */
   int sizeOfFunction = get_function_size(
       astnode,
       errors); // Note that we have a function that gets the size of a function.
+
   fprintf(out, "addi r14,r14,-%d\n", sizeOfFunction);
   fprintf(out, "jl r15,%s\n", name);
   fprintf(out, "addi r14,r14,%d\n", sizeOfFunction);
+
+  // Could we handle the loading of the function parameters here directly
+  // instead of inside of the function definition? NO! because the jl will
+  // change the value of the pc and we have not incremented the stack frame
+  // pointer at this point in time!
 }
 
 /*
@@ -772,10 +1455,13 @@ void code_gen_pass(node *root, Scope *globalScope, FILE *out,
       current_scope = current->scope;
 
     if (current->type == funcdef) {
+      // Note that we must adjust this to be able to accept function parameters.
 
       const char *name = get_name(current);
       char buffer[64];
+
       snprintf(buffer, sizeof(buffer), "%s", name);
+
       fprintf(out, "align\n%s\n", buffer);
       fprintf(out, "sw 0(r14),r15\n");
     }
@@ -794,10 +1480,28 @@ void code_gen_pass(node *root, Scope *globalScope, FILE *out,
       int offset =
           handle_expression(current->children[0], errors, out, globalScope);
 
-      fprintf(out, "addi r14,r14,-4\n");
-      fprintf(out, "jl r15,read\n");
-      fprintf(out, "addi r14,r14,4\n");
-      fprintf(out, "sw %d(r14),r13\n", offset);
+      if (offset) {
+        fprintf(out, "addi r14,r14,-4\n");
+        fprintf(out, "jl r15,read\n");
+        fprintf(out, "addi r14,r14,4\n");
+        fprintf(out, "sw %d(r14),r13\n", offset);
+      } else {
+        const char *temp_register = get_next_free_register();
+        fprintf(out, "addi %s,r0,%d %%s the temp register is %s\n",
+                temp_register, index_load_pointer, temp_register);
+
+        index_store_pointer -= 4;
+        if (index_store_pointer > 0) {
+          index_load_pointer = index_store_pointer - 4;
+        }
+
+        fprintf(out, "lw %s,indexstorage(%s)\n", temp_register, temp_register);
+        fprintf(out, "add %s,%s,r14\n", temp_register, temp_register);
+        fprintf(out, "addi r14,r14,-4\n");
+        fprintf(out, "jl r15,read\n");
+        fprintf(out, "addi r14,r14,4\n");
+        fprintf(out, "sw 0(%s),r13\n", temp_register);
+      }
     }
     if (current->type == write) {
 
@@ -805,10 +1509,35 @@ void code_gen_pass(node *root, Scope *globalScope, FILE *out,
 
       int offset = handle_expression(valueNode, errors, out, globalScope);
 
-      fprintf(out, "lw r13, %d(r14)\n", offset);
-      fprintf(out, "addi r14,r14,-%d\n", 8);
-      fprintf(out, "jl r15, write\n");
-      fprintf(out, "addi r14,r14, %d\n", 8);
+      if (offset) { // When the offset that is returned is not zero directly get
+                    // from stack frame.
+        fprintf(out, "lw r13, %d(r14)\n", offset);
+        fprintf(out, "addi r14,r14,-%d\n", 8);
+        fprintf(out, "jl r15, write\n");
+        fprintf(out, "addi r14,r14, %d\n", 8);
+      } else {
+
+        fprintf(stderr, "LOADING OFFSET FROM LOAD POINTER OF VALUE %d\n",
+                index_load_pointer);
+        const char *temp = get_next_free_register();
+        fprintf(out, "addi %s,r0,%d\n", temp, index_load_pointer);
+
+        index_load_pointer -= 4;
+
+        if (index_store_pointer == 0)
+          index_load_pointer = 0;
+        else
+          index_load_pointer = index_store_pointer - 4;
+
+        fprintf(out, "lw %s,indexstorage(%s)\n", temp, temp);
+        fprintf(out, "add %s,%s,r14\n", temp,
+                temp); // Now we have the stackframe offset stored in temp.
+        fprintf(out, "lw r13,0(%s)\n", temp);
+        free_register(temp);
+        fprintf(out, "addi r14,r14,-%d\n", 8);
+        fprintf(out, "jl r15, write\n");
+        fprintf(out, "addi r14,r14,%d\n", 8);
+      }
     }
 
     if (current->type == ifnode) {
@@ -820,6 +1549,7 @@ void code_gen_pass(node *root, Scope *globalScope, FILE *out,
       node *return_value_node = current->children[0];
       int offset =
           handle_expression(return_value_node, errors, out, globalScope);
+      // Need to refactor for array types.
       fprintf(out, "lw r13,%d(r14)\n", offset);
     }
     if (current->type == whilenode) {
@@ -883,6 +1613,7 @@ void code_gen_pass(node *root, Scope *globalScope, FILE *out,
 /*
  * This subroutine we call whenever the read function is called.
  */
+
 void read_subtroutine(FILE *out) {
 
   fprintf(out, "read\n");
@@ -910,8 +1641,10 @@ void read_subtroutine(FILE *out) {
   fprintf(out, "add r13, r0, %s\n", value_register);
   fprintf(out, "lw r15, 0(r14)\n");
   fprintf(out, "jr r15\n");
+  free_register(value_register);
+  free_register(stding_register);
+  free_register(compare_register);
 }
-
 /*
  * This function we call whenever we have a write statement, we treat this as
  * it's own subroutine that creates a stack frame.
@@ -926,12 +1659,9 @@ void write_subroutine(FILE *out) {
 
   const char *valueRegister =
       get_next_free_register(); // This will be the register that we hold the
-                                // value in.
   const char *printRegister =
       get_next_free_register(); // This register we will use to hold the actual
-
   const char *magnitudeRegister = get_next_free_register();
-
   const char *tempValRegister = get_next_free_register();
 
   fprintf(out, "align\n");
@@ -968,6 +1698,12 @@ void write_subroutine(FILE *out) {
 
   fprintf(out, "lw r15,0(r14)\n");
   fprintf(out, "jr r15\n");
+
+  free_register(temp_reg);
+  free_register(valueRegister);
+  free_register(printRegister);
+  free_register(magnitudeRegister);
+  free_register(tempValRegister);
 
   fprintf(out, "\n\n\n");
 }
