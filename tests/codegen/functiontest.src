@@ -1,0 +1,8 @@
+func foo(x:integer, y:integer)->integer{
+  return(x+y);
+}
+
+
+func main()->void{
+    write(foo(10,2));
+  }

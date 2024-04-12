@@ -1,0 +1,38 @@
+@not allowed;
+func foo() -> void{
+  f(g(h(x)))=13;
+  f(g(h(x))).a[123][123];
+  f(g(h(x))).a;
+  return xyz;
+  !@#;
+  }
+
+%^
+  struct foo{
+      private func foo()->void{
+          doStuff();
+        }
+    };
+
+doStuff();
+foo();
+
+    impl foo{
+        struct foo inherits X,Y,Z{
+            private func foo(x:integer, y:float) ->void;
+          };
+        private let x: integer;
+      }
+func foo() -> void{
+    f(g(h(x))).a[12]; //not allowed;
+    f(g(h(x))) = 123;
+    impl foo{
+        x=10;
+        doStuff();
+      }
+    return x+y*z;
+  }
+  impl foo inherits X,Y,Z{
+     let private x: integer;
+      let private z: mytype;
+    };

@@ -1,0 +1,55 @@
+digraph AST {
+node [shape=record];
+node [fontname=Sans];charset= " UTF-8" splines=true splines=spline rankdir =LR
+1374[label="prog | (null)"];
+1374 -> 1373
+1374 -> 1372
+1374 -> 1371
+1371[label="funcdef list | (null)"];
+1371 -> 1367
+1367[label="funcdef | (null)"];
+1367 -> 1365
+1367 -> 1336
+1367 -> 1335
+1367 -> 1334
+1334[label="identifier | main"];
+1335[label="fparams list | (null)"];
+1336[label="type | void"];
+1365[label="funcbody | (null)"];
+1365 -> 1364
+1364[label="ifnode | (null)"];
+1364 -> 1362
+1364 -> 1355
+1364 -> 1348
+1348[label="relexpr | (null)"];
+1348 -> 1346
+1348 -> 1342
+1348 -> 1341
+1341[label="var | (null)"];
+1341 -> 1339
+1341 -> 1338
+1338[label="identifier | x"];
+1339[label="dimlist | (null)"];
+1342[label="relop | gt"];
+1346[label="var | (null)"];
+1346 -> 1344
+1346 -> 1343
+1343[label="identifier | y"];
+1344[label="dimlist | (null)"];
+1355[label="statblock | (null)"];
+1355 -> 1354
+1354[label="funccall | (null)"];
+1354 -> 1352
+1354 -> 1351
+1351[label="identifier | doStuff"];
+1352[label="aparams list | (null)"];
+1362[label="statblock | (null)"];
+1362 -> 1361
+1361[label="funccall | (null)"];
+1361 -> 1359
+1361 -> 1358
+1358[label="identifier | doStuff2"];
+1359[label="aparams list | (null)"];
+1372[label="impldeflist | (null)"];
+1373[label="structdecl list | (null)"];
+}

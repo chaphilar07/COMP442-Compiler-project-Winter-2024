@@ -1,0 +1,21 @@
+Leaf token created of type identifier and value A 
+Leaf token created of type identifier and value B 
+Leaf token created of type identifier and value C 
+Leaf token created of type identifier and value A 
+Leaf token created of type identifier and value B 
+Leaf token created of type identifier and value C 
+Leaf token created of type identifier and value foo 
+BEGINNING OF TABLE FOR SCOPE global 
+class C inherits 
+BEGINNING OF TABLE FOR SCOPE C 
+END OF TABLE FOR SCOPE C 
+class B inherits 
+BEGINNING OF TABLE FOR SCOPE B 
+END OF TABLE FOR SCOPE B 
+class A inherits 
+BEGINNING OF TABLE FOR SCOPE A 
+END OF TABLE FOR SCOPE A 
+class foo inherits A, B, C, 
+BEGINNING OF TABLE FOR SCOPE foo 
+END OF TABLE FOR SCOPE foo 
+END OF TABLE FOR SCOPE global 

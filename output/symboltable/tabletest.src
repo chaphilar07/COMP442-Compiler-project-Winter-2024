@@ -1,0 +1,5 @@
+SEMANTIC ERROR LINE 2: Cannot lookup variable/function before it has been declared/defined, on line 2, y used before declaration
+SEMANTIC ERROR LINE 2: Cannot lookup variable/function before it has been declared/defined, on line 2, x used before declaration
+SEMANTIC ERROR ON LINE 3: Invalid function call, function doStuff is not defined in the source file.
+SEMANTIC ERROR ON LINE 5: Invalid function call, function doStuff2 is not defined in the source file.
+End of Error Report, total of 4 errors found.

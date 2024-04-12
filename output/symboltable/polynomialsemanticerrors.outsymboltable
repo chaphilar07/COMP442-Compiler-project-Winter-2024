@@ -1,0 +1,236 @@
+BEGINNING OF TABLE FOR:  global scope "Global"
+
+Table Entry 1 of "Global":class E inherits D, 	size: 4	offset: 0
+
+			BEGINNING OF TABLE FOR:  class scope "E"
+
+			Table Entry 1 of "E":private var c integer	size: 4	offset: 0
+
+			END OF TABLE FOR SCOPE class scope "E"
+
+Table Entry 2 of "Global":func f3 -> integer : p1 integer[2][3]	size: 28	return type size: 4
+
+			BEGINNING OF TABLE FOR:  function scope "f3"
+
+			Table Entry 1 of "f3":fparam p1 integer[2][3]	size: 24	offset: 4
+
+			END OF TABLE FOR SCOPE function scope "f3"
+
+Table Entry 3 of "Global":class POLYNOMIAL inherits 	size: 0	offset: 0
+
+			BEGINNING OF TABLE FOR:  class scope "POLYNOMIAL"
+
+			Table Entry 1 of "POLYNOMIAL":public func evaluate2 -> float : x float	size: 0	return type size: 8
+
+						BEGINNING OF TABLE FOR:  function scope "evaluate2"
+
+						Table Entry 1 of "evaluate2":fparam x float	size: 8	offset: 0
+
+						END OF TABLE FOR SCOPE function scope "evaluate2"
+
+			Table Entry 2 of "POLYNOMIAL":public func evaluate -> float : x float	size: 16	return type size: 8
+
+						BEGINNING OF TABLE FOR:  function scope "evaluate"
+
+						Table Entry 1 of "evaluate":fparam x float	size: 8	offset: 4
+
+						Table Entry 2 of "evaluate":litval	size: 4	offset: 12	 value: 0	name: literal100
+
+						END OF TABLE FOR SCOPE function scope "evaluate"
+
+			END OF TABLE FOR SCOPE class scope "POLYNOMIAL"
+
+Table Entry 4 of "Global":class C inherits 	size: 4	offset: 0
+
+			BEGINNING OF TABLE FOR:  class scope "C"
+
+			Table Entry 1 of "C":private var a integer	size: 4	offset: 0
+
+			END OF TABLE FOR SCOPE class scope "C"
+
+Table Entry 5 of "Global":func main -> void : 	size: 256	return type size: 0
+
+			BEGINNING OF TABLE FOR:  function scope "main"
+
+			Table Entry 1 of "main":var x integer	size: 4	offset: 4
+
+			Table Entry 2 of "main":var a a	size: 0	offset: 8
+
+			Table Entry 3 of "main":litval	size: 8	offset: 8	 value: 1.0	name: literal111
+
+			Table Entry 4 of "main":litval	size: 4	offset: 16	 value: function value	name: literal124
+
+			Table Entry 5 of "main":litval	size: 16	offset: 20	 value: function value	name: literal109
+
+			Table Entry 6 of "main":var f2 QUADRATIC	size: 24	offset: 36
+
+			Table Entry 7 of "main":var j integer[1][2][3]	size: 24	offset: 60
+
+			Table Entry 8 of "main":litval	size: 0	offset: 84	 value: function value	name: literal116
+
+			Table Entry 9 of "main":litval	size: 4	offset: 84	 value: 2	name: literal123
+
+			Table Entry 10 of "main":litval	size: 4	offset: 88	 value: 2	name: literal107
+
+			Table Entry 11 of "main":litval	size: 4	offset: 92	 value: 2	name: literal118
+
+			Table Entry 12 of "main":litval	size: 8	offset: 96	 value: 3.5	name: literal108
+
+			Table Entry 13 of "main":var z integer	size: 4	offset: 104
+
+			Table Entry 14 of "main":tempvar	size: 4	offset: 108	name: temp108	
+
+			Table Entry 15 of "main":var c C	size: 4	offset: 112
+
+			Table Entry 16 of "main":litval	size: 4	offset: 116	 value: 10	name: literal128
+
+			Table Entry 17 of "main":litval	size: 0	offset: 120	 value: function value	name: literal117
+
+			Table Entry 18 of "main":litval	size: 8	offset: 120	 value: 1.3	name: literal122
+
+			Table Entry 19 of "main":litval	size: 8	offset: 128	 value: 0.0	name: literal112
+
+			Table Entry 20 of "main":litval	size: 8	offset: 136	 value: function value	name: literal127
+
+			Table Entry 21 of "main":litval	size: 4	offset: 144	 value: 1	name: literal119
+
+			Table Entry 22 of "main":var f1 LINEAR	size: 16	offset: 148
+
+			Table Entry 23 of "main":var i integer[2][3]	size: 24	offset: 164
+
+			Table Entry 24 of "main":var counter integer	size: 4	offset: 188
+
+			Table Entry 25 of "main":litval	size: 4	offset: 192	 value: 1	name: literal114
+
+			Table Entry 26 of "main":litval	size: 4	offset: 196	 value: 2	name: literal121
+
+			Table Entry 27 of "main":litval	size: 24	offset: 200	 value: function value	name: literal113
+
+			Table Entry 28 of "main":litval	size: 8	offset: 224	 value: function value	name: literal126
+
+			Table Entry 29 of "main":var y float	size: 8	offset: 232
+
+			Table Entry 30 of "main":litval	size: 0	offset: 240	 value: function value	name: literal115
+
+			Table Entry 31 of "main":litval	size: 4	offset: 240	 value: 1	name: literal120
+
+			Table Entry 32 of "main":litval	size: 8	offset: 244	 value: 2.0	name: literal110
+
+			Table Entry 33 of "main":litval	size: 4	offset: 252	 value: 1	name: literal125
+
+			END OF TABLE FOR SCOPE function scope "main"
+
+Table Entry 6 of "Global":class D inherits C, 	size: 4	offset: 0
+
+			BEGINNING OF TABLE FOR:  class scope "D"
+
+			Table Entry 1 of "D":private var b integer	size: 4	offset: 0
+
+			END OF TABLE FOR SCOPE class scope "D"
+
+Table Entry 7 of "Global":class LINEAR inherits POLYNOMIAL, 	size: 16	offset: 0
+
+			BEGINNING OF TABLE FOR:  class scope "LINEAR"
+
+			Table Entry 1 of "LINEAR":private var a float	size: 8	offset: 0
+
+			Table Entry 2 of "LINEAR":public func build -> LINEAR : A float,B float	size: 36	return type size: 0
+
+						BEGINNING OF TABLE FOR:  function scope "build"
+
+						Table Entry 1 of "build":var new_function LINEAR	size: 16	offset: 20
+
+						Table Entry 2 of "build":fparam B float	size: 8	offset: 4
+
+						Table Entry 3 of "build":fparam A float	size: 8	offset: 12
+
+						END OF TABLE FOR SCOPE function scope "build"
+
+			Table Entry 3 of "LINEAR":private var b float	size: 8	offset: 8
+
+			Table Entry 4 of "LINEAR":public func evaluate -> float : x float	size: 44	return type size: 8
+
+						BEGINNING OF TABLE FOR:  function scope "evaluate"
+
+						Table Entry 1 of "evaluate":fparam x float	size: 8	offset: 4
+
+						Table Entry 2 of "evaluate":tempvar	size: 8	offset: 12	name: temp101	
+
+						Table Entry 3 of "evaluate":var result float	size: 8	offset: 20
+
+						Table Entry 4 of "evaluate":litval	size: 8	offset: 28	 value: 0.0	name: literal101
+
+						Table Entry 5 of "evaluate":tempvar	size: 8	offset: 36	name: temp100	
+
+						END OF TABLE FOR SCOPE function scope "evaluate"
+
+			END OF TABLE FOR SCOPE class scope "LINEAR"
+
+Table Entry 8 of "Global":class QUADRATIC inherits POLYNOMIAL, 	size: 24	offset: 0
+
+			BEGINNING OF TABLE FOR:  class scope "QUADRATIC"
+
+			Table Entry 1 of "QUADRATIC":private var a float	size: 8	offset: 0
+
+			Table Entry 2 of "QUADRATIC":public func build -> QUADRATIC : A float,B float,C float	size: 88	return type size: 0
+
+						BEGINNING OF TABLE FOR:  function scope "build"
+
+						Table Entry 1 of "build":litval	size: 4	offset: 28	 value: 1	name: literal105
+
+						Table Entry 2 of "build":litval	size: 4	offset: 32	 value: 3	name: literal103
+
+						Table Entry 3 of "build":litval	size: 4	offset: 36	 value: 3	name: literal104
+
+						Table Entry 4 of "build":fparam C float	size: 8	offset: 4
+
+						Table Entry 5 of "build":var new_function QUADRATIC	size: 24	offset: 40
+
+						Table Entry 6 of "build":litval	size: 4	offset: 64	 value: 3	name: literal102
+
+						Table Entry 7 of "build":fparam B float	size: 8	offset: 12
+
+						Table Entry 8 of "build":litval	size: 4	offset: 68	 value: 1	name: literal106
+
+						Table Entry 9 of "build":tempvar	size: 8	offset: 72	name: temp106	
+
+						Table Entry 10 of "build":fparam A float	size: 8	offset: 20
+
+						Table Entry 11 of "build":tempvar	size: 8	offset: 80	name: temp107	
+
+						END OF TABLE FOR SCOPE function scope "build"
+
+			Table Entry 3 of "QUADRATIC":private var c float	size: 8	offset: 8
+
+			Table Entry 4 of "QUADRATIC":private var b float	size: 8	offset: 16
+
+			Table Entry 5 of "QUADRATIC":public func evaluate -> float : x float	size: 52	return type size: 8
+
+						BEGINNING OF TABLE FOR:  function scope "evaluate"
+
+						Table Entry 1 of "evaluate":fparam x float	size: 8	offset: 4
+
+						Table Entry 2 of "evaluate":tempvar	size: 8	offset: 12	name: temp104	
+
+						Table Entry 3 of "evaluate":tempvar	size: 8	offset: 20	name: temp105	
+
+						Table Entry 4 of "evaluate":tempvar	size: 8	offset: 28	name: temp102	
+
+						Table Entry 5 of "evaluate":tempvar	size: 8	offset: 36	name: temp103	
+
+						Table Entry 6 of "evaluate":var result float	size: 8	offset: 44
+
+						END OF TABLE FOR SCOPE function scope "evaluate"
+
+			END OF TABLE FOR SCOPE class scope "QUADRATIC"
+
+Table Entry 9 of "Global":func f -> void : i integer	size: 12	return type size: 0
+
+			BEGINNING OF TABLE FOR:  function scope "f"
+
+			Table Entry 1 of "f":fparam i integer	size: 4	offset: 4
+
+			END OF TABLE FOR SCOPE function scope "f"
+
+END OF TABLE FOR SCOPE global scope "Global"
+

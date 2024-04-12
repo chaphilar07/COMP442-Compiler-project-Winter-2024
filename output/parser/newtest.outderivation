@@ -1,0 +1,40 @@
+PROG eof
+REPTPROG0 eof
+STRUCTORIMPLORFUNC REPTPROG0 eof
+STRUCTDECL REPTPROG0 eof
+struct id OPTSTRUCTDECL2 lcubr REPTSTRUCTDECL4 rcubr semi REPTPROG0 eof
+struct id lcubr REPTSTRUCTDECL4 rcubr semi REPTPROG0 eof
+struct id lcubr VISIBILITY MEMBERDECL REPTSTRUCTDECL4 rcubr semi REPTPROG0 eof
+struct id lcubr private MEMBERDECL REPTSTRUCTDECL4 rcubr semi REPTPROG0 eof
+struct id lcubr private FUNCDECL REPTSTRUCTDECL4 rcubr semi REPTPROG0 eof
+struct id lcubr private FUNCHEAD semi REPTSTRUCTDECL4 rcubr semi REPTPROG0 eof
+struct id lcubr private func id lpar FPARAMS rpar arrow RETURNTYPE semi REPTSTRUCTDECL4 rcubr semi REPTPROG0 eof
+struct id lcubr private func id lpar rpar arrow RETURNTYPE semi REPTSTRUCTDECL4 rcubr semi REPTPROG0 eof
+struct id lcubr private func id lpar rpar arrow void semi REPTSTRUCTDECL4 rcubr semi REPTPROG0 eof
+struct id lcubr private func id lpar rpar arrow void semi rcubr semi REPTPROG0 eof
+struct id lcubr private func id lpar rpar arrow void semi rcubr semi STRUCTORIMPLORFUNC REPTPROG0 eof
+struct id lcubr private func id lpar rpar arrow void semi rcubr semi IMPLDEF REPTPROG0 eof
+struct id lcubr private func id lpar rpar arrow void semi rcubr semi impl id lcubr REPTIMPLDEF3 rcubr REPTPROG0 eof
+struct id lcubr private func id lpar rpar arrow void semi rcubr semi impl id lcubr FUNCDEF REPTIMPLDEF3 rcubr REPTPROG0 eof
+struct id lcubr private func id lpar rpar arrow void semi rcubr semi impl id lcubr FUNCHEAD FUNCBODY REPTIMPLDEF3 rcubr REPTPROG0 eof
+struct id lcubr private func id lpar rpar arrow void semi rcubr semi impl id lcubr func id lpar FPARAMS rpar arrow RETURNTYPE FUNCBODY REPTIMPLDEF3 rcubr REPTPROG0 eof
+struct id lcubr private func id lpar rpar arrow void semi rcubr semi impl id lcubr func id lpar id colon TYPE REPTFPARAMS3 REPTFPARAMS4 rpar arrow RETURNTYPE FUNCBODY REPTIMPLDEF3 rcubr REPTPROG0 eof
+struct id lcubr private func id lpar rpar arrow void semi rcubr semi impl id lcubr func id lpar id colon integer REPTFPARAMS3 REPTFPARAMS4 rpar arrow RETURNTYPE FUNCBODY REPTIMPLDEF3 rcubr REPTPROG0 eof
+struct id lcubr private func id lpar rpar arrow void semi rcubr semi impl id lcubr func id lpar id colon integer REPTFPARAMS4 rpar arrow RETURNTYPE FUNCBODY REPTIMPLDEF3 rcubr REPTPROG0 eof
+struct id lcubr private func id lpar rpar arrow void semi rcubr semi impl id lcubr func id lpar id colon integer rpar arrow RETURNTYPE FUNCBODY REPTIMPLDEF3 rcubr REPTPROG0 eof
+struct id lcubr private func id lpar rpar arrow void semi rcubr semi impl id lcubr func id lpar id colon integer rpar arrow TYPE FUNCBODY REPTIMPLDEF3 rcubr REPTPROG0 eof
+struct id lcubr private func id lpar rpar arrow void semi rcubr semi impl id lcubr func id lpar id colon integer rpar arrow integer FUNCBODY REPTIMPLDEF3 rcubr REPTPROG0 eof
+struct id lcubr private func id lpar rpar arrow void semi rcubr semi impl id lcubr func id lpar id colon integer rpar arrow integer lcubr REPTFUNCBODY1 rcubr REPTIMPLDEF3 rcubr REPTPROG0 eof
+struct id lcubr private func id lpar rpar arrow void semi rcubr semi impl id lcubr func id lpar id colon integer rpar arrow integer lcubr VARDECLORSTAT REPTFUNCBODY1 rcubr REPTIMPLDEF3 rcubr REPTPROG0 eof
+struct id lcubr private func id lpar rpar arrow void semi rcubr semi impl id lcubr func id lpar id colon integer rpar arrow integer lcubr STATEMENT REPTFUNCBODY1 rcubr REPTIMPLDEF3 rcubr REPTPROG0 eof
+struct id lcubr private func id lpar rpar arrow void semi rcubr semi impl id lcubr func id lpar id colon integer rpar arrow integer lcubr return lpar EXPR rpar semi REPTFUNCBODY1 rcubr REPTIMPLDEF3 rcubr REPTPROG0 eof
+struct id lcubr private func id lpar rpar arrow void semi rcubr semi impl id lcubr func id lpar id colon integer rpar arrow integer lcubr return lpar ARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTIMPLDEF3 rcubr REPTPROG0 eof
+struct id lcubr private func id lpar rpar arrow void semi rcubr semi impl id lcubr func id lpar id colon integer rpar arrow integer lcubr return lpar TERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTIMPLDEF3 rcubr REPTPROG0 eof
+struct id lcubr private func id lpar rpar arrow void semi rcubr semi impl id lcubr func id lpar id colon integer rpar arrow integer lcubr return lpar FACTOR RIGHTRECTERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTIMPLDEF3 rcubr REPTPROG0 eof
+struct id lcubr private func id lpar rpar arrow void semi rcubr semi impl id lcubr func id lpar id colon integer rpar arrow integer lcubr return lpar intlit RIGHTRECTERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTIMPLDEF3 rcubr REPTPROG0 eof
+struct id lcubr private func id lpar rpar arrow void semi rcubr semi impl id lcubr func id lpar id colon integer rpar arrow integer lcubr return lpar intlit RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTIMPLDEF3 rcubr REPTPROG0 eof
+struct id lcubr private func id lpar rpar arrow void semi rcubr semi impl id lcubr func id lpar id colon integer rpar arrow integer lcubr return lpar intlit OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTIMPLDEF3 rcubr REPTPROG0 eof
+struct id lcubr private func id lpar rpar arrow void semi rcubr semi impl id lcubr func id lpar id colon integer rpar arrow integer lcubr return lpar intlit rpar semi REPTFUNCBODY1 rcubr REPTIMPLDEF3 rcubr REPTPROG0 eof
+struct id lcubr private func id lpar rpar arrow void semi rcubr semi impl id lcubr func id lpar id colon integer rpar arrow integer lcubr return lpar intlit rpar semi rcubr REPTIMPLDEF3 rcubr REPTPROG0 eof
+struct id lcubr private func id lpar rpar arrow void semi rcubr semi impl id lcubr func id lpar id colon integer rpar arrow integer lcubr return lpar intlit rpar semi rcubr rcubr REPTPROG0 eof
+struct id lcubr private func id lpar rpar arrow void semi rcubr semi impl id lcubr func id lpar id colon integer rpar arrow integer lcubr return lpar intlit rpar semi rcubr rcubr eof

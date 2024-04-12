@@ -1,0 +1,20 @@
+inserting free function newname into scope Global ...inserted free function ...
+inserting free function newFunc into scope Global ...inserted free function ...
+inserting free function main into scope Global ...inserted free function ...
+Inserting vardecl x into scope main ... inserted vardecl exiting.
+Inserting vardecl y into scope main ... inserted vardecl exiting.
+Inserting class A into scope Global ... Inserted class entry.
+Inserting vardecl x into scope A ... inserted vardecl exiting.
+Inserting class foo into scope Global ... Inserted class entry.
+Inserting function entry x into scope foo ... Exiting function insertion.
+Inserting function entry notdefined into scope foo ... Exiting function insertion.
+Inserting function entry notdefined1 into scope foo ... Exiting function insertion.
+Inserting function entry notdefined2 into scope foo ... Exiting function insertion.
+Inserting class bar into scope Global ... Inserted class entry.
+Inserting vardecl y into scope bar ... inserted vardecl exiting.
+Inserting function entry do into scope bar ... Exiting function insertion.
+Encountered impl with name foo ... Found corresponding class with name foo .
+Defining member function x ... inserted and defined member function ... 
+Encountered impl with name bar ... Found corresponding class with name bar .
+Defining member function do ... inserted and defined member function ... 
+Defining member function nope ... Encountered impl with name none ... success

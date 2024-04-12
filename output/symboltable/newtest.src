@@ -1,0 +1,5 @@
+SEMANTIC ERROR ON LINE 9: Cannot have a return statement in function with return type of void
+SEMANTIC ERROR ON LINE 9: Invalid return type, void is the expected return type from the function.
+SEMANTIC ERROR ON LINE 10: FUNCTION bar BEING DEFIND WITH DIFFERENT NUMBER OF PARAMETERS ERROR !
+SEMANTIC ERROR ON LINE 10: FUNCTION bar HAS BEEN DEFINED WITH A DIFFERENT RETURN TYPE
+End of Error Report, total of 4 errors found.

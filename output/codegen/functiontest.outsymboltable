@@ -1,0 +1,28 @@
+BEGINNING OF TABLE FOR:  global scope "Global"
+
+Table Entry 1 of "Global":func main -> void : 	size: 16	return type size: 0
+
+			BEGINNING OF TABLE FOR:  function scope "main"
+
+			Table Entry 1 of "main":litval	size: 4	offset: 4	 value: 10	name: literal187
+
+			Table Entry 2 of "main":litval	size: 4	offset: 8	 value: 2	name: literal186
+
+			Table Entry 3 of "main":litval	size: 4	offset: 12	 value: function value	name: literal185
+
+			END OF TABLE FOR SCOPE function scope "main"
+
+Table Entry 2 of "Global":func foo -> integer : x integer,y integer	size: 16	return type size: 4
+
+			BEGINNING OF TABLE FOR:  function scope "foo"
+
+			Table Entry 1 of "foo":fparam x integer Number: 1	size: 4	offset: 4
+
+			Table Entry 2 of "foo":tempvar	size: 4	offset: 12	name: temp160	
+
+			Table Entry 3 of "foo":fparam y integer Number: 0	size: 4	offset: 8
+
+			END OF TABLE FOR SCOPE function scope "foo"
+
+END OF TABLE FOR SCOPE global scope "Global"
+

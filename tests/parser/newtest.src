@@ -1,0 +1,10 @@
+struct foo{
+    private func bar() -> void;
+  };
+
+
+impl foo{
+    func bar(x:integer)->integer{
+        return(0);
+      }
+  }
