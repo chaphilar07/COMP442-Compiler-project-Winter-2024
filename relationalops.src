@@ -1,0 +1,54 @@
+func test_eq(x:integer, y:integer)->void{
+    if(x==y) then {
+      write(1);
+      }else{
+        write(0);
+        };
+  }
+
+  func test_neq(x:integer, y: integer)->integer{
+      if(x<>y) then {
+        write(1);
+        }else{
+          write(0);
+          };
+    }
+
+    func test_leq(x:integer, y:integer)->void{
+        if(x<=y) then {
+            write(1);
+          }else{
+          write(0);
+            };
+      }
+      func test_geq(x:integer, y:integer)->void{
+          if(x>=y) then {
+             write(1);
+            }else{
+              write(0);
+            };
+        }
+
+        func test_gt(x:integer, y:integer)->void{
+            if(x<y) then {
+              write(1);
+              }else {
+                write(0);
+                };
+          }
+
+        func test_lt(x:integer, y:integer)->void{
+            if(x>y)then{
+              write(1);
+              }else{
+              write(0);
+              };
+          }
+
+
+func main()->void{
+    test_eq(1,0);
+    test_eq(0,0);
+    test_eq(0,1);
+    test_eq(1,1);
+  }

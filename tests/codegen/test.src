@@ -1,5 +1,0 @@
-func main()->void{
-  let x:integer;
-  read(x);
-  write(x);
-  }

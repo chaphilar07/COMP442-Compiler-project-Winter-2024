@@ -1,0 +1,31 @@
+func return1()->integer{
+    return(1);
+  }
+
+func return2()->integer{
+    return(2);
+  }
+
+func return3()->integer{
+    return(3);
+  }
+
+
+  func rec(x:integer)->void{
+    if(x>=1) then{
+        write(x);
+        rec(x-1);
+      }else{
+
+        };
+    }
+
+
+  func main()->void{
+      let x: integer;
+      x=return3()+return2()+return1();
+
+      write(x);
+
+      rec(x);
+    }

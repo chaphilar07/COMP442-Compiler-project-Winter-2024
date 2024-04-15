@@ -21,7 +21,6 @@
 token *lookahead = NULL;
 FILE *src = NULL;
 FILE *derivation_output = NULL;
-FILE *error_output = NULL;
 FILE *rule_output = NULL;
 int line;
 msg_stack *derivation_msg_stack = NULL;
@@ -67,12 +66,8 @@ void print_rule(const char *rule) {
 }
 
 void syntax_error(const char *err) {
-  if (error_output == NULL) {
-    error("ERROR - syntax_error() : syntax error output file has not been "
-          "opened.");
-  }
 
-  fprintf(error_output,
+  fprintf(stderr,
           "SYNTAX ERROR UNEXPECTED TOKEN \'%s\': %s, line: %d \t Error "
           "Message: %s \n",
           lookahead->lexeme, lookahead->category, line, err);
@@ -351,21 +346,22 @@ node *parse(const char *path) {
   // Now we will print to the correct directory.
   file_name = replaceSubstring(file_name, "tests", "output");
 
-  snprintf(ast_out_file_name, sizeof(ast_out_file_name), "%s.outast",
+  snprintf(ast_out_file_name, sizeof(ast_out_file_name),
+           "output/parser/%s.outast", file_name);
+  snprintf(nodes_out_file_name, sizeof(nodes_out_file_name),
+           "output/parser/%s.nodesout", file_name);
+  snprintf(stack_out_file_name, sizeof(stack_out_file_name),
+           "output/parser/%s.stackcontent", file_name);
+  snprintf(rule_file_name, sizeof(rule_file_name), "output/parser/%s.rules",
            file_name);
-  snprintf(nodes_out_file_name, sizeof(nodes_out_file_name), "%s.nodesout",
-           file_name);
-  snprintf(stack_out_file_name, sizeof(stack_out_file_name), "%s.stackcontent",
-           file_name);
-  snprintf(rule_file_name, sizeof(rule_file_name), "%s.rules", file_name);
-  snprintf(out_file_name, sizeof(out_file_name), "%s.outderivation", file_name);
-  snprintf(error_file_name, sizeof(error_file_name), "%s.outsyntaxerrors",
-           file_name);
+  snprintf(out_file_name, sizeof(out_file_name),
+           "output/parser/%s.outderivation", file_name);
+  snprintf(error_file_name, sizeof(error_file_name),
+           "output/parser/%s.outsyntaxerrors", file_name);
 
-  printf("Printg rules to: %s \t Printing errors to: %s \n", out_file_name,
+  printf("Printing rules to: %s \t Printing errors to: %s \n", out_file_name,
          error_file_name);
 
-  error_output = fopen(error_file_name, "w+");
   derivation_output = fopen(out_file_name, "w+");
   rule_output = fopen(rule_file_name, "w+");
   stack_contents = fopen(stack_out_file_name, "w+");
@@ -377,14 +373,11 @@ node *parse(const char *path) {
   derivation_string = strdup("START");
   printf("DERIVATION FILE : %s \nERROR FILE: %s \n", out_file_name,
          error_file_name);
+
   if (!derivation_output)
     error("ERROR - parse() : cannot open the output file for derivation.");
   else
     printf("opened file for printing rules ...\n");
-  if (!error_output)
-    error("ERROR - parse(): Cannot open the file error for syntax errors.");
-  else
-    printf("opened file for printing errors ... \n");
 
   stack = init_stack();
   line = 1;
@@ -425,9 +418,7 @@ node *parse(const char *path) {
     lookahead = NULL;
     fclose(derivation_output);
     fclose(src);
-    fclose(error_output);
     derivation_output = NULL;
-    error_output = NULL;
     src = NULL;
     printf("Closing files ... \n");
 
@@ -463,10 +454,8 @@ node *parse(const char *path) {
 
     fclose(derivation_output);
     fclose(src);
-    fclose(error_output);
 
     derivation_output = NULL;
-    error_output = NULL;
     src = NULL;
 
     printf("Closing files ... \n");

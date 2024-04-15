@@ -1,0 +1,58 @@
+BEGINNING OF TABLE FOR:  global scope "Global"
+
+Table Entry 1 of "Global":func main -> void : 	size: 40	return type size: 0
+
+			BEGINNING OF TABLE FOR:  function scope "main"
+
+			Table Entry 1 of "main":var x B	size: 12	offset: 4
+
+			Table Entry 2 of "main":litval	size: 4	offset: 16	 value: 4	name: literal103
+
+			Table Entry 3 of "main":litval	size: 0	offset: 20	 value: function value	name: literal104
+
+			Table Entry 4 of "main":litval	size: 4	offset: 20	 value: 3	name: literal102
+
+			Table Entry 5 of "main":var y B	size: 12	offset: 24
+
+			Table Entry 6 of "main":tempvar	size: 4	offset: 36	name: temp100	
+
+			END OF TABLE FOR SCOPE function scope "main"
+
+Table Entry 2 of "Global":class B inherits 	size: 12	offset: 0
+
+			BEGINNING OF TABLE FOR:  class scope "B"
+
+			Table Entry 1 of "B":private var c A	size: 8	offset: 0
+
+			Table Entry 2 of "B":private var d integer	size: 4	offset: 8
+
+			END OF TABLE FOR SCOPE class scope "B"
+
+Table Entry 3 of "Global":class A inherits 	size: 8	offset: 0
+
+			BEGINNING OF TABLE FOR:  class scope "A"
+
+			Table Entry 1 of "A":private var a integer	size: 4	offset: 0
+
+			Table Entry 2 of "A":private func bar -> integer : 	size: 8	return type size: 4
+
+						BEGINNING OF TABLE FOR:  function scope "bar"
+
+						Table Entry 1 of "bar":litval	size: 4	offset: 4	 value: 1	name: literal101
+
+						END OF TABLE FOR SCOPE function scope "bar"
+
+			Table Entry 3 of "A":private var b integer	size: 4	offset: 4
+
+			Table Entry 4 of "A":private func foo -> void : 	size: 8	return type size: 0
+
+						BEGINNING OF TABLE FOR:  function scope "foo"
+
+						Table Entry 1 of "foo":litval	size: 4	offset: 4	 value: 10	name: literal100
+
+						END OF TABLE FOR SCOPE function scope "foo"
+
+			END OF TABLE FOR SCOPE class scope "A"
+
+END OF TABLE FOR SCOPE global scope "Global"
+

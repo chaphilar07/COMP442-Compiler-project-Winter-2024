@@ -1,0 +1,52 @@
+BEGINNING OF TABLE FOR:  global scope "Global"
+
+Table Entry 1 of "Global":func main -> void : 	size: 32	return type size: 0
+
+			BEGINNING OF TABLE FOR:  function scope "main"
+
+			Table Entry 1 of "main":litval	size: 4	offset: 4	 value: 2	name: literal105
+
+			Table Entry 2 of "main":tempvar	size: 4	offset: 8	name: temp104	
+
+			Table Entry 3 of "main":litval	size: 4	offset: 12	 value: 1	name: literal103
+
+			Table Entry 4 of "main":litval	size: 4	offset: 16	 value: function value	name: literal104
+
+			Table Entry 5 of "main":tempvar	size: 4	offset: 20	name: temp105	
+
+			Table Entry 6 of "main":litval	size: 4	offset: 24	 value: 10	name: literal106
+
+			Table Entry 7 of "main":var i integer	size: 4	offset: 28
+
+			END OF TABLE FOR SCOPE function scope "main"
+
+Table Entry 2 of "Global":func pow -> integer : x integer,p integer	size: 48	return type size: 4
+
+			BEGINNING OF TABLE FOR:  function scope "pow"
+
+			Table Entry 1 of "pow":fparam x integer Number: 1	size: 4	offset: 4
+
+			Table Entry 2 of "pow":tempvar	size: 4	offset: 12	name: temp101	
+
+			Table Entry 3 of "pow":var j integer	size: 4	offset: 16
+
+			Table Entry 4 of "pow":litval	size: 4	offset: 20	 value: 1	name: literal102
+
+			Table Entry 5 of "pow":fparam p integer Number: 0	size: 4	offset: 8
+
+			Table Entry 6 of "pow":tempvar	size: 4	offset: 24	name: temp102	
+
+			Table Entry 7 of "pow":tempvar	size: 4	offset: 28	name: temp103	
+
+			Table Entry 8 of "pow":var i integer	size: 4	offset: 32
+
+			Table Entry 9 of "pow":litval	size: 4	offset: 36	 value: 1	name: literal101
+
+			Table Entry 10 of "pow":tempvar	size: 4	offset: 40	name: temp100	
+
+			Table Entry 11 of "pow":litval	size: 4	offset: 44	 value: 0	name: literal100
+
+			END OF TABLE FOR SCOPE function scope "pow"
+
+END OF TABLE FOR SCOPE global scope "Global"
+

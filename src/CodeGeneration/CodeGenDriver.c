@@ -63,6 +63,10 @@ int main(int argc, char *argv[]) {
         fprintf(output_file, "\n\n\n");
         write_subroutine(output_file);
 
+        // Manage the state of the code generation module.
+        free_all_registers();
+        reset_index_pointers();
+
         fprintf(output_file, "parameterstorage res 512\n");
         fprintf(output_file, "indexstorage res 256 \n");
 
@@ -70,6 +74,10 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "FAILURE COULD NOT PARSE THE SOURCE FILE!\n");
         continue;
       }
+      // Close files.
+      fclose(symbol_table_output);
+      fclose(output_file);
+      fclose(semantic_error_file);
     }
   }
 

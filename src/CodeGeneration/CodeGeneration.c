@@ -17,6 +17,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+FILE *debugging_info = NULL;
 /*
  * This function will set the size and offsets of all of the classes and class
  * functions in the global scope.
@@ -43,8 +45,18 @@ unsigned int while_numbers = 100;
 int index_store_pointer = 0;
 int index_load_pointer = 0;
 
-bool free_buffers[] = {true, true, true, true, true, true,
-                       true, true, true, true, true, true};
+void reset_index_pointers() {
+  index_load_pointer = 0;
+  index_store_pointer = 0;
+}
+
+bool free_registers[] = {true, true, true, true, true, true,
+                         true, true, true, true, true, true};
+
+void free_all_registers() {
+  for (int i = 0; i < 12; i++)
+    free_registers[i] = true;
+}
 
 /*
  * Helper function gets a number from a string.
@@ -74,8 +86,8 @@ void free_register(const char *register_name) {
   int register_number = extract_number_from_string(register_name);
   register_number -= 1;
 
-  free_buffers[register_number] = true;
-  fprintf(stderr, "FREEING REGISTER %d \n", register_number + 1);
+  free_registers[register_number] = true;
+  fprintf(debugging_info, "FREEING REGISTER %d \n", register_number + 1);
   free((void *)register_name);
 }
 /*
@@ -110,11 +122,69 @@ char *get_next_else_label() {
 }
 
 /*
- * This function is used to handle statements inside of any kind of statbody or
- * function body node.
+ * This function is used to get the offset for class members.
+ *
+ * What should we do if we want to access the members of a class.
+ *
+ * What if the variable that we are accessing is an array, what if the variable
+ * that we are trying to access is a float, should we do the computations in the
+ * registers in this case? Like we do with indexes?
  */
-void handle_statement(node *astnode, ErrorArray *errors, Scope *globalScope,
-                      FILE *out) {}
+int get_class_member_offset(node *astnode, Scope *globalScope,
+                            ErrorArray *errors, FILE *out) {
+  // With this function we will get offset of a class member access this is
+  // meant to be called when have a class member eg, a dot.
+
+  // The base variable offset will always be the left child.
+  node *left = astnode->children[1];
+  node *right = astnode->children[0];
+
+  Scope *scopePtr = globalScope;
+
+  int base_varialbe_offset = get_offset(left, left->scope, errors, out);
+
+  while (scopePtr && scopePtr->type != GLOBAL_SCOPE)
+    scopePtr = scopePtr->parentScope;
+
+  if (right->type != dot) {
+    TypeInfo class_type_info = get_type_expression(left, errors, scopePtr);
+
+    if (class_type_info.type != ID_TYPE) {
+      fprintf(debugging_info,
+              "ERROR TRYING TO USE CLASS MEMBER ACCESS ON NON CLASS TYPE!\n");
+      return -1; // Error! we are trying to access a member from a non class
+                 // type.
+    }
+    fprintf(debugging_info, "checking if %s is a member of variable %s\n",
+            get_name((right)), get_name(left));
+
+    TableEntry *class_entry = get_entry(scopePtr, class_type_info.typeString);
+    TableEntry *member_entry =
+        get_entry(class_entry->data.classEntry.scope, get_name(right));
+    base_varialbe_offset += member_entry->offset;
+    return base_varialbe_offset;
+  } else {
+    while (right->type == dot) {
+      TypeInfo class_type_info = get_type_expression(left, errors, scopePtr);
+      TableEntry *class_entry = get_entry(scopePtr, class_type_info.typeString);
+      node *member_node = right->children[1];
+      TableEntry *member_entry =
+          get_entry(class_entry->data.classEntry.scope, get_name(member_node));
+      base_varialbe_offset += member_entry->offset;
+
+      left = right->children[1];
+      right = right->children[0];
+    }
+
+    TypeInfo class_type_info = get_type_expression(left, errors, left->scope);
+    TableEntry *class_entry = get_entry(scopePtr, class_type_info.typeString);
+    TableEntry *member_entry =
+        get_entry(class_entry->data.classEntry.scope, get_name(right));
+    base_varialbe_offset += member_entry->offset;
+    return base_varialbe_offset;
+  }
+}
+
 /*
  * This function will deal with an if statement, we want to DFS through the file
  * and basically do the same things that the code_gen_pass function would do and
@@ -190,7 +260,8 @@ void handle_while_statement(node *astnode, Scope *globalScope,
   int expressionOffset =
       handle_expression(expressionNode, errors, out, globalScope);
 
-  fprintf(stderr, "the value produced by the expression for the offset %d \n",
+  fprintf(debugging_info,
+          "the value produced by the expression for the offset %d \n",
           expressionOffset);
   char *comp_regiseter = get_next_free_register();
   fprintf(out, "lw %s, %d(r14)\n", comp_regiseter, expressionOffset);
@@ -219,19 +290,19 @@ char *get_next_free_register() {
   int register_selected = -1;
 
   for (int i = 0; i < 12; i++) {
-    if (free_buffers[i] == true) {
-      free_buffers[i] = false;
+    if (free_registers[i] == true) {
+      free_registers[i] = false;
 
       register_selected = i + 1;
 
-      fprintf(stderr, "SELECTED REGISTER %d NO LONGER FREE \n",
+      fprintf(debugging_info, "SELECTED REGISTER %d NO LONGER FREE \n",
               register_selected);
       break;
     }
   }
 
   if (register_selected < 0) {
-    fprintf(stderr, "BIG PROBLEM NO FREE REGISTERS!!!\n");
+    fprintf(debugging_info, "BIG PROBLEM NO FREE REGISTERS!!!\n");
     return NULL; // NO FREE REGISTERS BIG PROBLEM!!!
   }
 
@@ -301,19 +372,22 @@ TableEntry *create_litval_entry(node *astnode) {
 
   TableEntry *entry = malloc(sizeof(TableEntry));
   if (!entry) {
-    fprintf(stderr, "ERROR - create_litval_entry():Cannot allocate memory for "
-                    "table entry\n ");
+    fprintf(debugging_info,
+            "ERROR - create_litval_entry():Cannot allocate memory for "
+            "table entry\n ");
     return NULL;
   }
 
   if (!entry) {
-    fprintf(stderr, "ERROR - create_temp_entry(): Cannot allocate memory for "
-                    "new table entry.\n");
+    fprintf(debugging_info,
+            "ERROR - create_temp_entry(): Cannot allocate memory for "
+            "new table entry.\n");
     return NULL;
   }
   if (astnode->type != floatnum && astnode->type != intnum) {
-    fprintf(stderr, "ERROR - create_temp_entry(): Passed invalid type of node "
-                    "to funciton exiting.\n");
+    fprintf(debugging_info,
+            "ERROR - create_temp_entry(): Passed invalid type of node "
+            "to funciton exiting.\n");
     return NULL;
   }
 
@@ -349,8 +423,9 @@ TableEntry *create_litval_entry(node *astnode) {
  */
 int get_variable_offset(node *astnode, ErrorArray *errors, FILE *out) {
   if (!astnode) {
-    fprintf(stderr, "ERROR - get_variable_offset(): Cannot get offset node is "
-                    "null, exiting\n");
+    fprintf(debugging_info,
+            "ERROR - get_variable_offset(): Cannot get offset node is "
+            "null, exiting\n");
     return -1;
   }
 
@@ -466,7 +541,7 @@ int get_variable_offset(node *astnode, ErrorArray *errors, FILE *out) {
 
         free_register(temp);
         free_register(accumulator);
-        fprintf(stderr,
+        fprintf(debugging_info,
                 "VALUE OF THE LOADING POINTER %d VALUE OF THE STORING POINTER "
                 "%d ... \n",
                 index_load_pointer, index_store_pointer);
@@ -902,10 +977,10 @@ int get_function_size(node *astnode, void *arr) {
     while (scopePtr && scopePtr->type != GLOBAL_SCOPE) {
       scopePtr = scopePtr->parentScope;
       if (scopePtr == NULL) {
-        fprintf(stderr, "BIG PROBLEM!!!\n");
+        fprintf(debugging_info, "BIG PROBLEM!!!\n");
       }
       if (scopePtr->type == GLOBAL_SCOPE)
-        fprintf(stderr, "FOUND GLOBAL SCOPE!\n");
+        fprintf(debugging_info, "FOUND GLOBAL SCOPE!\n");
     }
 
     TableEntry *funcEntry = get_entry(scopePtr, name);
@@ -1097,7 +1172,7 @@ int handle_expression(node *astnode, ErrorArray *errors, FILE *out,
     } else {
       const char *temp = get_next_free_register();
 
-      fprintf(stderr, "LOADING OFFSET FROM LOAD POINTER OF VALUE %d\n",
+      fprintf(debugging_info, "LOADING OFFSET FROM LOAD POINTER OF VALUE %d\n",
               index_load_pointer);
       fprintf(out, "addi %s,r0,%d\n", temp,
               index_load_pointer); // Get the value of the offset into the haep
@@ -1121,7 +1196,7 @@ int handle_expression(node *astnode, ErrorArray *errors, FILE *out,
       fprintf(out, "lw %s, %d(r14)\n", left_register, leftOffset);
     } else {
 
-      fprintf(stderr, "LOADING OFFSET FROM LOAD POINTER OF VALUE %d\n",
+      fprintf(debugging_info, "LOADING OFFSET FROM LOAD POINTER OF VALUE %d\n",
               index_load_pointer);
       const char *temp = get_next_free_register();
 
@@ -1133,7 +1208,7 @@ int handle_expression(node *astnode, ErrorArray *errors, FILE *out,
         index_load_pointer = 0;
       else
         index_load_pointer = index_store_pointer - 4;
-      fprintf(stderr, "IN THE LEFT OFFSET THE VALUE OF LOAD %d \n",
+      fprintf(debugging_info, "IN THE LEFT OFFSET THE VALUE OF LOAD %d \n",
               index_load_pointer);
 
       fprintf(out, "lw %s, indexstorage(%s) %%s HERE2 !!!\n", temp,
@@ -1147,9 +1222,9 @@ int handle_expression(node *astnode, ErrorArray *errors, FILE *out,
     }
 
     fprintf(
-        out, "%s %s,%s,%s %%s operation %s performed \n", operationBuffer,
+        out, "%s %s,%s,%s\n", operationBuffer,
         operation_register, // perform the operation and store it in a buffer.
-        left_register, right_register, operationBuffer);
+        left_register, right_register);
 
     free_register(left_register);
     free_register(right_register);
@@ -1163,6 +1238,14 @@ int handle_expression(node *astnode, ErrorArray *errors, FILE *out,
   } else if (astnode->type == var) {
 
     return get_offset(astnode, globalScope, errors, out);
+
+  } else if (astnode->type == dot) {
+    int x = get_class_member_offset(astnode, astnode->scope, errors, out);
+    if (x == 0) {
+      fprintf(debugging_info, "PROBLEM!!!\n");
+      exit(0);
+    }
+    return x;
 
   } else if (astnode->type == funccall) {
 
@@ -1246,7 +1329,7 @@ void handle_assignment_statement(node *astnode, ErrorArray *errors,
   int value_offset =
       handle_expression(astnode->children[0], errors, out, globalScope);
   int assignment_offset =
-      get_offset(astnode->children[1], globalScope, errors, out);
+      handle_expression(astnode->children[1], errors, out, globalScope);
 
   const char *value_register = get_next_free_register();
   if (value_offset) {
@@ -1255,7 +1338,7 @@ void handle_assignment_statement(node *astnode, ErrorArray *errors,
     // we need to get the offset from the indexstorage.
     const char *temp = get_next_free_register();
 
-    fprintf(stderr, "LOADING OFFSET FROM LOAD POINTER OF VALUE %d\n",
+    fprintf(debugging_info, "LOADING OFFSET FROM LOAD POINTER OF VALUE %d\n",
             index_load_pointer);
     fprintf(out, "addi %s,r0,%d\n", temp, index_load_pointer);
     index_store_pointer -= 4;
@@ -1275,7 +1358,7 @@ void handle_assignment_statement(node *astnode, ErrorArray *errors,
     free_register(value_register);
   } else {
 
-    fprintf(stderr, "LOADING OFFSET FROM LOAD POINTER OF VALUE %d\n",
+    fprintf(debugging_info, "LOADING OFFSET FROM LOAD POINTER OF VALUE %d\n",
             index_load_pointer);
     const char *temp = get_next_free_register();
     fprintf(out, "addi %s,r0,%d\n", temp, index_load_pointer);
@@ -1295,14 +1378,15 @@ void handle_assignment_statement(node *astnode, ErrorArray *errors,
 /*
  * This function gets function parameters list from a function call node.
  */
-TableEntry *get_function_entry(Scope *currentScope, node *functionNode) {
+TableEntry *get_function_entry(Scope *currentScope, node *functionNode,
+                               ErrorArray *errors) {
   Scope *scopePtr = currentScope;
 
   const char *name = get_name(functionNode);
-  fprintf(stderr, "looking for the function %s ...\n", name);
+  fprintf(debugging_info, "looking for the function %s ...\n", name);
 
   if (scopePtr && scopePtr->type != GLOBAL_SCOPE) {
-    fprintf(stderr, "Global scope has been found\n");
+    fprintf(debugging_info, "Global scope has been found\n");
     scopePtr = scopePtr->parentScope;
   }
 
@@ -1311,76 +1395,152 @@ TableEntry *get_function_entry(Scope *currentScope, node *functionNode) {
        functionNode->parent->parent->type != dot &&
        functionNode->parent->children[1] == functionNode)) {
 
-    fprintf(stderr, "looking for free function %s in scope %s ...\n", name,
-            scopePtr->scopeName);
+    fprintf(debugging_info, "looking for free function %s in scope %s ...\n",
+            name, scopePtr->scopeName);
     TableEntry *funcEntry = get_entry(scopePtr, name);
 
     if (funcEntry->tableType == FUNCDEF_ENTRY) {
-      fprintf(stderr, "found function %s in scope %s, returning ... \n", name,
-              scopePtr->scopeName);
+      fprintf(debugging_info, "found function %s in scope %s, returning ... \n",
+              name, scopePtr->scopeName);
       return funcEntry;
     } else {
       return NULL;
     }
   } else {
 
-    scopePtr = functionNode->scope;
+    while (scopePtr && scopePtr->type != GLOBAL_SCOPE)
+      scopePtr = scopePtr->parentScope;
 
-    while (scopePtr && scopePtr->type != GLOBAL_SCOPE) {
-      TableEntry *funcEntry = get_entry(scopePtr, name);
+    TypeInfo class_type_info;
 
-      if (funcEntry->tableType == FUNCDEF_ENTRY)
-        return funcEntry;
+    if (functionNode->parent->children[0] == functionNode) {
+      class_type_info = get_type_expression(functionNode->parent->children[1],
+                                            errors, functionNode->scope);
+    } else {
+      class_type_info =
+          get_type_expression(functionNode->parent->parent->children[1], errors,
+                              functionNode->scope);
+    }
 
-      if (scopePtr->type == CLASS_SCOPE) {
-        TableEntry *classEntry =
-            get_entry(scopePtr->parentScope, scopePtr->scopeName);
+    fprintf(debugging_info, "Name of class: %s name of member: %s\n",
+            class_type_info.typeString, name);
 
-        if (classEntry->tableType == CLASS_ENTRY &&
-            classEntry->data.classEntry.inheritsCount > 0 &&
-            classEntry->data.classEntry.inheritedScopes) {
+    TableEntry *class_entry = get_entry(scopePtr, class_type_info.typeString);
+    if (class_entry->tableType == CLASS_ENTRY) {
+      fprintf(debugging_info, "The name of the class entry is %s ...\n",
+              class_entry->data.classEntry.name);
+      scopePtr = class_entry->data.classEntry.scope;
+      TableEntry *func_entry = get_entry(scopePtr, name);
+      if (func_entry->tableType == FUNCDEF_ENTRY) {
+        fprintf(debugging_info, "Found function entry!\n");
+        return func_entry;
+      }
 
-          ScopeStack *stack = init_scope_stack();
+      if (class_entry->tableType == CLASS_ENTRY &&
+          class_entry->data.classEntry.inheritsCount &&
+          class_entry->data.classEntry.inheritedScopes) {
+        ScopeStack *stack = init_scope_stack();
 
-          for (int i = 0; i < classEntry->data.classEntry.inheritsCount; i++) {
-            push_scope(classEntry->data.classEntry.inheritedScopes[i], stack);
-          }
+        for (int i = 0; i < class_entry->data.classEntry.inheritsCount; i++)
+          push_scope(class_entry->data.classEntry.inheritedScopes[i], stack);
 
-          while (stack->size > 0) {
-            Scope *current_scope = pop_scope(stack);
+        while (stack->size > 0) {
+          Scope *current = pop_scope(stack);
 
-            funcEntry = get_entry(current_scope, name);
+          func_entry = get_entry(current, name);
+          if (func_entry->tableType == FUNCDEF_ENTRY)
+            return func_entry;
 
-            if (funcEntry->tableType == FUNCDEF_ENTRY)
-              return funcEntry;
+          class_entry = get_entry(current->parentScope, current->scopeName);
 
-            classEntry =
-                get_entry(current_scope->parentScope, current_scope->scopeName);
-
-            if (classEntry && classEntry->tableType == CLASS_ENTRY &&
-                classEntry->data.classEntry.inheritsCount &&
-                classEntry->data.classEntry.inheritedScopes) {
-              for (int i = 0; i < classEntry->data.classEntry.inheritsCount;
-                   i++) {
-                push_scope(classEntry->data.classEntry.inheritedScopes[i],
-                           stack);
-              }
+          if (class_entry->tableType == CLASS_ENTRY &&
+              class_entry->data.classEntry.inheritsCount &&
+              class_entry->data.classEntry.inheritedScopes) {
+            for (int i = 0; i < class_entry->data.classEntry.inheritsCount;
+                 i++) {
+              push_scope(class_entry->data.classEntry.inheritedScopes[i],
+                         stack);
             }
           }
         }
       }
-      scopePtr = scopePtr->parentScope;
     }
     return NULL;
   }
-  return NULL;
 }
 
+TableEntry *get_function_definition_entry(node *astnode, Scope *global_scope,
+                                          ErrorArray *errors, FILE *out) {
+
+  const char *name = get_name(astnode);
+  fprintf(debugging_info,
+          "In get_function_definition_entry looking for function %s ... \n",
+          name);
+  Scope *scopePtr = global_scope;
+
+  while (scopePtr && scopePtr->type != GLOBAL_SCOPE)
+    scopePtr = scopePtr->parentScope;
+
+  if (scopePtr->type == GLOBAL_SCOPE) {
+    fprintf(debugging_info, "GLOBAL SCOPE FOUND !\n");
+  } else {
+    fprintf(debugging_info, "PROBLEM SCOPE IS NOW NULL!!!\n");
+  }
+
+  /*Method need to access the class.
+   */
+  if (astnode->parent->type == impldef) {
+    fprintf(debugging_info, "looking for a member function %s ... \n", name);
+    const char *class_name = get_name(astnode->parent);
+    fprintf(debugging_info, "the name of the class is %s ... \n", class_name);
+    TableEntry *class_entry = get_entry(scopePtr, class_name);
+    if (class_entry->tableType == CLASS_ENTRY) {
+      TableEntry *func_entry =
+          get_entry(class_entry->data.classEntry.scope, name);
+      if (func_entry->tableType == FUNCDEF_ENTRY)
+        return func_entry;
+
+      if (class_entry->tableType == CLASS_ENTRY &&
+          class_entry->data.classEntry.inheritsCount &&
+          class_entry->data.classEntry.inheritedScopes) {
+        ScopeStack *stack = init_scope_stack();
+        while (stack->size > 0) {
+          Scope *current = pop_scope(stack);
+          func_entry = get_entry(current, name);
+
+          if (func_entry->tableType == FUNCDEF_ENTRY)
+            return func_entry;
+
+          class_entry = get_entry(current->parentScope, current->scopeName);
+
+          if (class_entry && class_entry->tableType == CLASS_ENTRY &&
+              class_entry->data.classEntry.inheritedScopes &&
+              class_entry->data.classEntry.inheritsCount) {
+            for (int i = 0; i < class_entry->data.classEntry.inheritsCount;
+                 i++) {
+              push_scope(class_entry->data.classEntry.inheritedScopes[i],
+                         stack);
+            }
+          }
+        }
+      }
+    }
+    return NULL; // function definition entry could not be found.
+  } else {
+    // We only need to search in the global scope.
+
+    TableEntry *func_entry = get_entry(scopePtr, name);
+    if (func_entry->tableType == FUNCDEF_ENTRY)
+      return func_entry;
+    else
+      return NULL;
+  }
+}
 /*
  * This function will be handleing the function calls as they are traversed.
  *
- * When we arrive at a function call we do the following we store the parameters
- * in registers(1,2,..13 so max 13 parameters).
+ * When we arrive at a function call we do the following we store the
+ * parameters in registers(1,2,..13 so max 13 parameters).
  *
  * we jump to that functions label.
  *
@@ -1390,11 +1550,27 @@ TableEntry *get_function_entry(Scope *currentScope, node *functionNode) {
 void handle_function_call(node *astnode, ErrorArray *errors, Scope *globalScope,
                           FILE *out) {
 
-  const char *name = get_name(astnode);
-  TableEntry *funcEntry = get_function_entry(astnode->scope, astnode);
+  char name[128];
+  TableEntry *funcEntry = get_function_entry(astnode->scope, astnode, errors);
+  if (funcEntry == NULL) {
+    fprintf(debugging_info, "PROBLEM!!!\n");
+    return;
+  }
+
   int params_count = funcEntry->data.funcEntry.numfparams;
   node *paramsNode = astnode->children[0];
 
+  if ((astnode->parent->type == dot &&
+       astnode->parent->children[0] == astnode) ||
+      (astnode->parent->parent->type == dot && astnode->parent->type == dot &&
+       astnode->parent->children[1] == astnode)) {
+    snprintf(name, sizeof(name), "%s_%s", funcEntry->scope->scopeName,
+             get_name(astnode));
+    fprintf(debugging_info, "created member function label %s ... \n", name);
+  } else {
+    snprintf(name, sizeof(name), "%s", get_name(astnode));
+    fprintf(debugging_info, "created free function label %s ... \n", name);
+  }
   // We load the values of the parameters into the heap portion that we have
   // reserved for this purpose
 
@@ -1420,18 +1596,14 @@ void handle_function_call(node *astnode, ErrorArray *errors, Scope *globalScope,
   free_register(parameter_value_register);
   free_register(temp_register);
 
-  int sizeOfFunction = get_function_size(
-      astnode,
-      errors); // Note that we have a function that gets the size of a function.
+  int sizeOfFunction =
+      get_function_size(astnode,
+                        errors); // Note that we have a function that gets the
+                                 // size of a function.
 
   fprintf(out, "addi r14,r14,-%d\n", sizeOfFunction);
   fprintf(out, "jl r15,%s\n", name);
   fprintf(out, "addi r14,r14,%d\n", sizeOfFunction);
-
-  // Could we handle the loading of the function parameters here directly
-  // instead of inside of the function definition? NO! because the jl will
-  // change the value of the pc and we have not incremented the stack frame
-  // pointer at this point in time!
 }
 
 /*
@@ -1446,6 +1618,7 @@ void handle_function_call(node *astnode, ErrorArray *errors, Scope *globalScope,
 void code_gen_pass(node *root, Scope *globalScope, FILE *out,
                    ErrorArray *errors) {
 
+  debugging_info = fopen("current_compile_debug.log", "w+");
   semantic_stack *stack = init_stack();
   push_node(root, stack);
 
@@ -1460,9 +1633,9 @@ void code_gen_pass(node *root, Scope *globalScope, FILE *out,
 
     if (current_scope->type == FUNCTION_SCOPE && current->scope &&
         current->scope != current_scope) {
-      // We need to jump back to the correct stack frame location, to do this we
-      // get the address that is stored, at the top of the stack frame in the
-      // first 4 bytes (word).
+      // We need to jump back to the correct stack frame location, to do this
+      // we get the address that is stored, at the top of the stack frame in
+      // the first 4 bytes (word).
 
       current_scope = current->scope;
       fprintf(out, "lw r15, 0(r14)\n");
@@ -1477,23 +1650,50 @@ void code_gen_pass(node *root, Scope *globalScope, FILE *out,
       const char *name = get_name(current);
       char buffer[64];
 
-      snprintf(buffer, sizeof(buffer), "%s", name);
+      /*
+       * Here we encounter problem that we do not get the correct class table
+       * entry, this is what we need to go into if we are a class definition.
+       *
+       * We need to get the class name, we append that to the label that we are
+       * creating for the function or else we will get naming conflicts.
+       */
+      TableEntry *func_entry =
+          get_function_definition_entry(current, current_scope, errors, out);
+
+      print_entry(func_entry, debugging_info);
+
+      if (current->parent->type == impldef) {
+        fprintf(debugging_info, "CLASS FUNCTION DEFINITION ... \n");
+
+        const char *class_name = get_name(current->parent);
+        Scope *scopePtr = current->scope;
+
+        while (scopePtr && scopePtr->type != GLOBAL_SCOPE)
+          scopePtr = scopePtr->parentScope;
+
+        snprintf(buffer, sizeof(buffer), "%s_%s", class_name, name);
+        fprintf(debugging_info, "created label %s  for class function %s.\n",
+                buffer, name);
+      } else {
+        snprintf(buffer, sizeof(buffer), "%s", name);
+      }
 
       fprintf(out, "align\n%s\n", buffer);
       fprintf(out, "sw 0(r14),r15\n");
 
-      TableEntry *funcEntry = get_function_entry(current->scope, current);
+      if (!func_entry) {
+        fprintf(debugging_info, "ERROR NULL VALUE RETURNED!!\n");
+      }
 
       Scope *function_scope =
-          funcEntry->data.funcEntry.scope; // We get the scope of the function.
+          func_entry->data.funcEntry.scope; // This is causing a probblem ...
+      fprintf(debugging_info, "The functions name is %s it's scope is %s...\n",
+              func_entry->data.funcEntry.name, func_entry->scope->scopeName);
 
-      fprintf(stderr, "The functions name is %s it's scope is %s...\n",
-              funcEntry->data.funcEntry.name, funcEntry->scope->scopeName);
+      fprintf(debugging_info, "entry %s has %d parameters \n", name,
+              func_entry->data.funcEntry.numfparams);
 
-      fprintf(stderr, "entry %s has %d parameters \n", name,
-              funcEntry->data.funcEntry.numfparams);
-
-      if (funcEntry->data.funcEntry.numfparams > 0) {
+      if (func_entry->data.funcEntry.numfparams > 0) {
 
         const char *temp_register = get_next_free_register();
         const char *value_register = get_next_free_register();
@@ -1505,11 +1705,11 @@ void code_gen_pass(node *root, Scope *globalScope, FILE *out,
          * so when we retrieve them it is essentially the same order that they
          * were inserted.
          */
-        for (int i = 0; i < funcEntry->data.funcEntry.numfparams; i++) {
+        for (int i = 0; i < func_entry->data.funcEntry.numfparams; i++) {
 
           TableEntry *fparam_entry = get_entry(
               function_scope,
-              funcEntry->data.funcEntry.fparamslist[i]->data.fparamEntry.name);
+              func_entry->data.funcEntry.fparamslist[i]->data.fparamEntry.name);
 
           int parameter_offset = fparam_entry->offset;
 
@@ -1565,17 +1765,20 @@ void code_gen_pass(node *root, Scope *globalScope, FILE *out,
 
       node *valueNode = current->children[0];
 
+      if (valueNode->type == dot) {
+        fprintf(debugging_info, "DOT\n");
+      }
       int offset = handle_expression(valueNode, errors, out, globalScope);
-
-      if (offset) { // When the offset that is returned is not zero directly get
-                    // from stack frame.
+      if (offset) { // When the offset that is returned is not zero directly
+                    // get from stack frame.
         fprintf(out, "lw r13, %d(r14)\n", offset);
         fprintf(out, "addi r14,r14,-%d\n", 8);
         fprintf(out, "jl r15, write\n");
         fprintf(out, "addi r14,r14, %d\n", 8);
       } else {
 
-        fprintf(stderr, "LOADING OFFSET FROM LOAD POINTER OF VALUE %d\n",
+        fprintf(debugging_info,
+                " !!!LOADING OFFSET FROM LOAD POINTER OF VALUE !!!!%d\n",
                 index_load_pointer);
         const char *temp = get_next_free_register();
         fprintf(out, "addi %s,r0,%d\n", temp, index_load_pointer);
@@ -1643,6 +1846,8 @@ void code_gen_pass(node *root, Scope *globalScope, FILE *out,
       fprintf(out, "\n\n\n");
     }
   }
+
+  fclose(debugging_info);
   return;
 }
 
@@ -1655,7 +1860,8 @@ void code_gen_pass(node *root, Scope *globalScope, FILE *out,
  * the console.
  *
  * Tomorrow the first thing that we should work on is the print statement and
- * read statements, this is actuall really very simple, during the time we use a
+ * read statements, this is actuall really very simple, during the time we use
+ * a
  *
  * How will we deal with this?
  *
@@ -1709,16 +1915,17 @@ void read_subtroutine(FILE *out) {
  *
  * What is the actual algorithm that we will be usign to print the statement.
  * 1. we store the value in an offset in the stack frame. We will use 4(r14),
- * this makes sense because the first four bytes are for the return address and
- * the next however many bytes will store the integer that we are going to print
- * to the console.
+ * this makes sense because the first four bytes are for the return address
+ * and the next however many bytes will store the integer that we are going to
+ * print to the console.
  */
 void write_subroutine(FILE *out) {
 
   const char *valueRegister =
       get_next_free_register(); // This will be the register that we hold the
   const char *printRegister =
-      get_next_free_register(); // This register we will use to hold the actual
+      get_next_free_register(); // This register we will use to hold the
+                                // actual
   const char *magnitudeRegister = get_next_free_register();
   const char *tempValRegister = get_next_free_register();
 
@@ -1728,8 +1935,8 @@ void write_subroutine(FILE *out) {
   fprintf(out, "sw 4(r14), r13\n");
   fprintf(out, "lw %s, 4(r14)\n", valueRegister);
   fprintf(out, "addi %s,r0,1\n", magnitudeRegister);
-  fprintf(out, "mag\n"); // This part is subroutine that will get the magnitude
-                         // of the integer.
+  fprintf(out, "mag\n"); // This part is subroutine that will get the
+                         // magnitude of the integer.
   fprintf(out, "div %s,%s,%s\n", tempValRegister, valueRegister,
           magnitudeRegister);
   fprintf(out, "cgei %s,%s,10\n", printRegister, tempValRegister);

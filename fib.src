@@ -1,0 +1,25 @@
+func fib(x:integer)->integer{
+    let i: integer;
+    let j: integer;
+
+    if(x<=1) then {
+      return(x);
+      }else{
+        
+        i=fib(x-1);
+        j=fib(x-2); 
+
+        return(i+j);
+        };
+  }
+
+
+func main()->void{
+    let i:integer;
+    i=1;
+
+    while(i<=15){
+        write(fib(i));
+        i=i+1;
+      };
+  }

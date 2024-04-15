@@ -1,10 +1,24 @@
 BEGINNING OF TABLE FOR:  global scope "Global"
 
-Table Entry 1 of "Global":func main -> void : 	size: 8	return type size: 0
+Table Entry 1 of "Global":func main -> void : 	size: 36	return type size: 0
 
 			BEGINNING OF TABLE FOR:  function scope "main"
 
-			Table Entry 1 of "main":var x integer	size: 4	offset: 4
+			Table Entry 1 of "main":tempvar	size: 4	offset: 4	name: temp101	
+
+			Table Entry 2 of "main":var a integer	size: 4	offset: 8
+
+			Table Entry 3 of "main":litval	size: 4	offset: 12	 value: 1	name: literal103
+
+			Table Entry 4 of "main":litval	size: 4	offset: 16	 value: 2	name: literal102
+
+			Table Entry 5 of "main":tempvar	size: 4	offset: 20	name: temp102	
+
+			Table Entry 6 of "main":litval	size: 4	offset: 24	 value: 3	name: literal101
+
+			Table Entry 7 of "main":tempvar	size: 4	offset: 28	name: temp100	
+
+			Table Entry 8 of "main":litval	size: 4	offset: 32	 value: 3	name: literal100
 
 			END OF TABLE FOR SCOPE function scope "main"
 

@@ -1,0 +1,5 @@
+[prog, (null)], 
+[identifier, main], [prog, (null)], 
+[fparams list, (null)], [identifier, main], [prog, (null)], 
+[identifier, x], [fparams list, (null)], [identifier, main], [prog, (null)], 
+[type, x], [fparams list, (null)], [identifier, main], [prog, (null)], 

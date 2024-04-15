@@ -1,0 +1,52 @@
+func main()->void{
+    let i: integer;
+    let j: integer;
+    let k: integer;
+
+    let arr: integer[10][10][10];
+    let counter: integer;
+
+    counter =0;
+    i=0;j=0;k=0;
+
+
+    while(i<10){
+        while(j<10){
+            while(k<10){
+              arr[i][j][k]=i+j+k;
+              k=k+1;
+              counter=counter+1;
+
+              };
+              k=0;
+              j=j+1;
+          };
+          j=0;
+          i=i+1;
+      };
+      write(counter);
+
+      i=0;j=0;k=0;
+
+      while(i<10){
+          while(j<10){
+              while(k<10){
+                write(arr[i][j][k]);
+                  k=k+1;
+                  counter=counter-1;
+                };
+                k=0;
+                j=j+1;
+            };
+            j=0;
+            i=i+1;
+        };
+
+
+
+
+
+
+     
+        write(counter);
+  }

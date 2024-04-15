@@ -12,6 +12,8 @@
 #include "../SemanticAnalyzer/SemanticError.h"
 #include "../parser/AST/AST_SymbolTable.h"
 
+void free_all_registers();
+void reset_index_pointers();
 TableEntry *create_litval_entry(node *astnode);
 
 TableEntry *create_temp_entry(node *astnode, Scope *globalScope,

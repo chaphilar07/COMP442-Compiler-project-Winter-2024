@@ -1,0 +1,130 @@
+BEGINNING OF TABLE FOR:  global scope "Global"
+
+Table Entry 1 of "Global":func main -> void : 	size: 36	return type size: 0
+
+			BEGINNING OF TABLE FOR:  function scope "main"
+
+			Table Entry 1 of "main":litval	size: 4	offset: 4	 value: 0	name: literal116
+
+			Table Entry 2 of "main":litval	size: 4	offset: 8	 value: 1	name: literal123
+
+			Table Entry 3 of "main":litval	size: 0	offset: 12	 value: function value	name: literal118
+
+			Table Entry 4 of "main":litval	size: 4	offset: 12	 value: 0	name: literal117
+
+			Table Entry 5 of "main":litval	size: 4	offset: 16	 value: 1	name: literal122
+
+			Table Entry 6 of "main":litval	size: 0	offset: 20	 value: function value	name: literal112
+
+			Table Entry 7 of "main":litval	size: 4	offset: 20	 value: 1	name: literal119
+
+			Table Entry 8 of "main":litval	size: 4	offset: 24	 value: 1	name: literal114
+
+			Table Entry 9 of "main":litval	size: 0	offset: 28	 value: function value	name: literal121
+
+			Table Entry 10 of "main":litval	size: 4	offset: 28	 value: 0	name: literal113
+
+			Table Entry 11 of "main":litval	size: 0	offset: 32	 value: function value	name: literal115
+
+			Table Entry 12 of "main":litval	size: 4	offset: 32	 value: 0	name: literal120
+
+			END OF TABLE FOR SCOPE function scope "main"
+
+Table Entry 2 of "Global":func test_eq -> void : x integer,y integer	size: 24	return type size: 0
+
+			BEGINNING OF TABLE FOR:  function scope "test_eq"
+
+			Table Entry 1 of "test_eq":fparam x integer Number: 1	size: 4	offset: 4
+
+			Table Entry 2 of "test_eq":litval	size: 4	offset: 12	 value: 1	name: literal101
+
+			Table Entry 3 of "test_eq":fparam y integer Number: 0	size: 4	offset: 8
+
+			Table Entry 4 of "test_eq":tempvar	size: 4	offset: 16	name: temp100	
+
+			Table Entry 5 of "test_eq":litval	size: 4	offset: 20	 value: 0	name: literal100
+
+			END OF TABLE FOR SCOPE function scope "test_eq"
+
+Table Entry 3 of "Global":func test_neq -> integer : x integer,y integer	size: 24	return type size: 4
+
+			BEGINNING OF TABLE FOR:  function scope "test_neq"
+
+			Table Entry 1 of "test_neq":fparam x integer Number: 1	size: 4	offset: 4
+
+			Table Entry 2 of "test_neq":tempvar	size: 4	offset: 12	name: temp101	
+
+			Table Entry 3 of "test_neq":litval	size: 4	offset: 16	 value: 1	name: literal103
+
+			Table Entry 4 of "test_neq":litval	size: 4	offset: 20	 value: 0	name: literal102
+
+			Table Entry 5 of "test_neq":fparam y integer Number: 0	size: 4	offset: 8
+
+			END OF TABLE FOR SCOPE function scope "test_neq"
+
+Table Entry 4 of "Global":func test_gt -> void : x integer,y integer	size: 24	return type size: 0
+
+			BEGINNING OF TABLE FOR:  function scope "test_gt"
+
+			Table Entry 1 of "test_gt":fparam x integer Number: 1	size: 4	offset: 4
+
+			Table Entry 2 of "test_gt":tempvar	size: 4	offset: 12	name: temp104	
+
+			Table Entry 3 of "test_gt":litval	size: 4	offset: 16	 value: 1	name: literal109
+
+			Table Entry 4 of "test_gt":litval	size: 4	offset: 20	 value: 0	name: literal108
+
+			Table Entry 5 of "test_gt":fparam y integer Number: 0	size: 4	offset: 8
+
+			END OF TABLE FOR SCOPE function scope "test_gt"
+
+Table Entry 5 of "Global":func test_geq -> void : x integer,y integer	size: 24	return type size: 0
+
+			BEGINNING OF TABLE FOR:  function scope "test_geq"
+
+			Table Entry 1 of "test_geq":fparam x integer Number: 1	size: 4	offset: 4
+
+			Table Entry 2 of "test_geq":litval	size: 4	offset: 12	 value: 1	name: literal107
+
+			Table Entry 3 of "test_geq":litval	size: 4	offset: 16	 value: 0	name: literal106
+
+			Table Entry 4 of "test_geq":tempvar	size: 4	offset: 20	name: temp103	
+
+			Table Entry 5 of "test_geq":fparam y integer Number: 0	size: 4	offset: 8
+
+			END OF TABLE FOR SCOPE function scope "test_geq"
+
+Table Entry 6 of "Global":func test_leq -> void : x integer,y integer	size: 24	return type size: 0
+
+			BEGINNING OF TABLE FOR:  function scope "test_leq"
+
+			Table Entry 1 of "test_leq":litval	size: 4	offset: 12	 value: 1	name: literal105
+
+			Table Entry 2 of "test_leq":fparam x integer Number: 1	size: 4	offset: 4
+
+			Table Entry 3 of "test_leq":litval	size: 4	offset: 16	 value: 0	name: literal104
+
+			Table Entry 4 of "test_leq":tempvar	size: 4	offset: 20	name: temp102	
+
+			Table Entry 5 of "test_leq":fparam y integer Number: 0	size: 4	offset: 8
+
+			END OF TABLE FOR SCOPE function scope "test_leq"
+
+Table Entry 7 of "Global":func test_lt -> void : x integer,y integer	size: 24	return type size: 0
+
+			BEGINNING OF TABLE FOR:  function scope "test_lt"
+
+			Table Entry 1 of "test_lt":fparam x integer Number: 1	size: 4	offset: 4
+
+			Table Entry 2 of "test_lt":litval	size: 4	offset: 12	 value: 1	name: literal111
+
+			Table Entry 3 of "test_lt":tempvar	size: 4	offset: 16	name: temp105	
+
+			Table Entry 4 of "test_lt":fparam y integer Number: 0	size: 4	offset: 8
+
+			Table Entry 5 of "test_lt":litval	size: 4	offset: 20	 value: 0	name: literal110
+
+			END OF TABLE FOR SCOPE function scope "test_lt"
+
+END OF TABLE FOR SCOPE global scope "Global"
+

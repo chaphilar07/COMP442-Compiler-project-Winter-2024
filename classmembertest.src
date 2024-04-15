@@ -1,0 +1,41 @@
+
+
+struct A{
+    private let a: integer;
+    private let b: integer;
+
+    private func foo()->void;
+    private func bar()->integer;
+  };
+
+  impl A{
+      func foo()->void{
+          write(10);
+        }
+        func bar()->integer{
+            return(1);
+        }
+    }
+
+struct B{
+    private let c: A;
+    private let d: integer;
+
+  };
+
+func main()->void{
+  let x: B;
+  x.c.b=3;
+  x.d=4;
+  x.c.foo(); //Note that we have a problem when we have a dot, we do not call the function for some reason.
+  write(x.c.b);
+  write(x.d);
+
+  let y: B;
+
+  y.d = x.c.b+x.d;
+
+  write(y.d);
+
+
+  }

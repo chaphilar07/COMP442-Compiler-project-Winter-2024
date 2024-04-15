@@ -1,0 +1,6 @@
+func main()->void{
+    let a: integer;
+    a=((1+2)*3)/3; //Operator precedence demonstration, showing that this will compute the correct output.
+    write(a);
+
+  }

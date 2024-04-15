@@ -1,11 +1,29 @@
 align
 main
 sw 0(r14),r15
-addi r14,r14,-4
-jl r15,read
-addi r14,r14,4
-sw 4(r14),r13
-lw r13, 4(r14)
+addi r1,r0,3 
+sw 32(r14),r1
+addi r1,r0,3 
+sw 24(r14),r1
+addi r1,r0,2 
+sw 16(r14),r1
+addi r1,r0,1 
+sw 12(r14),r1
+lw r2,16(r14)
+lw r1, 12(r14)
+add r3,r1,r2
+sw 20(r14),r3
+lw r2,24(r14)
+lw r1, 20(r14)
+mul r3,r1,r2
+sw 4(r14),r3
+lw r2,32(r14)
+lw r1, 4(r14)
+div r3,r1,r2
+sw 28(r14),r3
+lw r1,28(r14)
+sw 8(r14),r1
+lw r13, 8(r14)
 addi r14,r14,-8
 jl r15, write
 addi r14,r14, 8
@@ -16,9 +34,9 @@ jr r15
 
 entry
 addi r14,r0,topaddr
-addi r14,r14,-8
+addi r14,r14,-36
 jl r15,main
-addi r14,r14,8
+addi r14,r14,36
 hlt
 
 

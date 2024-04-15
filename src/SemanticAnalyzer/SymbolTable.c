@@ -23,6 +23,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+FILE *symbol_table_debug = NULL;
+
 int get_class_size(const char *className, Scope *globalScope) {
 
   Scope *scopePtr = globalScope;
@@ -194,7 +196,7 @@ const char *get_scope_type_string(ScopeType type) {
 
 unsigned int FNV1a_hash(const char *str, int size) {
   if (!str) {
-    fprintf(stderr, "ERROR FNV-1a(): Cannot hash a NULL string.\n");
+    fprintf(symbol_table_debug, "ERROR FNV-1a(): Cannot hash a NULL string.\n");
     return 0;
   }
   unsigned int hash = 2166136261U; // FNV-1a offset basis
@@ -211,18 +213,21 @@ const char *get_entry_type_string(EntryType type);
 // This is the function that will insert the entry into the hash table.
 int insert_entry(Scope *scope, TableEntry *entry) {
   if (!scope) {
-    fprintf(stderr, "ERROR - insert_entry(): Cannot insert entry scope has not "
-                    "been allocated.\n");
+    fprintf(symbol_table_debug,
+            "ERROR - insert_entry(): Cannot insert entry scope has not "
+            "been allocated.\n");
     return -1;
   }
   if (!scope->entries) {
-    fprintf(stderr, "ERROR - insert_entry(): Cannt insert entry the table has "
-                    "not been allocated\n");
+    fprintf(symbol_table_debug,
+            "ERROR - insert_entry(): Cannt insert entry the table has "
+            "not been allocated\n");
     return -1;
   }
   if (!entry) {
-    fprintf(stderr, "ERROR - insert_entry(): Cannot insert an entry in the "
-                    "table, entry does not exist\n");
+    fprintf(symbol_table_debug,
+            "ERROR - insert_entry(): Cannot insert an entry in the "
+            "table, entry does not exist\n");
     return -1;
   }
 
@@ -281,14 +286,16 @@ const char *get_vis_string(varvis vis) {
 TableEntry *delete_entry(Scope *scope, const char *key) {
 
   if (!scope) {
-    fprintf(stderr, "ERROR - insert_entry(): Cannot insert entry scope has not "
-                    "been allocated.\n");
+    fprintf(symbol_table_debug,
+            "ERROR - insert_entry(): Cannot insert entry scope has not "
+            "been allocated.\n");
     return NULL;
   }
 
   if (!scope->entries) {
-    fprintf(stderr, "ERROR - delete_entry(): Cannot delete entry the table has "
-                    "not been allocated\n");
+    fprintf(symbol_table_debug,
+            "ERROR - delete_entry(): Cannot delete entry the table has "
+            "not been allocated\n");
     return NULL;
   }
 
@@ -302,15 +309,16 @@ TableEntry *delete_entry(Scope *scope, const char *key) {
 
 TableEntry *get_entry(Scope *scope, const char *key) {
   if (!scope) {
-    fprintf(stderr, "ERROR - get_entry(): Cannot get entry the scope has not "
-                    "been allocated\n");
+    fprintf(symbol_table_debug,
+            "ERROR - get_entry(): Cannot get entry the scope has not "
+            "been allocated\n");
     return NULL;
   }
 
   unsigned int hash = FNV1a_hash(key, SIZE);
 
   if (&(scope->entries[hash]) == NULL) {
-    fprintf(stderr,
+    fprintf(symbol_table_debug,
             "No entry has been inserted into the table with key %s, exiting \n",
             key);
     return NULL;
@@ -323,8 +331,9 @@ TableEntry *get_entry(Scope *scope, const char *key) {
 ScopeStack *init_scope_stack() {
   ScopeStack *stack = malloc(sizeof(ScopeStack));
   if (!stack) {
-    fprintf(stderr, "ERROR - init_scope_stack(): Cannot create a new scope "
-                    "stack exiting");
+    fprintf(symbol_table_debug,
+            "ERROR - init_scope_stack(): Cannot create a new scope "
+            "stack exiting");
     return NULL;
   }
 
@@ -336,8 +345,9 @@ ScopeStack *init_scope_stack() {
 // This pushes a scope onto the current scope.
 int push_scope(Scope *scope, ScopeStack *stack) {
   if (!stack) {
-    fprintf(stderr, "ERROR - push_scope(): Cannot push a scope onto the stack, "
-                    "stack is NULL, terminating\n");
+    fprintf(symbol_table_debug,
+            "ERROR - push_scope(): Cannot push a scope onto the stack, "
+            "stack is NULL, terminating\n");
     return -1;
   }
 
@@ -356,14 +366,16 @@ int push_scope(Scope *scope, ScopeStack *stack) {
 // Pops a node off of the top of the  stack.
 Scope *pop_scope(ScopeStack *stack) {
   if (!stack) {
-    fprintf(stderr, "ERROR - pop_scope(): Cannot pop node off of stack that "
-                    "has not been allocated memory. \n");
+    fprintf(symbol_table_debug,
+            "ERROR - pop_scope(): Cannot pop node off of stack that "
+            "has not been allocated memory. \n");
     return NULL;
   }
 
   if (stack->head == NULL && stack->size <= 0) {
-    fprintf(stderr, "ERROR - pop_scope(): Cannot pop a node off the stack "
-                    "stack is already empty.\n");
+    fprintf(symbol_table_debug,
+            "ERROR - pop_scope(): Cannot pop a node off the stack "
+            "stack is already empty.\n");
     return NULL;
   }
 
@@ -380,8 +392,9 @@ Scope *pop_scope(ScopeStack *stack) {
 // head of the stack, by using peek.
 Scope *peek_scope(ScopeStack *stack) {
   if (!stack) {
-    fprintf(stderr, "ERROR - pop_scope(): Cannot pop node off of stack that "
-                    "has not been allocated memory. \n");
+    fprintf(symbol_table_debug,
+            "ERROR - pop_scope(): Cannot pop node off of stack that "
+            "has not been allocated memory. \n");
     return NULL;
   }
 
@@ -400,8 +413,9 @@ Scope *init_scope(Scope *parentScope, const char *scopeName, ScopeType type) {
   Scope *scope = malloc(sizeof(Scope));
 
   if (!scope) {
-    fprintf(stderr, "ERROR - init_scope(): Cannot allocate memory for a new "
-                    "scope terminating");
+    fprintf(symbol_table_debug,
+            "ERROR - init_scope(): Cannot allocate memory for a new "
+            "scope terminating");
     return NULL;
   }
 
@@ -416,7 +430,7 @@ Scope *init_scope(Scope *parentScope, const char *scopeName, ScopeType type) {
   }
 
   if (!scope->entries) {
-    fprintf(stderr,
+    fprintf(symbol_table_debug,
             "ERROR - init_scope(): Cannot allocate memory for the symbol table "
             "of scope %s, exiting",
             scope->scopeName);
@@ -441,13 +455,13 @@ Scope *init_scope(Scope *parentScope, const char *scopeName, ScopeType type) {
 // This function will get the name from a variable, struct or impl node.
 const char *get_name(node *astnode) {
   if (!astnode) {
-    fprintf(stderr,
+    fprintf(symbol_table_debug,
             "ERROR - get_name(): Cannot get name of null node, terminating\n");
     return NULL;
   }
 
   if (astnode->numchildren <= 0) {
-    fprintf(stderr,
+    fprintf(symbol_table_debug,
             "ERROR - get_name(): Node does not have a name, terminating\n");
     return NULL;
   }
@@ -482,8 +496,9 @@ const char *get_type_from_enum(LangType type) {
 LangType get_type_enum(node *astnode) {
 
   if (!astnode) {
-    fprintf(stderr, "ERROR - get_type_enum(): Cannot get name of null node, "
-                    "terminating\n");
+    fprintf(symbol_table_debug,
+            "ERROR - get_type_enum(): Cannot get name of null node, "
+            "terminating\n");
     return 0;
   }
   int numdims = astnode->numchildren;
@@ -520,14 +535,16 @@ const char *get_entry_type_string(EntryType type) {
 const char *get_type_string(node *astnode) {
 
   if (!astnode) {
-    fprintf(stderr, "ERROR - get_tyep_string(): Cannot get name of null node, "
-                    "terminating\n");
+    fprintf(symbol_table_debug,
+            "ERROR - get_tyep_string(): Cannot get name of null node, "
+            "terminating\n");
     return NULL;
   }
 
   if (astnode->numchildren <= 0) {
-    fprintf(stderr, "ERROR - get_type_string(): Node does not have a name, "
-                    "terminating\n");
+    fprintf(symbol_table_debug,
+            "ERROR - get_type_string(): Node does not have a name, "
+            "terminating\n");
     return NULL;
   }
 
@@ -545,8 +562,9 @@ const char *get_type_string(node *astnode) {
 // fparam type.
 int *get_arraydims(node *astnode) {
   if (!astnode) {
-    fprintf(stderr, "ERROR - get_arraydims(): Cannot get arraydims node is "
-                    "null, terminating\n");
+    fprintf(symbol_table_debug,
+            "ERROR - get_arraydims(): Cannot get arraydims node is "
+            "null, terminating\n");
     return NULL;
   }
 
@@ -575,8 +593,9 @@ int *get_arraydims(node *astnode) {
 int get_number_of_dims(node *astnode) {
 
   if (!astnode) {
-    fprintf(stderr, "ERROR - get_arraydims(): Cannot get arraydims node is "
-                    "null, terminating\n");
+    fprintf(symbol_table_debug,
+            "ERROR - get_arraydims(): Cannot get arraydims node is "
+            "null, terminating\n");
     return -1;
   }
 
@@ -592,8 +611,9 @@ int get_number_of_dims(node *astnode) {
 varvis get_vis(node *astnode) {
 
   if (!astnode) {
-    fprintf(stderr, "ERROR - get_arraydims(): Cannot get arraydims node is "
-                    "null, terminating\n");
+    fprintf(symbol_table_debug,
+            "ERROR - get_arraydims(): Cannot get arraydims node is "
+            "null, terminating\n");
     return -1;
   }
 
@@ -610,8 +630,9 @@ varvis get_vis(node *astnode) {
 
 void print_entry(TableEntry *entry, FILE *out) {
   if (!entry) {
-    fprintf(stderr, "ERROR - get_entry_string(): Cannot print the entry the "
-                    "entry is null, exiting\n");
+    fprintf(symbol_table_debug,
+            "ERROR - get_entry_string(): Cannot print the entry the "
+            "entry is null, exiting\n");
     return;
   }
 
@@ -709,14 +730,16 @@ void print_entry(TableEntry *entry, FILE *out) {
 TableEntry *create_fparam_entry(node *astnode, Scope *currentScope,
                                 int parameterNumber) {
   if (!astnode) {
-    fprintf(stderr, "ERROR - get_arraydims(): Cannot get arraydims node is "
-                    "null, terminating\n");
+    fprintf(symbol_table_debug,
+            "ERROR - get_arraydims(): Cannot get arraydims node is "
+            "null, terminating\n");
     return NULL;
   }
   TableEntry *entry = malloc(sizeof(TableEntry));
   if (!entry) {
-    fprintf(stderr, "ERROR - create_fparam_entry(): Cannot allocate memory for "
-                    "fparam entry, exiting.\n");
+    fprintf(symbol_table_debug,
+            "ERROR - create_fparam_entry(): Cannot allocate memory for "
+            "fparam entry, exiting.\n");
     return NULL;
   }
 
@@ -724,7 +747,8 @@ TableEntry *create_fparam_entry(node *astnode, Scope *currentScope,
   entry->scope = currentScope;
   entry->tableType = FPARAM_ENTRY;
   entry->data.fparamEntry.type = get_type_info(astnode);
-  fprintf(stderr, "assigning a type string of %s to fparam node %s ...\n",
+  fprintf(symbol_table_debug,
+          "assigning a type string of %s to fparam node %s ...\n",
           entry->data.fparamEntry.type.typeString, get_name(astnode));
   entry->data.fparamEntry.name = get_name(astnode);
   entry->data.fparamEntry.id = parameterNumber;
@@ -769,8 +793,9 @@ TableEntry *create_fparam_entry(node *astnode, Scope *currentScope,
 TableEntry **get_fparams_list(node *astnode, Scope *currentscope) {
 
   if (!astnode) {
-    fprintf(stderr, "ERROR - get_arraydims(): Cannot get arraydims node is "
-                    "null, terminating\n");
+    fprintf(symbol_table_debug,
+            "ERROR - get_arraydims(): Cannot get arraydims node is "
+            "null, terminating\n");
     return NULL;
   }
 
@@ -802,8 +827,9 @@ TableEntry **get_fparams_list(node *astnode, Scope *currentscope) {
 int get_fparam_count(node *astnode) {
 
   if (!astnode) {
-    fprintf(stderr, "ERROR - get_arraydims(): Cannot get arraydims node is "
-                    "null, terminating\n");
+    fprintf(symbol_table_debug,
+            "ERROR - get_arraydims(): Cannot get arraydims node is "
+            "null, terminating\n");
     return -1;
   }
 
@@ -820,15 +846,17 @@ TableEntry *create_variable_entry(node *astnode, Scope *currentScope,
                                   ErrorArray *errors) {
 
   if (!astnode) {
-    fprintf(stderr, "ERROR - get_arraydims(): Cannot get arraydims node is "
-                    "null, terminating\n");
+    fprintf(symbol_table_debug,
+            "ERROR - get_arraydims(): Cannot get arraydims node is "
+            "null, terminating\n");
     return NULL;
   }
 
   TableEntry *entry = malloc(sizeof(TableEntry));
   if (!entry) {
-    fprintf(stderr, "ERROR - create_variable_entry(): Cannot allocate memory "
-                    "for new entry exiting\n");
+    fprintf(symbol_table_debug,
+            "ERROR - create_variable_entry(): Cannot allocate memory "
+            "for new entry exiting\n");
     return NULL;
   }
 
@@ -886,16 +914,18 @@ TableEntry *create_variable_entry(node *astnode, Scope *currentScope,
 TableEntry *create_func_entry(node *astnode, Scope *scope) {
 
   if (!astnode) {
-    fprintf(stderr, "ERROR - get_arraydims(): Cannot get arraydims node is "
-                    "null, terminating\n");
+    fprintf(symbol_table_debug,
+            "ERROR - get_arraydims(): Cannot get arraydims node is "
+            "null, terminating\n");
     return NULL;
   }
 
   TableEntry *entry = malloc(sizeof(TableEntry));
 
   if (!entry) {
-    fprintf(stderr, "ERROR - create_func_entry(): Cannot allocate function "
-                    "entry, exiting\n");
+    fprintf(symbol_table_debug,
+            "ERROR - create_func_entry(): Cannot allocate function "
+            "entry, exiting\n");
     return NULL;
   }
 
@@ -922,7 +952,7 @@ TableEntry *create_func_entry(node *astnode, Scope *scope) {
   entry->data.funcEntry.fparamslist = get_fparams_list(astnode, scope);
   entry->data.funcEntry.numfparams = get_fparam_count(astnode);
   fprintf(
-      stderr,
+      symbol_table_debug,
       "function %s has been assigned %d parameters in its definition ... \n",
       entry->data.funcEntry.name, entry->data.funcEntry.numfparams);
 
@@ -968,13 +998,14 @@ TableEntry *create_class_entry(node *astnode, Scope *currentScope,
                                ErrorArray *arr) {
 
   if (!astnode) {
-    fprintf(stderr, "ERROR - create_class_entry(): Cannot create a class entry "
-                    "null node, exiting\n");
+    fprintf(symbol_table_debug,
+            "ERROR - create_class_entry(): Cannot create a class entry "
+            "null node, exiting\n");
     return NULL;
   }
 
   if (astnode->type != structdecl) {
-    fprintf(stderr,
+    fprintf(symbol_table_debug,
             "ERROR - create_class_entry: Cannot create class node for node of "
             "type %s , terminating\n",
             get_node_type_string(astnode));
@@ -983,8 +1014,9 @@ TableEntry *create_class_entry(node *astnode, Scope *currentScope,
 
   TableEntry *entry = malloc(sizeof(TableEntry));
   if (!entry) {
-    fprintf(stderr, "ERROR - create_class_entry(): Cannot allocate memory for "
-                    "a new class entry exiting.\n");
+    fprintf(symbol_table_debug,
+            "ERROR - create_class_entry(): Cannot allocate memory for "
+            "a new class entry exiting.\n");
     return NULL;
   }
 
@@ -1056,6 +1088,7 @@ TableEntry *create_class_entry(node *astnode, Scope *currentScope,
 
 Scope *create_program_scope(node *root, void *arr) {
 
+  symbol_table_debug = fopen("symbol_table_debug.log", "w+");
   ErrorArray *errors = (ErrorArray *)arr;
 
   // We will use a typecast not the safest thing to do but it will work for
@@ -1151,7 +1184,8 @@ Scope *create_program_scope(node *root, void *arr) {
       insert_entry(current_scope, entry);
       current->entryName = entry->data.litval.id;
 
-      fprintf(stderr, "CREATED LITERAL VAL ENTRY %s WITH VALUE %s \n",
+      fprintf(symbol_table_debug,
+              "CREATED LITERAL VAL ENTRY %s WITH VALUE %s \n",
               current->entryName, current->value);
     }
     if ((current->type == multop || current->type == addop ||
@@ -1188,7 +1222,7 @@ Scope *create_program_scope(node *root, void *arr) {
     if (current->type ==
         funccall) { // We create symbol table entries for the functions.
       TableEntry *litvalentry = (TableEntry *)malloc(sizeof(TableEntry));
-      fprintf(stderr,
+      fprintf(symbol_table_debug,
               "CRREATING A FUNCTION LITERAL VALUE FOR %s the parent of foo is "
               "a node of type %s  ... \n",
               get_name(current), get_type_string(current->parent));
@@ -1199,7 +1233,7 @@ Scope *create_program_scope(node *root, void *arr) {
       litvalentry->data.litval.value = "function value";
       insert_entry(current_scope, litvalentry);
 
-      fprintf(stderr,
+      fprintf(symbol_table_debug,
               "INSERTED FUNCTION LITERAL VALUE %s INTO SCOPE %s WITH ID NUMBER "
               "%s ...\n",
               get_name(current), current_scope->scopeName,
@@ -1385,9 +1419,6 @@ Scope *create_program_scope(node *root, void *arr) {
               parent,
               current); // This function removes the child from the tree.
 
-          FILE *temp = fopen("dottest.txt", "w+");
-          print_tree_dot(root, temp);
-
           insert_error(errors, create_error(name, err203, line));
         }
       }
@@ -1438,9 +1469,11 @@ Scope *create_program_scope(node *root, void *arr) {
    * Perform the second pass and then calcuate the size and offsets for the code
    * generation.
    */
+
   second_pass_type_check(root, globalScope,
                          errors); // Now this will be working correctly.
 
+  fclose(symbol_table_debug);
   return globalScope;
 }
 
@@ -1463,11 +1496,12 @@ Scope *create_program_scope(node *root, void *arr) {
 void print_scope(Scope *scope, FILE *out, unsigned int tabs) {
 
   if (!scope) {
-    fprintf(stderr, "ERROR - print_scope(): Scope passed is null exiting\n");
+    fprintf(symbol_table_debug,
+            "ERROR - print_scope(): Scope passed is null exiting\n");
     return;
   }
   if (!out) {
-    fprintf(stderr,
+    fprintf(symbol_table_debug,
             "ERROR - print_scope(): File passed has not been opened exiting\n");
     return;
   }
@@ -1514,14 +1548,15 @@ void print_scope(Scope *scope, FILE *out, unsigned int tabs) {
 int free_scopes(Scope *globalScope) {
   if (!globalScope) {
     fprintf(
-        stderr,
+        symbol_table_debug,
         "ERROR - free_scopes(): Cannot free a scope that is null, exiting.\n");
     return -1;
   }
 
   if (globalScope->parentScope != NULL) {
-    fprintf(stderr, "EXPECTING A GLOBAL SCOPE CANNOT CALL THIS FUNCTION ON A "
-                    "NON-GLOBAL SCOPE.\n");
+    fprintf(symbol_table_debug,
+            "EXPECTING A GLOBAL SCOPE CANNOT CALL THIS FUNCTION ON A "
+            "NON-GLOBAL SCOPE.\n");
     return -1;
   }
 

@@ -16,6 +16,7 @@
  * This function will check for a function's return type, if the return type is
  * not void we must ensure that there is a return statement and that it is the
  * last statement of the function
+ *
  */
 
 void check_for_return_statement_function(node *astnode, Scope *globalScope,
@@ -31,6 +32,15 @@ void check_for_return_statement_function(node *astnode, Scope *globalScope,
   for (int i = 0; i < number_of_statements; i++) {
     if (astnode->children[0]->children[i]->type == returnnode) {
       return_node = astnode->children[0]->children[i];
+    }
+    if (astnode->children[0]->children[i]->type == ifnode) {
+      node *if_node = astnode->children[0]->children[i];
+
+      for (int j = 0; j < if_node->numchildren; j++) {
+        if (if_node->children[j]->type == returnnode) {
+          return_node = if_node->children[j];
+        }
+      }
     }
   }
 
@@ -390,17 +400,6 @@ TypeInfo get_type_var(node *astnode, ErrorArray *arr, Scope *globalScope) {
       else
         variableTypeInfo = entry->data.varEntry.type;
       TypeInfo curVarTypeInfo;
-
-      if (variableTypeInfo.type == INT_TYPE)
-        fprintf(stderr, "integer\n");
-      else if (variableTypeInfo.type == FLOAT_TYPE)
-        fprintf(stderr, "float\n");
-      else if (variableTypeInfo.type == NONE_TYPE)
-        fprintf(stderr, "none type\n");
-      else if (variableTypeInfo.type == ID_TYPE)
-        fprintf(stderr, "class type\n");
-      else
-        fprintf(stderr, "no type\n");
 
       if (variableTypeInfo.numberofdims >= varDimsCount) {
         for (int i = 0; i < dimlistNode->numchildren; i++) {
