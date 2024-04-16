@@ -1,15 +1,10 @@
-func test()->void{
-    let arr: integer[1];
-    arr[0]=1;
-
-write(arr[0]);
-    if(arr[0]==1) then {
-        write(1);
-      }else{
-          write(0);
-        };
-  }
-
 func main()->void{
-    test();
+  let x: integer;
+  x=1;
+
+  if(x-1 == 0)then{
+     write(1);
+    }else{
+     write(0);
+    };
   }

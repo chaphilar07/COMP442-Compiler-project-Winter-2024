@@ -54,8 +54,8 @@ lw r2, parameterstorage(r1)
 sw 4(r14),r2
 addi r1,r0,1 
 sw 8(r14),r1
-lw r2,4(r14) %s relexpr
 lw r1, 8(r14)
+lw r2,4(r14) %s relexpr
 cge r3,r2,r1
 sw 12(r14), r3
 lw r1,12(r14)
@@ -91,6 +91,8 @@ sw 4(r14),r1
 lw r13,4(r14)
 lw r15, 0(r14)
 jr r15
+lw r15, 0(r14)
+jr r15
 
 
 align
@@ -101,6 +103,8 @@ sw 4(r14),r1
 lw r13,4(r14)
 lw r15, 0(r14)
 jr r15
+lw r15, 0(r14)
+jr r15
 
 
 align
@@ -109,6 +113,8 @@ sw 0(r14),r15
 addi r1,r0,1 
 sw 4(r14),r1
 lw r13,4(r14)
+lw r15, 0(r14)
+jr r15
 lw r15, 0(r14)
 jr r15
 

@@ -1,30 +1,31 @@
 digraph AST {
 node [shape=record];
 node [fontname=Sans];charset= " UTF-8" splines=true splines=spline rankdir =LR
-389[label="prog | (null)"];
-389 -> 388
-389 -> 387
-389 -> 386
-386[label="funcdef list | (null)"];
-386 -> 382
-382[label="funcdef | (null)"];
-382 -> 380
-382 -> 222
-382 -> 221
-382 -> 220
+407[label="prog | (null)"];
+407 -> 406
+407 -> 405
+407 -> 404
+404[label="funcdef list | (null)"];
+404 -> 400
+400[label="funcdef | (null)"];
+400 -> 398
+400 -> 222
+400 -> 221
+400 -> 220
 220[label="identifier | main"];
 221[label="fparams list | (null)"];
 222[label="type | void"];
-380[label="funcbody | (null)"];
-380 -> 379
-380 -> 367
-380 -> 323
-380 -> 317
-380 -> 305
-380 -> 276
-380 -> 268
-380 -> 252
-380 -> 229
+398[label="funcbody | (null)"];
+398 -> 397
+398 -> 379
+398 -> 367
+398 -> 323
+398 -> 317
+398 -> 305
+398 -> 276
+398 -> 268
+398 -> 252
+398 -> 229
 229[label="vardecl | (null)"];
 229 -> 227
 229 -> 225
@@ -208,8 +209,31 @@ node [fontname=Sans];charset= " UTF-8" splines=true splines=spline rankdir =LR
 375 -> 372
 372[label="identifier | d"];
 373[label="dimlist | (null)"];
-387[label="impldeflist | (null)"];
-387 -> 202
+397[label="write | (null)"];
+397 -> 395
+395[label="dot | (null)"];
+395 -> 393
+395 -> 383
+383[label="var | (null)"];
+383 -> 381
+383 -> 380
+380[label="identifier | x"];
+381[label="dimlist | (null)"];
+393[label="dot | (null)"];
+393 -> 391
+393 -> 387
+387[label="var | (null)"];
+387 -> 385
+387 -> 384
+384[label="identifier | c"];
+385[label="dimlist | (null)"];
+391[label="funccall | (null)"];
+391 -> 389
+391 -> 388
+388[label="identifier | bar"];
+389[label="aparams list | (null)"];
+405[label="impldeflist | (null)"];
+405 -> 202
 202[label="impldef | (null)"];
 202 -> 201
 202 -> 191
@@ -241,9 +265,9 @@ node [fontname=Sans];charset= " UTF-8" splines=true splines=spline rankdir =LR
 198[label="return | (null)"];
 198 -> 196
 196[label="intnum | 1"];
-388[label="structdecl list | (null)"];
-388 -> 179
-388 -> 219
+406[label="structdecl list | (null)"];
+406 -> 179
+406 -> 219
 219[label="structdecl | (null)"];
 219 -> 218
 219 -> 211

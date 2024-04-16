@@ -1,0 +1,112 @@
+BEGINNING OF TABLE FOR:  global scope "Global"
+
+Table Entry 1 of "Global":func main -> void : 	size: 4204	return type size: 0
+
+			BEGINNING OF TABLE FOR:  function scope "main"
+
+			Table Entry 1 of "main":litval	size: 4	offset: 4	 value: 10	name: literal1000012
+
+			Table Entry 2 of "main":litval	size: 4	offset: 8	 value: 1	name: literal1000006
+
+			Table Entry 3 of "main":var arr integer[10][10][10]	size: 4000	offset: 12
+
+			Table Entry 4 of "main":litval	size: 4	offset: 4012	 value: 0	name: literal1000019
+
+			Table Entry 5 of "main":var k integer	size: 4	offset: 4016
+
+			Table Entry 6 of "main":tempvar size: 4 offset: 4020	name: temp1000009	
+
+			Table Entry 7 of "main":tempvar size: 4 offset: 4024	name: temp1000014	
+
+			Table Entry 8 of "main":litval	size: 4	offset: 4028	 value: 0	name: literal1000014
+
+			Table Entry 9 of "main":tempvar size: 4 offset: 4032	name: temp1000003	
+
+			Table Entry 10 of "main":tempvar size: 4 offset: 4036	name: temp1000011	
+
+			Table Entry 11 of "main":litval	size: 4	offset: 4040	 value: 1	name: literal1000021
+
+			Table Entry 12 of "main":litval	size: 4	offset: 4044	 value: 0	name: literal1000013
+
+			Table Entry 13 of "main":tempvar size: 4 offset: 4048	name: temp1000006	
+
+			Table Entry 14 of "main":litval	size: 4	offset: 4052	 value: 0	name: literal1000001
+
+			Table Entry 15 of "main":litval	size: 4	offset: 4056	 value: 10	name: literal1000026
+
+			Table Entry 16 of "main":var j integer	size: 4	offset: 4060
+
+			Table Entry 17 of "main":tempvar size: 4 offset: 4064	name: temp1000017	
+
+			Table Entry 18 of "main":litval	size: 4	offset: 4068	 value: 0	name: literal1000015
+
+			Table Entry 19 of "main":tempvar size: 4 offset: 4072	name: temp1000000	
+
+			Table Entry 20 of "main":tempvar size: 4 offset: 4076	name: temp1000010	
+
+			Table Entry 21 of "main":litval	size: 4	offset: 4080	 value: 1	name: literal1000020
+
+			Table Entry 22 of "main":litval	size: 4	offset: 4084	 value: 10	name: literal1000010
+
+			Table Entry 23 of "main":tempvar size: 4 offset: 4088	name: temp1000007	
+
+			Table Entry 24 of "main":litval	size: 4	offset: 4092	 value: 0	name: literal1000000
+
+			Table Entry 25 of "main":litval	size: 4	offset: 4096	 value: 10	name: literal1000025
+
+			Table Entry 26 of "main":litval	size: 4	offset: 4100	 value: 0	name: literal1000005
+
+			Table Entry 27 of "main":tempvar size: 4 offset: 4104	name: temp1000016	
+
+			Table Entry 28 of "main":tempvar size: 4 offset: 4108	name: temp1000001	
+
+			Table Entry 29 of "main":tempvar size: 4 offset: 4112	name: temp1000013	
+
+			Table Entry 30 of "main":litval	size: 4	offset: 4116	 value: 10	name: literal1000011
+
+			Table Entry 31 of "main":tempvar size: 4 offset: 4120	name: temp1000004	
+
+			Table Entry 32 of "main":litval	size: 4	offset: 4124	 value: 0	name: literal1000003
+
+			Table Entry 33 of "main":litval	size: 4	offset: 4128	 value: 10	name: literal1000024
+
+			Table Entry 34 of "main":litval	size: 4	offset: 4132	 value: 1	name: literal1000004
+
+			Table Entry 35 of "main":litval	size: 4	offset: 4136	 value: 1	name: literal1000009
+
+			Table Entry 36 of "main":var i integer	size: 4	offset: 4140
+
+			Table Entry 37 of "main":var counter integer	size: 4	offset: 4144
+
+			Table Entry 38 of "main":tempvar size: 4 offset: 4148	name: temp1000012	
+
+			Table Entry 39 of "main":litval	size: 4	offset: 4152	 value: 1	name: literal1000016
+
+			Table Entry 40 of "main":tempvar size: 4 offset: 4156	name: temp1000005	
+
+			Table Entry 41 of "main":litval	size: 4	offset: 4160	 value: 0	name: literal1000002
+
+			Table Entry 42 of "main":litval	size: 4	offset: 4164	 value: 1	name: literal1000023
+
+			Table Entry 43 of "main":litval	size: 4	offset: 4168	 value: 0	name: literal1000007
+
+			Table Entry 44 of "main":tempvar size: 4 offset: 4172	name: temp1000018	
+
+			Table Entry 45 of "main":litval	size: 4	offset: 4176	 value: 1	name: literal1000018
+
+			Table Entry 46 of "main":litval	size: 4	offset: 4180	 value: 1	name: literal1000008
+
+			Table Entry 47 of "main":tempvar size: 4 offset: 4184	name: temp1000008	
+
+			Table Entry 48 of "main":tempvar size: 4 offset: 4188	name: temp1000015	
+
+			Table Entry 49 of "main":litval	size: 4	offset: 4192	 value: 0	name: literal1000017
+
+			Table Entry 50 of "main":tempvar size: 4 offset: 4196	name: temp1000002	
+
+			Table Entry 51 of "main":litval	size: 4	offset: 4200	 value: 0	name: literal1000022
+
+			END OF TABLE FOR SCOPE function scope "main"
+
+END OF TABLE FOR SCOPE global scope "Global"
+

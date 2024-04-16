@@ -2,45 +2,45 @@ align
 main
 sw 0(r14),r15
 addi r1,r0,1 
-sw 4(r14),r1
-lw r1,4(r14)
-sw 28(r14),r1
-while100
+sw 8(r14),r1
+lw r1,8(r14)
+sw 16(r14),r1
+while1000000
 addi r1,r0,15 
-sw 20(r14),r1
-lw r2,28(r14) %s relexpr
-lw r1, 20(r14)
+sw 28(r14),r1
+lw r1, 28(r14)
+lw r2,16(r14) %s relexpr
 cle r3,r2,r1
-sw 12(r14), r3
-lw r1, 12(r14)
-bz r1,endwhile100
+sw 20(r14), r3
+lw r1, 20(r14)
+bz r1,endwhile1000000
 addi r1,r0,0
-lw r2, 28(r14)
+lw r2, 16(r14)
 sw parameterstorage(r1),r2
 addi r14,r14,-52
 jl r15,fib
 addi r14,r14,52
-sw 16(r14),r13
-lw r13, 16(r14)
+sw 24(r14),r13
+lw r13, 24(r14)
 addi r14,r14,-8
 jl r15, write
 addi r14,r14, 8
 addi r1,r0,0
-lw r2, 28(r14)
+lw r2, 16(r14)
 sw parameterstorage(r1),r2
 addi r14,r14,-52
 jl r15,fib
 addi r14,r14,52
 addi r1,r0,1 
-sw 24(r14),r1
-lw r2,24(r14)
-lw r1, 28(r14)
+sw 4(r14),r1
+lw r2,4(r14)
+lw r1, 16(r14)
 add r3,r1,r2
-sw 8(r14),r3
-lw r1,8(r14)
-sw 28(r14),r1
-j while100
-endwhile100
+sw 12(r14),r3
+lw r1,12(r14)
+sw 16(r14),r1
+j while1000000
+endwhile1000000
 lw r15, 0(r14)
 jr r15
 
@@ -52,19 +52,46 @@ addi r1,r0,0
 lw r2, parameterstorage(r1)
 sw 4(r14),r2
 addi r1,r0,1 
-sw 16(r14),r1
+sw 36(r14),r1
+lw r1, 36(r14)
 lw r2,4(r14) %s relexpr
-lw r1, 16(r14)
 cle r3,r2,r1
-sw 32(r14), r3
-lw r1,32(r14)
-bz r1,else100
+sw 8(r14), r3
+lw r1,8(r14)
+bz r1,else1000000
 lw r13,4(r14)
 lw r15, 0(r14)
 jr r15
-j endif100
-else100
+j endif1000000
+else1000000
 addi r3,r0,1 
+sw 32(r14),r3
+lw r4,32(r14)
+lw r3, 4(r14)
+sub r5,r3,r4
+sw 48(r14),r5
+addi r1,r0,0
+lw r2, 48(r14)
+sw parameterstorage(r1),r2
+addi r14,r14,-52
+jl r15,fib
+addi r14,r14,52
+sw 44(r14),r13
+lw r1,44(r14)
+sw 40(r14),r1
+addi r3,r0,1 
+sw 32(r14),r3
+lw r4,32(r14)
+lw r3, 4(r14)
+sub r5,r3,r4
+sw 48(r14),r5
+addi r1,r0,0
+lw r2, 48(r14)
+sw parameterstorage(r1),r2
+addi r14,r14,-52
+jl r15,fib
+addi r14,r14,52
+addi r3,r0,2 
 sw 12(r14),r3
 lw r4,12(r14)
 lw r3, 4(r14)
@@ -78,8 +105,8 @@ jl r15,fib
 addi r14,r14,52
 sw 24(r14),r13
 lw r1,24(r14)
-sw 36(r14),r1
-addi r3,r0,1 
+sw 16(r14),r1
+addi r3,r0,2 
 sw 12(r14),r3
 lw r4,12(r14)
 lw r3, 4(r14)
@@ -91,41 +118,14 @@ sw parameterstorage(r1),r2
 addi r14,r14,-52
 jl r15,fib
 addi r14,r14,52
-addi r3,r0,2 
-sw 40(r14),r3
-lw r4,40(r14)
-lw r3, 4(r14)
-sub r5,r3,r4
-sw 8(r14),r5
-addi r1,r0,0
-lw r2, 8(r14)
-sw parameterstorage(r1),r2
-addi r14,r14,-52
-jl r15,fib
-addi r14,r14,52
-sw 48(r14),r13
-lw r1,48(r14)
-sw 20(r14),r1
-addi r3,r0,2 
-sw 40(r14),r3
-lw r4,40(r14)
-lw r3, 4(r14)
-sub r5,r3,r4
-sw 8(r14),r5
-addi r1,r0,0
-lw r2, 8(r14)
-sw parameterstorage(r1),r2
-addi r14,r14,-52
-jl r15,fib
-addi r14,r14,52
-lw r2,20(r14)
-lw r1, 36(r14)
+lw r2,16(r14)
+lw r1, 40(r14)
 add r3,r1,r2
-sw 44(r14),r3
-lw r13,44(r14)
+sw 20(r14),r3
+lw r13,20(r14)
 lw r15, 0(r14)
 jr r15
-endif100
+endif1000000
 lw r15, 0(r14)
 jr r15
 

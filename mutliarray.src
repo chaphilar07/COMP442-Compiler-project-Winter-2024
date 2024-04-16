@@ -31,7 +31,12 @@ func main()->void{
       while(i<10){
           while(j<10){
               while(k<10){
-                write(arr[i][j][k]);
+                  if(arr[i][j][k] == i+j+k) then {
+                      write(1);
+                    }else{
+                      write(0);
+                      };
+
                   k=k+1;
                   counter=counter-1;
                 };

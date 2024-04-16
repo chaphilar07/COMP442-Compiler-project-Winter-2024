@@ -2,34 +2,41 @@ align
 main
 sw 0(r14),r15
 addi r1,r0,3 
+sw 24(r14),r1
+lw r1,24(r14)
+sw 12(r14),r1
+addi r1,r0,4 
 sw 20(r14),r1
 lw r1,20(r14)
-sw 8(r14),r1
-addi r1,r0,4 
 sw 16(r14),r1
-lw r1,16(r14)
-sw 12(r14),r1
 addi r14,r14,-8
 jl r15,A_foo
 addi r14,r14,8
-lw r13, 8(r14)
-addi r14,r14,-8
-jl r15, write
-addi r14,r14, 8
 lw r13, 12(r14)
 addi r14,r14,-8
 jl r15, write
 addi r14,r14, 8
-lw r2,12(r14)
-lw r1, 8(r14)
-add r3,r1,r2 %s operation add performed 
-sw 36(r14),r3
-lw r1,36(r14)
-sw 32(r14),r1
-lw r13, 32(r14)
+lw r13, 16(r14)
 addi r14,r14,-8
 jl r15, write
 addi r14,r14, 8
+lw r2,16(r14)
+lw r1, 12(r14)
+add r3,r1,r2
+sw 40(r14),r3
+lw r1,40(r14)
+sw 36(r14),r1
+lw r13, 36(r14)
+addi r14,r14,-8
+jl r15, write
+addi r14,r14, 8
+lw r13, 8(r14)
+addi r14,r14,-8
+jl r15, write
+addi r14,r14, 8
+addi r14,r14,-8
+jl r15,A_bar
+addi r14,r14,8
 lw r15, 0(r14)
 jr r15
 
@@ -55,14 +62,16 @@ sw 4(r14),r1
 lw r13,4(r14)
 lw r15, 0(r14)
 jr r15
+lw r15, 0(r14)
+jr r15
 
 
 
 entry
 addi r14,r0,topaddr
-addi r14,r14,-40
+addi r14,r14,-44
 jl r15,main
-addi r14,r14,40
+addi r14,r14,44
 hlt
 
 

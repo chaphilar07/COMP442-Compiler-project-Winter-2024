@@ -4,8 +4,8 @@ sw 0(r14),r15
 while100
 addi r1,r0,100 
 sw 24(r14),r1
-lw r2,28(r14) %s relexpr
 lw r1, 24(r14)
+lw r2,28(r14) %s relexpr
 clt r3,r2,r1
 sw 20(r14), r3
 lw r1, 20(r14)
@@ -68,8 +68,8 @@ lw r1,4(r14)
 sw 16(r14),r1
 addi r1,r0,1 
 sw 20(r14),r1
-lw r2,32(r14) %s relexpr
 lw r1, 20(r14)
+lw r2,32(r14) %s relexpr
 ceq r3,r2,r1
 sw 28(r14), r3
 lw r1,28(r14)
@@ -80,8 +80,8 @@ jr r15
 j endif100
 else100
 while101
-lw r2,32(r14) %s relexpr
 lw r1, 8(r14)
+lw r2,32(r14) %s relexpr
 clt r3,r2,r1
 sw 24(r14), r3
 lw r1, 24(r14)

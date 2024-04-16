@@ -1,6 +1,10 @@
 align
 main
 sw 0(r14),r15
+lw r15, 0(r14)
+jr r15
+
+
 lw r1,128(r14)
 sw 128(r14),r1
 addi r3,r0,3.5 
@@ -46,8 +50,8 @@ sw 152(r14),r1
 while100
 addi r1,r0,10.0 
 sw 112(r14),r1
-lw r2,152(r14) %s relexpr
 lw r1, 112(r14)
+lw r2,152(r14) %s relexpr
 cle r3,r2,r1
 sw 144(r14), r3
 lw r1, 144(r14)
@@ -85,7 +89,13 @@ jr r15
 align
 test
 sw 0(r14),r15
+lw r15, 0(r14)
+jr r15
+
+
 lw r13,4(r14)
+lw r15, 0(r14)
+jr r15
 lw r15, 0(r14)
 jr r15
 
@@ -104,6 +114,8 @@ sw 20(r14),r1
 lw r1,4(r14)
 sw 28(r14),r1
 lw r13,20(r14)
+lw r15, 0(r14)
+jr r15
 lw r15, 0(r14)
 jr r15
 
@@ -132,6 +144,8 @@ sw 12(r14),r3
 lw r1,12(r14)
 sw 20(r14),r1
 lw r13,20(r14)
+lw r15, 0(r14)
+jr r15
 lw r15, 0(r14)
 jr r15
 
@@ -170,6 +184,8 @@ sw 24(r14),r1
 lw r13,24(r14)
 lw r15, 0(r14)
 jr r15
+lw r15, 0(r14)
+jr r15
 
 
 align
@@ -193,6 +209,8 @@ sw 36(r14),r1
 lw r13,28(r14)
 lw r15, 0(r14)
 jr r15
+lw r15, 0(r14)
+jr r15
 
 
 align
@@ -204,6 +222,8 @@ sw 4(r14),r2
 addi r1,r0,0.0 
 sw 12(r14),r1
 lw r13,12(r14)
+lw r15, 0(r14)
+jr r15
 lw r15, 0(r14)
 jr r15
 

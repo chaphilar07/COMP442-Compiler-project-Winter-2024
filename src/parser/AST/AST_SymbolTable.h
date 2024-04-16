@@ -329,6 +329,7 @@ int get_function_size(node *astnode, void *errors);
 
 int get_class_size(const char *className, Scope *globalScope);
 
+const char *get_entry_name(TableEntry *entry);
 void print_type(TypeInfo type1, FILE *out);
 int insert_entry(Scope *scope, TableEntry *entry);
 #endif // !AST_GEN_H

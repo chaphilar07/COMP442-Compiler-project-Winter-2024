@@ -4,19 +4,19 @@ Table Entry 1 of "Global":func main -> void : 	size: 32	return type size: 0
 
 			BEGINNING OF TABLE FOR:  function scope "main"
 
-			Table Entry 1 of "main":litval	size: 4	offset: 4	 value: 1	name: literal105
+			Table Entry 1 of "main":litval	size: 4	offset: 4	 value: 1	name: literal1000006
 
-			Table Entry 2 of "main":tempvar	size: 4	offset: 8	name: temp104	
+			Table Entry 2 of "main":litval	size: 4	offset: 8	 value: 1	name: literal1000005
 
-			Table Entry 3 of "main":tempvar	size: 4	offset: 12	name: temp105	
+			Table Entry 3 of "main":tempvar	size: 4	offset: 12	name: temp1000004	
 
-			Table Entry 4 of "main":litval	size: 4	offset: 16	 value: function value	name: literal107
+			Table Entry 4 of "main":var i integer	size: 4	offset: 16
 
-			Table Entry 5 of "main":litval	size: 4	offset: 20	 value: 15	name: literal108
+			Table Entry 5 of "main":tempvar	size: 4	offset: 20	name: temp1000005	
 
-			Table Entry 6 of "main":litval	size: 4	offset: 24	 value: 1	name: literal106
+			Table Entry 6 of "main":litval	size: 4	offset: 24	 value: function value	name: literal1000007
 
-			Table Entry 7 of "main":var i integer	size: 4	offset: 28
+			Table Entry 7 of "main":litval	size: 4	offset: 28	 value: 15	name: literal1000008
 
 			END OF TABLE FOR SCOPE function scope "main"
 
@@ -26,27 +26,27 @@ Table Entry 2 of "Global":func fib -> integer : x integer	size: 52	return type s
 
 			Table Entry 1 of "fib":fparam x integer Number: 0	size: 4	offset: 4
 
-			Table Entry 2 of "fib":tempvar	size: 4	offset: 8	name: temp101	
+			Table Entry 2 of "fib":tempvar	size: 4	offset: 8	name: temp1000003	
 
-			Table Entry 3 of "fib":litval	size: 4	offset: 12	 value: 1	name: literal103
+			Table Entry 3 of "fib":litval	size: 4	offset: 12	 value: 2	name: literal1000001
 
-			Table Entry 4 of "fib":litval	size: 4	offset: 16	 value: 1	name: literal104
+			Table Entry 4 of "fib":var j integer	size: 4	offset: 16
 
-			Table Entry 5 of "fib":var j integer	size: 4	offset: 20
+			Table Entry 5 of "fib":tempvar	size: 4	offset: 20	name: temp1000000	
 
-			Table Entry 6 of "fib":litval	size: 4	offset: 24	 value: function value	name: literal102
+			Table Entry 6 of "fib":litval	size: 4	offset: 24	 value: function value	name: literal1000000
 
-			Table Entry 7 of "fib":tempvar	size: 4	offset: 28	name: temp102	
+			Table Entry 7 of "fib":tempvar	size: 4	offset: 28	name: temp1000001	
 
-			Table Entry 8 of "fib":tempvar	size: 4	offset: 32	name: temp103	
+			Table Entry 8 of "fib":litval	size: 4	offset: 32	 value: 1	name: literal1000003
 
-			Table Entry 9 of "fib":var i integer	size: 4	offset: 36
+			Table Entry 9 of "fib":litval	size: 4	offset: 36	 value: 1	name: literal1000004
 
-			Table Entry 10 of "fib":litval	size: 4	offset: 40	 value: 2	name: literal101
+			Table Entry 10 of "fib":var i integer	size: 4	offset: 40
 
-			Table Entry 11 of "fib":tempvar	size: 4	offset: 44	name: temp100	
+			Table Entry 11 of "fib":litval	size: 4	offset: 44	 value: function value	name: literal1000002
 
-			Table Entry 12 of "fib":litval	size: 4	offset: 48	 value: function value	name: literal100
+			Table Entry 12 of "fib":tempvar	size: 4	offset: 48	name: temp1000002	
 
 			END OF TABLE FOR SCOPE function scope "fib"
 

@@ -57,6 +57,8 @@ int main(int argc, char *argv[]) {
     fprintf(output_file, "parameterstorage res 512\n");
     fprintf(output_file, "indexstorage res 256 \n");
 
+    print_free_registers();
+
   } else {
     fprintf(stderr, "FAILURE COULD NOT PARSE FILE SYNTAX ERRORS!\n");
   }

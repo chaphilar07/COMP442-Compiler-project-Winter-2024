@@ -2,232 +2,257 @@ align
 main
 sw 0(r14),r15
 addi r1,r0,0 
-sw 4180(r14),r1
-lw r1,4180(r14)
-sw 4132(r14),r1
+sw 4092(r14),r1
+lw r1,4092(r14)
+sw 4144(r14),r1
 addi r1,r0,0 
-sw 4148(r14),r1
-lw r1,4148(r14)
-sw 4128(r14),r1
-addi r1,r0,0 
-sw 4060(r14),r1
-lw r1,4060(r14)
 sw 4052(r14),r1
+lw r1,4052(r14)
+sw 4140(r14),r1
 addi r1,r0,0 
-sw 4028(r14),r1
-lw r1,4028(r14)
-sw 4020(r14),r1
-while100
+sw 4160(r14),r1
+lw r1,4160(r14)
+sw 4060(r14),r1
+addi r1,r0,0 
+sw 4124(r14),r1
+lw r1,4124(r14)
+sw 4016(r14),r1
+while1000000
 addi r1,r0,10 
-sw 4100(r14),r1
-lw r2,4128(r14) %s relexpr
-lw r1, 4100(r14)
+sw 4(r14),r1
+lw r1, 4(r14)
+lw r2,4140(r14) %s relexpr
 clt r3,r2,r1
-sw 4080(r14), r3
-lw r1, 4080(r14)
-bz r1,endwhile100
-while101
+sw 4184(r14), r3
+lw r1, 4184(r14)
+bz r1,endwhile1000000
+while1000001
 addi r1,r0,10 
-sw 4024(r14),r1
-lw r2,4052(r14) %s relexpr
-lw r1, 4024(r14)
+sw 4116(r14),r1
+lw r1, 4116(r14)
+lw r2,4060(r14) %s relexpr
 clt r3,r2,r1
-sw 4164(r14), r3
-lw r1, 4164(r14)
-bz r1,endwhile101
-while102
+sw 4088(r14), r3
+lw r1, 4088(r14)
+bz r1,endwhile1000001
+while1000002
 addi r1,r0,10 
-sw 4176(r14),r1
-lw r2,4020(r14) %s relexpr
-lw r1, 4176(r14)
+sw 4084(r14),r1
+lw r1, 4084(r14)
+lw r2,4016(r14) %s relexpr
 clt r3,r2,r1
-sw 4124(r14), r3
-lw r1, 4124(r14)
-bz r1,endwhile102
-lw r2,4052(r14)
-lw r1, 4128(r14)
-add r3,r1,r2 %s operation add performed 
-sw 4048(r14),r3
-lw r2,4020(r14)
+sw 4048(r14), r3
 lw r1, 4048(r14)
-add r3,r1,r2 %s operation add performed 
-sw 4016(r14),r3
-addi r1,r0,8 %s accumulator register is r1 
-lw r2, 4128(r14)
+bz r1,endwhile1000002
+lw r2,4060(r14)
+lw r1, 4140(r14)
+add r3,r1,r2
+sw 4156(r14),r3
+lw r2,4016(r14)
+lw r1, 4156(r14)
+add r3,r1,r2
+sw 4120(r14),r3
+addi r1,r0,12 %s accumulator register is r1 
+lw r2, 4140(r14)
 addi r3,r0,40 %s problem here
 mul r2,r2,r3
 add r1,r1,r2
-lw r2, 4052(r14)
+lw r2, 4060(r14)
 addi r3,r0,40 %s problem here
 mul r2,r2,r3
 add r1,r1,r2
-lw r2,4020(r14)
+lw r2,4016(r14)
 muli r2,r2,4
 add r1,r1,r2
 addi r2, r0, 0 
 sw indexstorage(r2), r1
-lw r1,4016(r14)
+lw r1,4120(r14)
 addi r2,r0,0
 lw r2, indexstorage(r2) %s HERE !!
 add r2,r14,r2
 sw 0(r2),r1
 addi r1,r0,1 
-sw 4040(r14),r1
-lw r2,4040(r14)
-lw r1, 4020(r14)
-add r3,r1,r2 %s operation add performed 
-sw 4120(r14),r3
-lw r1,4120(r14)
-sw 4020(r14),r1
+sw 4136(r14),r1
+lw r2,4136(r14)
+lw r1, 4016(r14)
+add r3,r1,r2
+sw 4032(r14),r3
+lw r1,4032(r14)
+sw 4016(r14),r1
 addi r1,r0,1 
-sw 4076(r14),r1
-lw r2,4076(r14)
-lw r1, 4132(r14)
-add r3,r1,r2 %s operation add performed 
-sw 4088(r14),r3
-lw r1,4088(r14)
+sw 4180(r14),r1
+lw r2,4180(r14)
+lw r1, 4144(r14)
+add r3,r1,r2
+sw 4196(r14),r3
+lw r1,4196(r14)
+sw 4144(r14),r1
+j while1000002
+endwhile1000002
+addi r1,r0,0 
+sw 4168(r14),r1
+lw r1,4168(r14)
+sw 4016(r14),r1
+addi r1,r0,1 
+sw 8(r14),r1
+lw r2,8(r14)
+lw r1, 4060(r14)
+add r3,r1,r2
+sw 4108(r14),r3
+lw r1,4108(r14)
+sw 4060(r14),r1
+j while1000001
+endwhile1000001
+addi r1,r0,0 
+sw 4100(r14),r1
+lw r1,4100(r14)
+sw 4060(r14),r1
+addi r1,r0,1 
 sw 4132(r14),r1
-j while102
-endwhile102
-addi r1,r0,0 
-sw 4068(r14),r1
-lw r1,4068(r14)
-sw 4020(r14),r1
-addi r1,r0,1 
-sw 4104(r14),r1
-lw r2,4104(r14)
-lw r1, 4052(r14)
-add r3,r1,r2 %s operation add performed 
-sw 4012(r14),r3
-lw r1,4012(r14)
-sw 4052(r14),r1
-j while101
-endwhile101
-addi r1,r0,0 
-sw 4(r14),r1
-lw r1,4(r14)
-sw 4052(r14),r1
-addi r1,r0,1 
-sw 4036(r14),r1
-lw r2,4036(r14)
-lw r1, 4128(r14)
-add r3,r1,r2 %s operation add performed 
-sw 4160(r14),r3
-lw r1,4160(r14)
-sw 4128(r14),r1
-j while100
-endwhile100
-lw r13, 4132(r14)
+lw r2,4132(r14)
+lw r1, 4140(r14)
+add r3,r1,r2
+sw 4072(r14),r3
+lw r1,4072(r14)
+sw 4140(r14),r1
+j while1000000
+endwhile1000000
+lw r13, 4144(r14)
 addi r14,r14,-8
 jl r15, write
 addi r14,r14, 8
 addi r1,r0,0 
-sw 4144(r14),r1
-lw r1,4144(r14)
-sw 4128(r14),r1
+sw 4044(r14),r1
+lw r1,4044(r14)
+sw 4140(r14),r1
 addi r1,r0,0 
-sw 4136(r14),r1
-lw r1,4136(r14)
-sw 4052(r14),r1
+sw 4028(r14),r1
+lw r1,4028(r14)
+sw 4060(r14),r1
 addi r1,r0,0 
-sw 4168(r14),r1
-lw r1,4168(r14)
-sw 4020(r14),r1
-while103
+sw 4068(r14),r1
+lw r1,4068(r14)
+sw 4016(r14),r1
+while1000003
 addi r1,r0,10 
-sw 4032(r14),r1
-lw r2,4128(r14) %s relexpr
-lw r1, 4032(r14)
+sw 4056(r14),r1
+lw r1, 4056(r14)
+lw r2,4140(r14) %s relexpr
 clt r3,r2,r1
-sw 4116(r14), r3
-lw r1, 4116(r14)
-bz r1,endwhile103
-while104
-addi r1,r0,10 
-sw 4064(r14),r1
-lw r2,4052(r14) %s relexpr
-lw r1, 4064(r14)
-clt r3,r2,r1
-sw 4152(r14), r3
-lw r1, 4152(r14)
-bz r1,endwhile104
-while105
+sw 4172(r14), r3
+lw r1, 4172(r14)
+bz r1,endwhile1000003
+while1000004
 addi r1,r0,10 
 sw 4096(r14),r1
-lw r2,4020(r14) %s relexpr
 lw r1, 4096(r14)
+lw r2,4060(r14) %s relexpr
 clt r3,r2,r1
-sw 4044(r14), r3
-lw r1, 4044(r14)
-bz r1,endwhile105
-addi r1,r0,8 %s accumulator register is r1 
-lw r2, 4128(r14)
+sw 4064(r14), r3
+lw r1, 4064(r14)
+bz r1,endwhile1000004
+while1000005
+addi r1,r0,10 
+sw 4128(r14),r1
+lw r1, 4128(r14)
+lw r2,4016(r14) %s relexpr
+clt r3,r2,r1
+sw 4104(r14), r3
+lw r1, 4104(r14)
+bz r1,endwhile1000005
+addi r1,r0,12 %s accumulator register is r1 
+lw r2, 4140(r14)
 addi r3,r0,40 %s problem here
 mul r2,r2,r3
 add r1,r1,r2
-lw r2, 4052(r14)
+lw r2, 4060(r14)
 addi r3,r0,40 %s problem here
 mul r2,r2,r3
 add r1,r1,r2
-lw r2,4020(r14)
+lw r2,4016(r14)
 muli r2,r2,4
 add r1,r1,r2
 addi r2, r0, 0 
 sw indexstorage(r2), r1
-addi r1,r0,0
-lw r1,indexstorage(r1)
-add r1,r1,r14
-lw r13,0(r1)
+lw r2,4060(r14)
+lw r1, 4140(r14)
+add r3,r1,r2
+sw 4188(r14),r3
+lw r2,4016(r14)
+lw r1, 4188(r14)
+add r3,r1,r2
+sw 4024(r14),r3
+lw r1, 4024(r14)
+addi r4,r0,0
+lw r4, indexstorage(r4) %s HERE2 !!!
+add r4,r14,r4
+lw r2, 0(r4)
+ceq r3,r2,r1
+sw 4112(r14), r3
+lw r1,4112(r14)
+bz r1,else1000000
+addi r1,r0,1 
+sw 4164(r14),r1
+lw r13, 4164(r14)
 addi r14,r14,-8
 jl r15, write
-addi r14,r14,8
+addi r14,r14, 8
+j endif1000000
+else1000000
+addi r1,r0,0 
+sw 4200(r14),r1
+lw r13, 4200(r14)
+addi r14,r14,-8
+jl r15, write
+addi r14,r14, 8
+endif1000000
 addi r1,r0,1 
+sw 4040(r14),r1
+lw r2,4040(r14)
+lw r1, 4016(r14)
+add r3,r1,r2
+sw 4148(r14),r3
+lw r1,4148(r14)
+sw 4016(r14),r1
+addi r1,r0,1 
+sw 4080(r14),r1
+lw r2,4080(r14)
+lw r1, 4144(r14)
+sub r3,r1,r2
+sw 4036(r14),r3
+lw r1,4036(r14)
+sw 4144(r14),r1
+j while1000005
+endwhile1000005
+addi r1,r0,0 
+sw 4012(r14),r1
+lw r1,4012(r14)
+sw 4016(r14),r1
+addi r1,r0,1 
+sw 4176(r14),r1
+lw r2,4176(r14)
+lw r1, 4060(r14)
+add r3,r1,r2
+sw 4076(r14),r3
+lw r1,4076(r14)
+sw 4060(r14),r1
+j while1000004
+endwhile1000004
+addi r1,r0,0 
+sw 4192(r14),r1
+lw r1,4192(r14)
+sw 4060(r14),r1
+addi r1,r0,1 
+sw 4152(r14),r1
+lw r2,4152(r14)
+lw r1, 4140(r14)
+add r3,r1,r2
+sw 4020(r14),r3
+lw r1,4020(r14)
 sw 4140(r14),r1
-lw r2,4140(r14)
-lw r1, 4020(r14)
-add r3,r1,r2 %s operation add performed 
-sw 4084(r14),r3
-lw r1,4084(r14)
-sw 4020(r14),r1
-addi r1,r0,1 
-sw 4172(r14),r1
-lw r2,4172(r14)
-lw r1, 4132(r14)
-sub r3,r1,r2 %s operation sub performed 
-sw 4156(r14),r3
-lw r1,4156(r14)
-sw 4132(r14),r1
-j while105
-endwhile105
-addi r1,r0,0 
-sw 4108(r14),r1
-lw r1,4108(r14)
-sw 4020(r14),r1
-addi r1,r0,1 
-sw 4072(r14),r1
-lw r2,4072(r14)
-lw r1, 4052(r14)
-add r3,r1,r2 %s operation add performed 
-sw 4008(r14),r3
-lw r1,4008(r14)
-sw 4052(r14),r1
-j while104
-endwhile104
-addi r1,r0,0 
-sw 4092(r14),r1
-lw r1,4092(r14)
-sw 4052(r14),r1
-addi r1,r0,1 
-sw 4056(r14),r1
-lw r2,4056(r14)
-lw r1, 4128(r14)
-add r3,r1,r2 %s operation add performed 
-sw 4112(r14),r3
-lw r1,4112(r14)
-sw 4128(r14),r1
-j while103
-endwhile103
-lw r13, 4132(r14)
+j while1000003
+endwhile1000003
+lw r13, 4144(r14)
 addi r14,r14,-8
 jl r15, write
 addi r14,r14, 8
@@ -238,9 +263,9 @@ jr r15
 
 entry
 addi r14,r0,topaddr
-addi r14,r14,-4184
+addi r14,r14,-4204
 jl r15,main
-addi r14,r14,4184
+addi r14,r14,4204
 hlt
 
 

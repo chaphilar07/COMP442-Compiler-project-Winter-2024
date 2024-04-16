@@ -1,0 +1,23 @@
+func factorial(x:integer)->integer{
+    let i:integer;
+    let j:integer;
+
+    i=1;
+    j=1;
+    while(i<=x){
+     j=j*i;
+     i=i+1;
+    };
+
+    return(j);
+}
+
+
+func main()->void{
+    let i: integer;
+    i=1;
+    while(i<=10){
+      write(factorial(i));
+      i=i+1;
+      };
+  }

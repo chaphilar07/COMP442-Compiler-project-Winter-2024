@@ -247,9 +247,6 @@ node **pop_until(NodeType type, semantic_stack *stack, int *len) {
  * This function will completely empty the stack, used for debugging purposes.
  */
 void empty_stack(semantic_stack *stack) {
-  if (stack->size == 0) {
-    error("ERROR - empty_stack(): Stack is already empty");
-  }
   while (stack->size > 0) {
     node *temp = pop_node(stack);
     if (temp->value)

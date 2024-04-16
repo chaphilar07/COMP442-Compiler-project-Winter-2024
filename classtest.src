@@ -1,0 +1,11 @@
+struct A{
+    private let x: integer;
+  };
+
+
+func main()->void{
+    let a:A[10];
+
+    a[0].x=1;
+    write(a[0].x);
+  }

@@ -1,0 +1,26 @@
+BEGINNING OF TABLE FOR:  global scope "Global"
+
+Table Entry 1 of "Global":func main -> void : 	size: 56	return type size: 0
+
+			BEGINNING OF TABLE FOR:  function scope "main"
+
+			Table Entry 1 of "main":var a A[10]	size: 40	offset: 4
+
+			Table Entry 2 of "main":litval	size: 4	offset: 44	 value: 0	name: literal102
+
+			Table Entry 3 of "main":litval	size: 4	offset: 48	 value: 0	name: literal101
+
+			Table Entry 4 of "main":litval	size: 4	offset: 52	 value: 1	name: literal100
+
+			END OF TABLE FOR SCOPE function scope "main"
+
+Table Entry 2 of "Global":class A inherits 	size: 4	offset: 0
+
+			BEGINNING OF TABLE FOR:  class scope "A"
+
+			Table Entry 1 of "A":private var x integer	size: 4	offset: 0
+
+			END OF TABLE FOR SCOPE class scope "A"
+
+END OF TABLE FOR SCOPE global scope "Global"
+

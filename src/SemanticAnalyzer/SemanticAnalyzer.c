@@ -760,7 +760,6 @@ TypeInfo get_type_expression(node *astnode, ErrorArray *arr,
   if (astnode->type == notnode) {
     return get_type_expression(astnode->children[0], arr, globalScope);
   } else if (astnode->type == sign) {
-    fprintf(stderr, "Getting the type of %s", astnode->children[0]->value);
     return get_type_expression(
         astnode->children[0], arr,
         globalScope); // We get the type of the expression, the right child of

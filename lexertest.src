@@ -1,0 +1,6 @@
+func bad()->void{
+    let x: integer;
+
+    x=@;
+
+  }

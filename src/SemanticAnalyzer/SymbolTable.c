@@ -639,7 +639,7 @@ void print_entry(TableEntry *entry, FILE *out) {
   }
 
   if (entry->tableType == TEMP_ENTRY) {
-    fprintf(out, "tempvar\tsize: %d\toffset: %d\tname: %s\t\n", entry->size,
+    fprintf(out, "tempvar size: %d offset: %d\tname: %s\t\n", entry->size,
             entry->offset, entry->data.TempVarEntry.name);
   }
   if (entry->tableType == LITVAL_ENTRY) {
@@ -1200,7 +1200,8 @@ Scope *create_program_scope(node *root, void *arr) {
           entry->data.TempVarEntry.name; // So we will keep some temporary
                                          // variable for the values here.
     }
-    if (current->type == dot || current->type == whilenode) {
+    if (current->type == dot || current->type == whilenode ||
+        current->type == ifnode) {
 
       semantic_stack *stack = init_stack();
       push_node(current, stack);
@@ -1323,6 +1324,20 @@ Scope *create_program_scope(node *root, void *arr) {
           insert_error(errors,
                        create_error(get_name(current), code, current->line));
         }
+
+        semantic_stack *stack = init_stack();
+        push_node(current->children[0], stack);
+        while (stack->size > 0) {
+          node *temp = pop_node(stack);
+          temp->scope = entry->data.funcEntry.scope;
+
+          if (temp->numchildren > 0) {
+            for (int i = 0; i < temp->numchildren; i++) {
+              push_node(temp->children[i], stack);
+            }
+          }
+        }
+
         push_node(init_node(sentinel), node_stack);
         push_scope(entry->data.funcEntry.scope, scope_stack);
 
@@ -1563,4 +1578,22 @@ int free_scopes(Scope *globalScope) {
   }
 
   return 1;
+}
+
+const char *get_entry_name(TableEntry *entry) {
+  if (entry->tableType == LITVAL_ENTRY) {
+    return entry->data.litval.id;
+  } else if (entry->tableType == FUNCDEF_ENTRY)
+    return entry->data.funcEntry.name;
+  else if (entry->tableType == VARIABLE_ENTRY) {
+    return entry->data.varEntry.name;
+  } else if (entry->tableType == FPARAM_ENTRY) {
+    return entry->data.fparamEntry.name;
+  } else if (entry->tableType == TEMP_ENTRY) {
+    return entry->data.TempVarEntry.name;
+  } else if (entry->tableType == CLASS_ENTRY) {
+    return entry->data.classEntry.name;
+  } else {
+    return "no name!";
+  }
 }

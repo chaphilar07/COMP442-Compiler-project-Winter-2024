@@ -159,8 +159,8 @@ sw 16(r14),r1
 lw r1,16(r14)
 sw 24(r14),r1
 while100
-lw r2,24(r14) %s relexpr
 lw r1, 20(r14)
+lw r2,24(r14) %s relexpr
 clt r3,r2,r1
 sw 28(r14), r3
 lw r1, 28(r14)
@@ -222,8 +222,8 @@ lw r2,48(r14)
 lw r1, 60(r14)
 sub r3,r1,r2
 sw 68(r14),r3
-lw r2,80(r14) %s relexpr
 lw r1, 68(r14)
+lw r2,80(r14) %s relexpr
 clt r3,r2,r1
 sw 52(r14), r3
 lw r1, 52(r14)
@@ -239,8 +239,8 @@ lw r2,44(r14)
 lw r1, 92(r14)
 sub r3,r1,r2
 sw 76(r14),r3
-lw r2,36(r14) %s relexpr
 lw r1, 76(r14)
+lw r2,36(r14) %s relexpr
 clt r3,r2,r1
 sw 32(r14), r3
 lw r1, 32(r14)
@@ -263,8 +263,14 @@ muli r2,r2,0
 add r1,r1,r2
 addi r2, r0, 8 
 sw indexstorage(r2), r1
-lw r2,0(r14) %s relexpr
-lw r1, 0(r14)
+addi r4,r0,8
+lw r4, indexstorage(r4) %s HERE1!!
+add r4,r14,r4
+lw r1, 0(r4)
+addi r4,r0,4
+lw r4, indexstorage(r4) %s HERE2 !!!
+add r4,r14,r4
+lw r2, 0(r4)
 cgt r3,r2,r1
 sw 72(r14), r3
 lw r1,72(r14)
@@ -273,9 +279,9 @@ addi r1,r0,4 %s accumulator register is r1
 lw r2,36(r14)
 muli r2,r2,0
 add r1,r1,r2
-addi r2, r0, 12 
+addi r2, r0, 4 
 sw indexstorage(r2), r1
-addi r2,r0,12
+addi r2,r0,4
 lw r2, indexstorage(r2) %s here !!!
 add r2,r14,r2
 lw r1, 0(r2)
@@ -290,19 +296,19 @@ sw 56(r14),r4
 lw r2,56(r14)
 muli r2,r2,0
 add r1,r1,r2
-addi r2, r0, 12 
+addi r2, r0, 4 
 sw indexstorage(r2), r1
 addi r1,r0,4 %s accumulator register is r1 
 lw r2,36(r14)
 muli r2,r2,0
 add r1,r1,r2
-addi r2, r0, 16 
+addi r2, r0, 8 
 sw indexstorage(r2), r1
-addi r2,r0,16
+addi r2,r0,8
 lw r2, indexstorage(r2) %s here !!!
 add r2,r14,r2
 lw r1, 0(r2)
-addi r2,r0,12
+addi r2,r0,4
 lw r2, indexstorage(r2) %s HERE !!
 add r2,r14,r2
 sw 0(r2),r1
@@ -310,10 +316,10 @@ addi r1,r0,4 %s accumulator register is r1
 lw r2,36(r14)
 muli r2,r2,0
 add r1,r1,r2
-addi r2, r0, 12 
+addi r2, r0, 4 
 sw indexstorage(r2), r1
 lw r1,96(r14)
-addi r2,r0,12
+addi r2,r0,4
 lw r2, indexstorage(r2) %s HERE !!
 add r2,r14,r2
 sw 0(r2),r1

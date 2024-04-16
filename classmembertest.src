@@ -36,6 +36,9 @@ func main()->void{
   y.d = x.c.b+x.d;
 
   write(y.d);
+  write(x.c.bar());//prints 1.
 
+
+  //Note that the problem right now is that the functioncall does not get stored in it's offset so we cannot load it for the operation need to fix this.
 
   }

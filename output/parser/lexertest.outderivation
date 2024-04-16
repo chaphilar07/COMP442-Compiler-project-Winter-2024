@@ -1,0 +1,23 @@
+PROG eof
+REPTPROG0 eof
+STRUCTORIMPLORFUNC REPTPROG0 eof
+FUNCDEF REPTPROG0 eof
+FUNCHEAD FUNCBODY REPTPROG0 eof
+func id lpar FPARAMS rpar arrow RETURNTYPE FUNCBODY REPTPROG0 eof
+func id lpar rpar arrow RETURNTYPE FUNCBODY REPTPROG0 eof
+func id lpar rpar arrow void FUNCBODY REPTPROG0 eof
+func id lpar rpar arrow void lcubr REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar rpar arrow void lcubr VARDECLORSTAT REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar rpar arrow void lcubr VARDECL REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar rpar arrow void lcubr let id colon TYPE REPTVARDECL4 semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar rpar arrow void lcubr let id colon integer REPTVARDECL4 semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar rpar arrow void lcubr let id colon integer semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar rpar arrow void lcubr let id colon integer semi VARDECLORSTAT REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar rpar arrow void lcubr let id colon integer semi STATEMENT REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar rpar arrow void lcubr let id colon integer semi id STATEMENTBODY REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar rpar arrow void lcubr let id colon integer semi id REPTIDNEST1 CHECKFORENDVAR REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar rpar arrow void lcubr let id colon integer semi id CHECKFORENDVAR REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar rpar arrow void lcubr let id colon integer semi id ASSIGNOP EXPR semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar rpar arrow void lcubr let id colon integer semi id assign EXPR semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar rpar arrow void lcubr let id colon integer semi id assign EXPR semi rcubr REPTPROG0 eof
+func id lpar rpar arrow void lcubr let id colon integer semi id assign EXPR semi rcubr eof

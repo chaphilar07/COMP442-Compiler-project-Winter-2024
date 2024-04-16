@@ -127,6 +127,19 @@ func main()->void{
    write(another_complex_expression()); //Output should be 3.
 
 
-    
+  let i: integer;
+  i=1+2+3;
+  write(i);
+  i=1*2*3*4*5*6*7*8*9*10;
+  write(i);
+
+  i=1*2+3*4+(-4);//Should output 10 to the user.
+  write(i);
+
+
+  let a: integer;
+
+  a=(9*4)/6+2;
+  write(a);
 
   }

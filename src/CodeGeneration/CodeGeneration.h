@@ -12,6 +12,7 @@
 #include "../SemanticAnalyzer/SemanticError.h"
 #include "../parser/AST/AST_SymbolTable.h"
 
+void print_free_registers();
 void free_all_registers();
 void reset_index_pointers();
 TableEntry *create_litval_entry(node *astnode);

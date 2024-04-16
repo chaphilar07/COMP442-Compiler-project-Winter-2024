@@ -35,10 +35,17 @@ FILE *debugging_info = NULL;
  * A register is free if it is true so we will set to true.
  */
 
-unsigned int temp_variable_number = 100;
-unsigned int literal_entry_number = 100;
-unsigned int if_numbers = 100;
-unsigned int while_numbers = 100;
+/*
+ *  ---NOTE----
+ *  We need very large numbers for these values or else we encounter COLLISIONS
+ * IN THE SYMBOL TABLE!!!!! We get problem that with long programs, we begin to
+ * loop forever becuase we keep loading the first word in the stack frame, which
+ * is the addrss of the first instruction of the subroutine.
+ */
+unsigned int temp_variable_number = 1000000;
+unsigned int literal_entry_number = 1000000;
+unsigned int if_numbers = 1000000;
+unsigned int while_numbers = 1000000;
 
 // This pointer will be used to access data that needs to be stored inside of
 // the indexstorage.
@@ -52,6 +59,14 @@ void reset_index_pointers() {
 
 bool free_registers[] = {true, true, true, true, true, true,
                          true, true, true, true, true, true};
+
+void print_free_registers() {
+  for (int i = 0; i < 12; i++) {
+    if (free_registers[i])
+      fprintf(stderr, "r%d, ", (i + 1));
+  }
+  fprintf(stderr, "\n");
+}
 
 void free_all_registers() {
   for (int i = 0; i < 12; i++)
@@ -1155,6 +1170,13 @@ int handle_expression(node *astnode, ErrorArray *errors, FILE *out,
 
     int operationOffset = get_offset(astnode, astnode->scope, errors, out);
 
+    if (!operationOffset) {
+      if (astnode->scope == NULL)
+        fprintf(stderr, "ERROR SCOPE OF THE NODE IS NULL!!!\n");
+      fprintf(stderr, "Cannot find %s in the current scope problem!!!\n",
+              astnode->entryName);
+      fprintf(stderr, "OPERATION OFFSET IS 0!! PROBLEM !!!\n");
+    }
     const char *left_register = get_next_free_register();
     const char *right_register = get_next_free_register();
     const char *operation_register = get_next_free_register();
