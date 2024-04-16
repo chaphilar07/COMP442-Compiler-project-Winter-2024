@@ -535,6 +535,10 @@ addi r1,r0,2
 sw 184(r14),r1
 addi r1,r0,6 
 sw 352(r14),r1
+lw r2,184(r14)
+lw r1, 352(r14)
+add r3,r1,r2
+sw 396(r14),r3
 addi r1,r0,4 
 sw 256(r14),r1
 addi r1,r0,9 
@@ -543,13 +547,9 @@ lw r2,256(r14)
 lw r1, 92(r14)
 mul r3,r1,r2
 sw 304(r14),r3
-lw r2,352(r14)
+lw r2,396(r14)
 lw r1, 304(r14)
 div r3,r1,r2
-sw 396(r14),r3
-lw r2,184(r14)
-lw r1, 396(r14)
-add r3,r1,r2
 sw 216(r14),r3
 lw r1,216(r14)
 sw 44(r14),r1

@@ -139,7 +139,9 @@ func main()->void{
 
   let a: integer;
 
-  a=(9*4)/6+2;
+  a=(9*4)/(6+2);
   write(a);
+
+
 
   }

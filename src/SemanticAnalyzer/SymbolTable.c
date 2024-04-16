@@ -167,6 +167,7 @@ bool compare_type_info(TypeInfo info1, TypeInfo info2) {
   if (strcmp(info1.typeString, info2.typeString)) {
     return false;
   }
+
   if (info1.numberofdims != info2.numberofdims) {
     return false;
   }
@@ -1357,7 +1358,9 @@ Scope *create_program_scope(node *root, void *arr) {
 
         const char *name = get_name(current);
         TableEntry *entry = get_entry(current_scope, name);
+        const char *name_for_print = strdup(name);
 
+        fprintf(stderr, "%s\n", name);
         if (entry->tableType == FUNCDEF_ENTRY) {
 
           entry->data.funcEntry.defined =
@@ -1436,7 +1439,9 @@ Scope *create_program_scope(node *root, void *arr) {
               parent,
               current); // This function removes the child from the tree.
 
-          insert_error(errors, create_error(name, err203, line));
+          fprintf(stderr, "%s\n", name);
+          insert_error(errors, create_error(name_for_print, err203, line));
+          free((void *)name_for_print);
         }
       }
 

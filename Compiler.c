@@ -57,6 +57,7 @@ int main(int argc, char *argv[]) {
     fprintf(output_file, "parameterstorage res 512\n");
     fprintf(output_file, "indexstorage res 256 \n");
 
+    fprintf(stderr, "FREE REGISTERS: ");
     print_free_registers();
 
   } else {

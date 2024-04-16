@@ -1,22 +1,20 @@
 BEGINNING OF TABLE FOR:  global scope "Global"
 
-Table Entry 1 of "Global":func main -> void : 	size: 44	return type size: 0
+Table Entry 1 of "Global":func main -> void : 	size: 40	return type size: 0
 
 			BEGINNING OF TABLE FOR:  function scope "main"
 
-			Table Entry 1 of "main":litval	size: 4	offset: 4	 value: function value	name: literal105
+			Table Entry 1 of "main":var x B	size: 12	offset: 4
 
-			Table Entry 2 of "main":var x B	size: 12	offset: 8
+			Table Entry 2 of "main":tempvar size: 4 offset: 16	name: temp1000000	
 
-			Table Entry 3 of "main":litval	size: 4	offset: 20	 value: 4	name: literal103
+			Table Entry 3 of "main":litval	size: 4	offset: 20	 value: 4	name: literal1000003
 
-			Table Entry 4 of "main":litval	size: 0	offset: 24	 value: function value	name: literal104
+			Table Entry 4 of "main":litval	size: 0	offset: 24	 value: function value	name: literal1000004
 
-			Table Entry 5 of "main":litval	size: 4	offset: 24	 value: 3	name: literal102
+			Table Entry 5 of "main":litval	size: 4	offset: 24	 value: 3	name: literal1000002
 
 			Table Entry 6 of "main":var y B	size: 12	offset: 28
-
-			Table Entry 7 of "main":tempvar	size: 4	offset: 40	name: temp100	
 
 			END OF TABLE FOR SCOPE function scope "main"
 
@@ -40,7 +38,7 @@ Table Entry 3 of "Global":class A inherits 	size: 8	offset: 0
 
 						BEGINNING OF TABLE FOR:  function scope "bar"
 
-						Table Entry 1 of "bar":litval	size: 4	offset: 4	 value: 1	name: literal101
+						Table Entry 1 of "bar":litval	size: 4	offset: 4	 value: 1	name: literal1000001
 
 						END OF TABLE FOR SCOPE function scope "bar"
 
@@ -50,7 +48,7 @@ Table Entry 3 of "Global":class A inherits 	size: 8	offset: 0
 
 						BEGINNING OF TABLE FOR:  function scope "foo"
 
-						Table Entry 1 of "foo":litval	size: 4	offset: 4	 value: 10	name: literal100
+						Table Entry 1 of "foo":litval	size: 4	offset: 4	 value: 10	name: literal1000000
 
 						END OF TABLE FOR SCOPE function scope "foo"
 

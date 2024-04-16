@@ -1,0 +1,22 @@
+func foo(x:integer)->void{
+    write(x);
+  }
+
+func main()->void{
+    let arr: integer[10];
+    let i: integer;
+
+    i=0;
+
+    while(i<10){
+        arr[i]=i+1;
+        i=i+1;
+    };
+
+    i=0;
+    while(i<10){
+      foo(arr[i]);
+      i=i+1;
+      };
+
+  }

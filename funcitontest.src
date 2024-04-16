@@ -1,0 +1,6 @@
+func add_two(x:integer,y:integer)->integer{
+    return(x+y);
+  }
+func main()->void{
+    write(add_two(3,3));
+  }

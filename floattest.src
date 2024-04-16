@@ -1,0 +1,9 @@
+func main()->void{
+    let a: integer;
+    let b: float;
+
+    let x: float;
+
+    x=a*b;
+    write(x);
+  }

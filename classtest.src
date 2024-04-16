@@ -1,11 +1,13 @@
 struct A{
-    private let x: integer;
+    private let i: integer;
   };
 
 
 func main()->void{
     let a:A[10];
+    let x: integer;
+    a[10].i=3;
+    x=3;
+    write(x);
 
-    a[0].x=1;
-    write(a[0].x);
   }

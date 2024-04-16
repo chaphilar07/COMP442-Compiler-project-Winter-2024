@@ -495,6 +495,7 @@ TypeInfo get_type_var(node *astnode, ErrorArray *arr, Scope *globalScope) {
               insert_error(
                   arr, create_error(get_name(astnode), err903, astnode->line));
               TypeInfo info1 = {NONE_TYPE, NULL, NULL, 0};
+              fprintf(stderr, "HERE RETURNING NULL TYPE STRING! \n");
               return info1;
             }
             return curVarTypeInfo;
@@ -512,6 +513,7 @@ TypeInfo get_type_var(node *astnode, ErrorArray *arr, Scope *globalScope) {
       }
     }
     TypeInfo info = {NONE_TYPE, "nil", NULL, 0};
+    fprintf(stderr, "HERE\n");
     return info;
   } else { // We have a member access to the variable.
 
@@ -556,12 +558,14 @@ TypeInfo get_type_var(node *astnode, ErrorArray *arr, Scope *globalScope) {
               indexInfo.arraydims != NULL) {
             insert_error(arr, create_error(name, err2100, astnode->line));
             TypeInfo temp = {NONE_TYPE, "nil", NULL, 0};
+            fprintf(stderr, "HERE\n");
             return temp;
           }
         }
       } else {
         insert_error(arr, create_error(name, err903, astnode->line));
         TypeInfo temp = {NONE_TYPE, "nil", NULL, 0};
+        fprintf(stderr, "HERE\n");
 
         return temp;
       }
@@ -605,11 +609,15 @@ TypeInfo get_type_var(node *astnode, ErrorArray *arr, Scope *globalScope) {
                   indexInfo.arraydims != NULL) {
                 insert_error(arr, create_error(name, err2100, astnode->line));
                 TypeInfo temp = {NONE_TYPE, "nil", NULL, 0};
+
+                fprintf(stderr, "HERE\n");
                 return temp;
               }
             }
           } else {
             insert_error(arr, create_error(name, err903, astnode->line));
+
+            fprintf(stderr, "HERE\n");
             TypeInfo temp = {NONE_TYPE, "nil", NULL, 0};
 
             return temp;
@@ -630,6 +638,7 @@ TypeInfo get_type_var(node *astnode, ErrorArray *arr, Scope *globalScope) {
         }
       }
     }
+    fprintf(stderr, "HERE\n");
     TypeInfo temp = {NONE_TYPE, "nil", NULL, 0};
     return temp;
   }
@@ -783,8 +792,13 @@ TypeInfo get_type_expression(node *astnode, ErrorArray *arr,
 
     if (right->type != dot) {
 
-      TypeInfo leftInfo = get_type_expression(left, arr, globalScope);
-      TableEntry *entry = get_entry(globalScope, leftInfo.typeString);
+      Scope *scopePtr = globalScope;
+      while (scopePtr && scopePtr->type != GLOBAL_SCOPE) {
+        scopePtr = scopePtr->parentScope;
+      }
+
+      TypeInfo leftInfo = get_type_expression(left, arr, scopePtr);
+      TableEntry *entry = get_entry(scopePtr, leftInfo.typeString);
 
       EntryType expectedType;
 
@@ -796,12 +810,12 @@ TypeInfo get_type_expression(node *astnode, ErrorArray *arr,
       if (entry->tableType != CLASS_ENTRY) {
         insert_error(arr, create_error(get_name(left), err701, left->line));
 
-        TypeInfo info = {NONE_TYPE, NULL, NULL, 0};
+        TypeInfo info = {NONE_TYPE, "nil", NULL, 0};
         return info;
       }
 
-      Scope *scopePtr = entry->data.classEntry.scope;
-      entry = get_entry(scopePtr, get_name(right));
+      Scope *class_scope_ptr = entry->data.classEntry.scope;
+      entry = get_entry(class_scope_ptr, get_name(right));
 
       if (entry->tableType != expectedType) {
         insert_error(arr, create_error(get_name(right), err702, right->line));
@@ -880,9 +894,9 @@ TypeInfo get_type_expression(node *astnode, ErrorArray *arr,
     TableEntry *memberEntry = get_entry(classScope, get_name(right));
 
     if (memberEntry->tableType == expectedType) {
-      return get_type_expression(right, arr, globalScope);
+      return get_type_expression(right, arr, right->scope);
     } else {
-      TypeInfo temp = {NONE_TYPE, NULL, NULL, 0};
+      TypeInfo temp = {NONE_TYPE, "nil", NULL, 0};
       return temp;
     }
 
@@ -897,8 +911,8 @@ TypeInfo get_type_expression(node *astnode, ErrorArray *arr,
 
     node *right = astnode->children[0];
 
-    TypeInfo info1 = get_type_expression(left, arr, globalScope);
-    TypeInfo info2 = get_type_expression(right, arr, globalScope);
+    TypeInfo info1 = get_type_expression(left, arr, left->scope);
+    TypeInfo info2 = get_type_expression(right, arr, right->scope);
 
     if (!compare_type_info(info1, info2)) {
       if (astnode->type == relexpr)

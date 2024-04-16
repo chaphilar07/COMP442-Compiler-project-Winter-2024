@@ -1,0 +1,82 @@
+BEGINNING OF TABLE FOR:  global scope "Global"
+
+Table Entry 1 of "Global":func main -> void : 	size: 168	return type size: 0
+
+			BEGINNING OF TABLE FOR:  function scope "main"
+
+			Table Entry 1 of "main":litval	size: 4	offset: 4	 value: 2	name: literal1000012
+
+			Table Entry 2 of "main":litval	size: 4	offset: 8	 value: 0	name: literal1000006
+
+			Table Entry 3 of "main":var arr integer[10]	size: 40	offset: 12
+
+			Table Entry 4 of "main":var x integer	size: 4	offset: 52
+
+			Table Entry 5 of "main":tempvar size: 4 offset: 56	name: temp1000009	
+
+			Table Entry 6 of "main":litval	size: 4	offset: 60	 value: 2	name: literal1000014
+
+			Table Entry 7 of "main":tempvar size: 4 offset: 64	name: temp1000003	
+
+			Table Entry 8 of "main":litval	size: 4	offset: 68	 value: 1	name: literal1000013
+
+			Table Entry 9 of "main":tempvar size: 4 offset: 72	name: temp1000006	
+
+			Table Entry 10 of "main":litval	size: 4	offset: 76	 value: 4	name: literal1000001
+
+			Table Entry 11 of "main":var j A	size: 8	offset: 80
+
+			Table Entry 12 of "main":litval	size: 4	offset: 88	 value: 0	name: literal1000015
+
+			Table Entry 13 of "main":tempvar size: 4 offset: 92	name: temp1000000	
+
+			Table Entry 14 of "main":tempvar size: 4 offset: 96	name: temp1000010	
+
+			Table Entry 15 of "main":litval	size: 4	offset: 100	 value: 1	name: literal1000010
+
+			Table Entry 16 of "main":tempvar size: 4 offset: 104	name: temp1000007	
+
+			Table Entry 17 of "main":litval	size: 4	offset: 108	 value: 3	name: literal1000000
+
+			Table Entry 18 of "main":litval	size: 4	offset: 112	 value: 10	name: literal1000005
+
+			Table Entry 19 of "main":tempvar size: 4 offset: 116	name: temp1000001	
+
+			Table Entry 20 of "main":litval	size: 4	offset: 120	 value: 10	name: literal1000011
+
+			Table Entry 21 of "main":tempvar size: 4 offset: 124	name: temp1000004	
+
+			Table Entry 22 of "main":litval	size: 4	offset: 128	 value: 1	name: literal1000003
+
+			Table Entry 23 of "main":litval	size: 4	offset: 132	 value: 1	name: literal1000004
+
+			Table Entry 24 of "main":litval	size: 4	offset: 136	 value: 1	name: literal1000009
+
+			Table Entry 25 of "main":var i integer	size: 4	offset: 140
+
+			Table Entry 26 of "main":tempvar size: 4 offset: 144	name: temp1000005	
+
+			Table Entry 27 of "main":litval	size: 4	offset: 148	 value: 0	name: literal1000002
+
+			Table Entry 28 of "main":litval	size: 4	offset: 152	 value: 1	name: literal1000007
+
+			Table Entry 29 of "main":litval	size: 4	offset: 156	 value: 0	name: literal1000008
+
+			Table Entry 30 of "main":tempvar size: 4 offset: 160	name: temp1000008	
+
+			Table Entry 31 of "main":tempvar size: 4 offset: 164	name: temp1000002	
+
+			END OF TABLE FOR SCOPE function scope "main"
+
+Table Entry 2 of "Global":class A inherits 	size: 8	offset: 0
+
+			BEGINNING OF TABLE FOR:  class scope "A"
+
+			Table Entry 1 of "A":private var a integer	size: 4	offset: 0
+
+			Table Entry 2 of "A":private var b integer	size: 4	offset: 4
+
+			END OF TABLE FOR SCOPE class scope "A"
+
+END OF TABLE FOR SCOPE global scope "Global"
+

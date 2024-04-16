@@ -1272,7 +1272,8 @@ int handle_expression(node *astnode, ErrorArray *errors, FILE *out,
     int x = get_class_member_offset(astnode, astnode->scope, errors, out);
     if (x == 0) {
       fprintf(debugging_info, "PROBLEM!!!\n");
-      exit(0);
+      exit(0); // Cannot access member variables yet from an array, how can we
+               // do this?
     }
     return x;
 
@@ -1644,9 +1645,6 @@ TableEntry *get_function_definition_entry(node *astnode, Scope *global_scope,
 /*
  * This function will be handleing the function calls as they are traversed.
  *
- * When we arrive at a function call we do the following we store the
- * parameters in registers(1,2,..13 so max 13 parameters).
- *
  * we jump to that functions label.
  *
  * Right now we just want it work with the most basic function call with no
@@ -1657,6 +1655,7 @@ void handle_function_call(node *astnode, ErrorArray *errors, Scope *globalScope,
 
   char name[128];
   TableEntry *funcEntry = get_function_entry(astnode->scope, astnode, errors);
+
   if (funcEntry == NULL) {
     fprintf(debugging_info, "PROBLEM!!!\n");
     return;
@@ -1688,15 +1687,31 @@ void handle_function_call(node *astnode, ErrorArray *errors, Scope *globalScope,
 
   int current_storing_position = 0;
   for (int i = 0; i < paramsNode->numchildren && i < params_count; i++) {
-    int paramOffset =
+    int param_offset =
         handle_expression(paramsNode->children[i], errors, out, astnode->scope);
 
-    fprintf(out, "addi %s,r0,%d\n", temp_register, current_storing_position);
-    fprintf(out, "lw %s, %d(r14)\n", parameter_value_register, paramOffset);
-    fprintf(out, "sw parameterstorage(%s),%s\n", temp_register,
-            parameter_value_register);
+    if (param_offset) {
+      fprintf(out, "addi %s,r0,%d\n", temp_register, current_storing_position);
+      fprintf(out, "lw %s, %d(r14)\n", parameter_value_register, param_offset);
+      fprintf(out, "sw parameterstorage(%s),%s\n", temp_register,
+              parameter_value_register);
+      current_storing_position += 4;
+    } else {
+      const char *temp = get_next_free_register();
+      fprintf(out, "addi %s,r0,%d\n", temp, index_load_pointer);
+      fprintf(out, "add %s,r14,%s\n", temp, temp);
+      index_store_pointer -= 4;
 
-    current_storing_position += 4;
+      if (index_store_pointer == 0) {
+        index_load_pointer = index_store_pointer;
+      } else {
+        index_load_pointer = index_store_pointer - 4;
+      }
+
+      fprintf(out, "lw %s,0(%s)\n", temp, temp);
+      fprintf(out, "addi %s,r0,%d\n", temp_register, current_storing_position);
+      fprintf(out, "sw parameterstorage(%s), %s\n", temp_register, temp);
+    }
   }
   free_register(parameter_value_register);
   free_register(temp_register);
