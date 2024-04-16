@@ -1,6 +1,6 @@
 BEGINNING OF TABLE FOR:  global scope "Global"
 
-Table Entry 1 of "Global":func main -> void : 	size: 124	return type size: 0
+Table Entry 1 of "Global":func main -> void : 	size: 100	return type size: 0
 
 			BEGINNING OF TABLE FOR:  function scope "main"
 
@@ -8,55 +8,43 @@ Table Entry 1 of "Global":func main -> void : 	size: 124	return type size: 0
 
 			Table Entry 2 of "main":litval	size: 4	offset: 32	 value: 64	name: literal111
 
-			Table Entry 3 of "main":litval	size: 0	offset: 36	 value: function value	name: literal132
+			Table Entry 3 of "main":litval	size: 4	offset: 36	 value: 6	name: literal124
 
-			Table Entry 4 of "main":litval	size: 4	offset: 36	 value: 6	name: literal124
+			Table Entry 4 of "main":litval	size: 0	offset: 40	 value: function value	name: literal129
 
-			Table Entry 5 of "main":tempvar	size: 4	offset: 40	name: temp113	
+			Table Entry 5 of "main":litval	size: 4	offset: 40	 value: 2	name: literal116
 
-			Table Entry 6 of "main":litval	size: 4	offset: 44	 value: 7	name: literal129
+			Table Entry 6 of "main":litval	size: 4	offset: 44	 value: 90	name: literal123
 
-			Table Entry 7 of "main":litval	size: 4	offset: 48	 value: 2	name: literal116
+			Table Entry 7 of "main":litval	size: 4	offset: 48	 value: 3	name: literal118
 
-			Table Entry 8 of "main":litval	size: 4	offset: 52	 value: 7	name: literal133
+			Table Entry 8 of "main":litval	size: 4	offset: 52	 value: 7	name: literal128
 
-			Table Entry 9 of "main":litval	size: 4	offset: 56	 value: 90	name: literal123
+			Table Entry 9 of "main":litval	size: 4	offset: 56	 value: 12	name: literal117
 
-			Table Entry 10 of "main":litval	size: 4	offset: 60	 value: 3	name: literal118
+			Table Entry 10 of "main":litval	size: 4	offset: 60	 value: 5	name: literal122
 
-			Table Entry 11 of "main":tempvar	size: 4	offset: 64	name: temp112	
+			Table Entry 11 of "main":litval	size: 4	offset: 64	 value: 0	name: literal112
 
-			Table Entry 12 of "main":litval	size: 0	offset: 68	 value: function value	name: literal128
+			Table Entry 12 of "main":litval	size: 0	offset: 68	 value: function value	name: literal127
 
-			Table Entry 13 of "main":litval	size: 4	offset: 68	 value: 12	name: literal117
+			Table Entry 13 of "main":litval	size: 4	offset: 68	 value: 22	name: literal119
 
-			Table Entry 14 of "main":litval	size: 4	offset: 72	 value: 5	name: literal122
+			Table Entry 14 of "main":litval	size: 4	offset: 72	 value: 1	name: literal114
 
-			Table Entry 15 of "main":litval	size: 4	offset: 76	 value: 0	name: literal112
+			Table Entry 15 of "main":litval	size: 4	offset: 76	 value: 11	name: literal121
 
-			Table Entry 16 of "main":litval	size: 4	offset: 80	 value: 7	name: literal127
+			Table Entry 16 of "main":litval	size: 4	offset: 80	 value: 34	name: literal113
 
-			Table Entry 17 of "main":litval	size: 4	offset: 84	 value: 22	name: literal119
+			Table Entry 17 of "main":litval	size: 4	offset: 84	 value: 7	name: literal130
 
-			Table Entry 18 of "main":var i integer	size: 4	offset: 88
+			Table Entry 18 of "main":litval	size: 4	offset: 88	 value: 7	name: literal126
 
-			Table Entry 19 of "main":litval	size: 4	offset: 92	 value: 1	name: literal114
+			Table Entry 19 of "main":litval	size: 4	offset: 92	 value: 25	name: literal115
 
-			Table Entry 20 of "main":litval	size: 4	offset: 96	 value: 11	name: literal121
+			Table Entry 20 of "main":litval	size: 4	offset: 96	 value: 4	name: literal120
 
-			Table Entry 21 of "main":litval	size: 4	offset: 100	 value: 34	name: literal113
-
-			Table Entry 22 of "main":litval	size: 0	offset: 104	 value: function value	name: literal130
-
-			Table Entry 23 of "main":litval	size: 4	offset: 104	 value: 1	name: literal126
-
-			Table Entry 24 of "main":litval	size: 4	offset: 108	 value: 25	name: literal115
-
-			Table Entry 25 of "main":litval	size: 4	offset: 112	 value: 4	name: literal120
-
-			Table Entry 26 of "main":litval	size: 4	offset: 116	 value: 7	name: literal131
-
-			Table Entry 27 of "main":litval	size: 4	offset: 120	 value: 0	name: literal125
+			Table Entry 21 of "main":litval	size: 0	offset: 100	 value: function value	name: literal125
 
 			END OF TABLE FOR SCOPE function scope "main"
 

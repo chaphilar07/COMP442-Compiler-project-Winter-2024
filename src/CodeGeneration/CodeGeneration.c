@@ -204,8 +204,15 @@ void handle_if_statment(node *astnode, Scope *globalScope, ErrorArray *errors,
       handle_expression(expressionNode, errors, out, globalScope);
 
   char *comp_regiseter = get_next_free_register();
-
-  fprintf(out, "lw %s,%d(r14)\n", comp_regiseter, expressionOffset);
+  if (expressionOffset)
+    fprintf(out, "lw %s,%d(r14)\n", comp_regiseter, expressionOffset);
+  else {
+    const char *temp = get_next_free_register();
+    fprintf(out, "addi %s,r0,%d\n", temp, index_load_pointer);
+    fprintf(out, "lw %s, indexstorage(%s)\n", temp, temp);
+    fprintf(out, "add %s,r14,%s\n", temp, temp);
+    fprintf(out, "lw %s,0(%s)\n", comp_regiseter, temp);
+  }
 
   const char *if_label = get_next_if_label();
   const char *else_label = get_next_else_label();
@@ -1257,10 +1264,30 @@ int handle_expression(node *astnode, ErrorArray *errors, FILE *out,
     fprintf(out, "sw %d(r14),r13\n", functionOffset);
     return functionOffset;
   } else if (astnode->type == sign) {
-    return handle_expression(astnode->children[0], errors, out, globalScope);
+
+    int current_offset =
+        handle_expression(astnode->children[0], errors, out, globalScope);
+
+    const char *temp_register = get_next_free_register();
+
+    // We load the word at the offset, multiply by negative one.
+    fprintf(out, "lw %s,%d(r14)\n", temp_register, current_offset);
+    fprintf(out, "muli %s,%s,-1\n", temp_register,
+            temp_register); // Multiply the value by -1.
+    fprintf(out, "sw %d(r14),%s\n", current_offset, temp_register);
+    free_register(temp_register);
+
+    return current_offset;
 
   } else if (astnode->type == notnode) {
-    return handle_expression(astnode->children[0], errors, out, globalScope);
+    int current_offset =
+        handle_expression(astnode->children[0], errors, out, globalScope);
+
+    const char *temp_register = get_next_free_register();
+    fprintf(out, "lw %s, %d(r14)\n", temp_register, current_offset);
+    fprintf(out, "not %s,%s\n", temp_register, temp_register);
+    fprintf(out, "sw %d(r14),%s\n", current_offset, temp_register);
+    return current_offset;
 
   } else if (astnode->type == relexpr) {
 
@@ -1292,8 +1319,64 @@ int handle_expression(node *astnode, ErrorArray *errors, FILE *out,
     const char *left_register = get_next_free_register();
     const char *opertion_register = get_next_free_register();
 
-    fprintf(out, "lw %s,%d(r14) %%s relexpr\n", left_register, leftOffset);
-    fprintf(out, "lw %s, %d(r14)\n", right_register, rightOffset);
+    if (rightOffset) {
+
+      fprintf(out, "lw %s, %d(r14)\n", right_register, rightOffset);
+    } else {
+
+      const char *temp = get_next_free_register();
+
+      fprintf(debugging_info, "LOADING OFFSET FROM LOAD POINTER OF VALUE %d\n",
+              index_load_pointer);
+      fprintf(out, "addi %s,r0,%d\n", temp,
+              index_load_pointer); // Get the value of the offset into the haep
+
+      index_store_pointer -= 4;
+      if (index_store_pointer == 0)
+        index_load_pointer = 0;
+      else
+        index_load_pointer = index_store_pointer - 4;
+
+      fprintf(out, "lw %s, indexstorage(%s) %%s HERE1!!\n", temp,
+              temp); // Load the value of the offset into the indexstorage.
+      fprintf(out, "add %s,r14,%s\n", temp,
+              temp); // Add the stack frame pointer to this value.
+      fprintf(out, "lw %s, 0(%s)\n", right_register,
+              temp); // Load the value of the offset into the stack
+                     // frame into the left operand register.
+      free_register(temp);
+    }
+
+    if (leftOffset) {
+
+      fprintf(out, "lw %s,%d(r14) %%s relexpr\n", left_register, leftOffset);
+    } else {
+
+      fprintf(debugging_info, "LOADING OFFSET FROM LOAD POINTER OF VALUE %d\n",
+              index_load_pointer);
+      const char *temp = get_next_free_register();
+
+      fprintf(out, "addi %s,r0,%d\n", temp,
+              index_load_pointer); // Get the value of the offset into the haep
+
+      index_store_pointer -= 4;
+      if (index_store_pointer == 0)
+        index_load_pointer = 0;
+      else
+        index_load_pointer = index_store_pointer - 4;
+      fprintf(debugging_info, "IN THE LEFT OFFSET THE VALUE OF LOAD %d \n",
+              index_load_pointer);
+
+      fprintf(out, "lw %s, indexstorage(%s) %%s HERE2 !!!\n", temp,
+              temp); // Load the value of the offset into the indexstorage.
+      fprintf(out, "add %s,r14,%s\n", temp,
+              temp); // Add the stack frame pointer to this value.
+      fprintf(out, "lw %s, 0(%s)\n", left_register,
+              temp); // Load the value of the offset into the stack
+                     // frame into the left operand register.
+      free_register(temp);
+    }
+
     fprintf(out, "%s %s,%s,%s\n", instructionOperation, opertion_register,
             left_register, right_register);
     fprintf(out, "sw %d(r14), %s\n", operationOffset, opertion_register);
@@ -1810,8 +1893,14 @@ void code_gen_pass(node *root, Scope *globalScope, FILE *out,
       node *return_value_node = current->children[0];
       int offset =
           handle_expression(return_value_node, errors, out, globalScope);
-      // Need to refactor for array types.
-      fprintf(out, "lw r13,%d(r14)\n", offset);
+
+      if (offset) {
+        fprintf(out, "lw r13,%d(r14)\n", offset);
+        fprintf(out, "lw r15, 0(r14)\n");
+        fprintf(out, "jr r15\n"); // Note that we should return to calling
+                                  // function at this point.
+      } else {
+      }
     }
     if (current->type == whilenode) {
       handle_while_statement(current, globalScope, errors, out);
@@ -1972,3 +2061,9 @@ void write_subroutine(FILE *out) {
 
   fprintf(out, "\n\n\n");
 }
+
+/*
+ * This function will print the instructions that will be necessary to load the
+ * value for the index offset into the register passed and then retrieve the
+ * value at that offset.
+ */

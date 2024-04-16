@@ -5,9 +5,15 @@
 func complex_expression(x: integer, y: integer, z: integer)->integer{
    return(x+y*z-(x*y)/z+x);
 }
-func another_complex_expression()->void{
+func another_complex_expression()->integer{
     return(((1+2)*3)/3);
   }
+
+
+
+
+
+
 
 
 func complex_expression_with_relops(x:integer, y: integer, z: integer) -> void{
@@ -118,6 +124,9 @@ func main()->void{
    complex_expression_with_relops(1,2,3);
    complex_expression_with_relops(1,2,3);
 
-   write(another_complex_expression());
+   write(another_complex_expression()); //Output should be 3.
+
+
+    
 
   }

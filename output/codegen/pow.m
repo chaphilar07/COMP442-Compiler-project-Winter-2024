@@ -2,7 +2,7 @@ align
 main
 sw 0(r14),r15
 while100
-addi r1,r0,10 
+addi r1,r0,100 
 sw 24(r14),r1
 lw r2,28(r14) %s relexpr
 lw r1, 24(r14)
@@ -26,11 +26,22 @@ lw r13, 16(r14)
 addi r14,r14,-8
 jl r15, write
 addi r14,r14, 8
+addi r1,r0,0
+lw r2, 28(r14)
+sw parameterstorage(r1),r2
+addi r3,r0,2 
+sw 4(r14),r3
+addi r1,r0,4
+lw r2, 4(r14)
+sw parameterstorage(r1),r2
+addi r14,r14,-48
+jl r15,pow
+addi r14,r14,48
 addi r1,r0,1 
 sw 12(r14),r1
 lw r2,12(r14)
 lw r1, 28(r14)
-add r3,r1,r2 %s operation add performed 
+add r3,r1,r2
 sw 8(r14),r3
 lw r1,8(r14)
 sw 28(r14),r1
@@ -57,13 +68,15 @@ lw r1,4(r14)
 sw 16(r14),r1
 addi r1,r0,1 
 sw 20(r14),r1
-lw r2,8(r14) %s relexpr
+lw r2,32(r14) %s relexpr
 lw r1, 20(r14)
 ceq r3,r2,r1
 sw 28(r14), r3
 lw r1,28(r14)
 bz r1,else100
 lw r13,4(r14)
+lw r15, 0(r14)
+jr r15
 j endif100
 else100
 while101
@@ -75,7 +88,7 @@ lw r1, 24(r14)
 bz r1,endwhile101
 lw r2,16(r14)
 lw r1, 4(r14)
-mul r3,r1,r2 %s operation mul performed 
+mul r3,r1,r2
 sw 12(r14),r3
 lw r1,12(r14)
 sw 4(r14),r1
@@ -83,13 +96,15 @@ addi r1,r0,1
 sw 36(r14),r1
 lw r2,36(r14)
 lw r1, 32(r14)
-add r3,r1,r2 %s operation add performed 
+add r3,r1,r2
 sw 40(r14),r3
 lw r1,40(r14)
 sw 32(r14),r1
 j while101
 endwhile101
 lw r13,4(r14)
+lw r15, 0(r14)
+jr r15
 endif100
 lw r15, 0(r14)
 jr r15

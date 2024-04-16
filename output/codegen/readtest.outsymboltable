@@ -1,0 +1,42 @@
+BEGINNING OF TABLE FOR:  global scope "Global"
+
+Table Entry 1 of "Global":func read_write_arr -> void : 	size: 88	return type size: 0
+
+			BEGINNING OF TABLE FOR:  function scope "read_write_arr"
+
+			Table Entry 1 of "read_write_arr":litval	size: 4	offset: 4	 value: 10	name: literal105
+
+			Table Entry 2 of "read_write_arr":var arr integer[10]	size: 40	offset: 8
+
+			Table Entry 3 of "read_write_arr":tempvar	size: 4	offset: 48	name: temp101	
+
+			Table Entry 4 of "read_write_arr":litval	size: 4	offset: 52	 value: 0	name: literal103
+
+			Table Entry 5 of "read_write_arr":litval	size: 4	offset: 56	 value: 1	name: literal104
+
+			Table Entry 6 of "read_write_arr":litval	size: 4	offset: 60	 value: 10	name: literal102
+
+			Table Entry 7 of "read_write_arr":tempvar	size: 4	offset: 64	name: temp102	
+
+			Table Entry 8 of "read_write_arr":tempvar	size: 4	offset: 68	name: temp103	
+
+			Table Entry 9 of "read_write_arr":var i integer	size: 4	offset: 72
+
+			Table Entry 10 of "read_write_arr":litval	size: 4	offset: 76	 value: 1	name: literal101
+
+			Table Entry 11 of "read_write_arr":tempvar	size: 4	offset: 80	name: temp100	
+
+			Table Entry 12 of "read_write_arr":litval	size: 4	offset: 84	 value: 0	name: literal100
+
+			END OF TABLE FOR SCOPE function scope "read_write_arr"
+
+Table Entry 2 of "Global":func main -> void : 	size: 4	return type size: 0
+
+			BEGINNING OF TABLE FOR:  function scope "main"
+
+			Table Entry 1 of "main":litval	size: 0	offset: 4	 value: function value	name: literal106
+
+			END OF TABLE FOR SCOPE function scope "main"
+
+END OF TABLE FOR SCOPE global scope "Global"
+

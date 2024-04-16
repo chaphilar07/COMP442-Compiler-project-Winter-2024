@@ -39,7 +39,7 @@ node [fontname=Sans];charset= " UTF-8" splines=true splines=spline rankdir =LR
 290[label="identifier | i"];
 291[label="dimlist | (null)"];
 294[label="relop | lt"];
-295[label="intnum | 10"];
+295[label="intnum | 100"];
 327[label="statblock | (null)"];
 327 -> 326
 327 -> 310
@@ -152,7 +152,7 @@ node [fontname=Sans];charset= " UTF-8" splines=true splines=spline rankdir =LR
 204[label="var | (null)"];
 204 -> 202
 204 -> 201
-201[label="identifier | p"];
+201[label="identifier | i"];
 202[label="dimlist | (null)"];
 205[label="relop | eq"];
 206[label="intnum | 1"];

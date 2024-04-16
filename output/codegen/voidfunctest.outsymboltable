@@ -1,0 +1,12 @@
+BEGINNING OF TABLE FOR:  global scope "Global"
+
+Table Entry 1 of "Global":func returnsvoid -> void : 	size: 8	return type size: 0
+
+			BEGINNING OF TABLE FOR:  function scope "returnsvoid"
+
+			Table Entry 1 of "returnsvoid":litval	size: 4	offset: 4	 value: 0	name: literal100
+
+			END OF TABLE FOR SCOPE function scope "returnsvoid"
+
+END OF TABLE FOR SCOPE global scope "Global"
+

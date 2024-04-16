@@ -1,22 +1,9 @@
+#include "../utils/utils.h"
 #include "Lexer.h"
 #include <dirent.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-char *extractFileName(const char *fullFileName) {
-  char *period = strrchr(fullFileName, '.');
-  if (!period || period == fullFileName) {
-    return NULL;
-  }
-  size_t length = period - fullFileName;
-  char *fileName = malloc(length + 1);
-  if (fileName) {
-    strncpy(fileName, fullFileName, length);
-    fileName[length] = '\0';
-  }
-  return fileName;
-}
 
 int main(int argc, char *argv[]) {
 

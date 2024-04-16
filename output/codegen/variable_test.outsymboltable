@@ -1,0 +1,26 @@
+BEGINNING OF TABLE FOR:  global scope "Global"
+
+Table Entry 1 of "Global":func main -> void : 	size: 8	return type size: 0
+
+			BEGINNING OF TABLE FOR:  function scope "main"
+
+			Table Entry 1 of "main":litval	size: 4	offset: 4	 value: 1	name: literal102
+
+			Table Entry 2 of "main":litval	size: 0	offset: 8	 value: function value	name: literal101
+
+			END OF TABLE FOR SCOPE function scope "main"
+
+Table Entry 2 of "Global":func increment -> void : x integer	size: 16	return type size: 0
+
+			BEGINNING OF TABLE FOR:  function scope "increment"
+
+			Table Entry 1 of "increment":fparam x integer Number: 0	size: 4	offset: 4
+
+			Table Entry 2 of "increment":tempvar	size: 4	offset: 8	name: temp100	
+
+			Table Entry 3 of "increment":litval	size: 4	offset: 12	 value: 1	name: literal100
+
+			END OF TABLE FOR SCOPE function scope "increment"
+
+END OF TABLE FOR SCOPE global scope "Global"
+

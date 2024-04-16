@@ -1,0 +1,9 @@
+func increment(x:integer)->void{
+  write(x+1);
+}
+
+func main()->void{
+    write(increment(1));
+  }
+
+

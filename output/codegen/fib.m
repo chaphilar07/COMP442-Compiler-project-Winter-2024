@@ -35,7 +35,7 @@ addi r1,r0,1
 sw 24(r14),r1
 lw r2,24(r14)
 lw r1, 28(r14)
-add r3,r1,r2 %s operation add performed 
+add r3,r1,r2
 sw 8(r14),r3
 lw r1,8(r14)
 sw 28(r14),r1
@@ -60,13 +60,15 @@ sw 32(r14), r3
 lw r1,32(r14)
 bz r1,else100
 lw r13,4(r14)
+lw r15, 0(r14)
+jr r15
 j endif100
 else100
 addi r3,r0,1 
 sw 12(r14),r3
 lw r4,12(r14)
 lw r3, 4(r14)
-sub r5,r3,r4 %s operation sub performed 
+sub r5,r3,r4
 sw 28(r14),r5
 addi r1,r0,0
 lw r2, 28(r14)
@@ -81,7 +83,7 @@ addi r3,r0,1
 sw 12(r14),r3
 lw r4,12(r14)
 lw r3, 4(r14)
-sub r5,r3,r4 %s operation sub performed 
+sub r5,r3,r4
 sw 28(r14),r5
 addi r1,r0,0
 lw r2, 28(r14)
@@ -93,7 +95,7 @@ addi r3,r0,2
 sw 40(r14),r3
 lw r4,40(r14)
 lw r3, 4(r14)
-sub r5,r3,r4 %s operation sub performed 
+sub r5,r3,r4
 sw 8(r14),r5
 addi r1,r0,0
 lw r2, 8(r14)
@@ -108,7 +110,7 @@ addi r3,r0,2
 sw 40(r14),r3
 lw r4,40(r14)
 lw r3, 4(r14)
-sub r5,r3,r4 %s operation sub performed 
+sub r5,r3,r4
 sw 8(r14),r5
 addi r1,r0,0
 lw r2, 8(r14)
@@ -118,9 +120,11 @@ jl r15,fib
 addi r14,r14,52
 lw r2,20(r14)
 lw r1, 36(r14)
-add r3,r1,r2 %s operation add performed 
+add r3,r1,r2
 sw 44(r14),r3
 lw r13,44(r14)
+lw r15, 0(r14)
+jr r15
 endif100
 lw r15, 0(r14)
 jr r15

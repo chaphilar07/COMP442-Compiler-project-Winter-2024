@@ -1,6 +1,7 @@
+
 /*
- * This source file contains array testing.
- */ 
+ * test!
+ */
 func return1()->integer{
     return(1);
   }

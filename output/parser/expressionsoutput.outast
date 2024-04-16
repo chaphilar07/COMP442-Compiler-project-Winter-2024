@@ -859,7 +859,7 @@ node [fontname=Sans];charset= " UTF-8" splines=true splines=spline rankdir =LR
 246 -> 225
 225[label="identifier | another_complex_expression"];
 226[label="fparams list | (null)"];
-227[label="type | void"];
+227[label="type | integer"];
 244[label="funcbody | (null)"];
 244 -> 243
 243[label="return | (null)"];

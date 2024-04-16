@@ -159,15 +159,17 @@ TypeInfo get_type_info(node *astnode) {
  * This function compares the type information of two variables.
  */
 bool compare_type_info(TypeInfo info1, TypeInfo info2) {
-  // We want this function to to type promotion of ints -> floats when unary.
 
-  if (info1.type != info2.type)
+  if (info1.type != info2.type) {
     return false;
+  }
 
-  if (strcmp(info1.typeString, info2.typeString))
+  if (strcmp(info1.typeString, info2.typeString)) {
     return false;
-  if (info1.numberofdims != info2.numberofdims)
+  }
+  if (info1.numberofdims != info2.numberofdims) {
     return false;
+  }
 
   // Note that we can have two variables with the same number of of dimensions
   // but they have different quantities for those dimensions so they do not have
@@ -1198,7 +1200,7 @@ Scope *create_program_scope(node *root, void *arr) {
           entry->data.TempVarEntry.name; // So we will keep some temporary
                                          // variable for the values here.
     }
-    if (current->type == dot) {
+    if (current->type == dot || current->type == whilenode) {
 
       semantic_stack *stack = init_stack();
       push_node(current, stack);
@@ -1404,7 +1406,7 @@ Scope *create_program_scope(node *root, void *arr) {
           // this tree at the parent.
 
           /*
-           * Want to to here is "cut" the fundef node from the rest of the tree,
+           * Want to do here is "cut" the fundef node from the rest of the tree,
            * to do this we will get the parent node find the child node of the
            * parent node that corresponds to this function definition nodes and
            * we wll set it to NULL.

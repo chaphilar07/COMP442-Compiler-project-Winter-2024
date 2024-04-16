@@ -1,0 +1,50 @@
+BEGINNING OF TABLE FOR:  global scope "Global"
+
+Table Entry 1 of "Global":func print_not -> void : x integer	size: 8	return type size: 0
+
+			BEGINNING OF TABLE FOR:  function scope "print_not"
+
+			Table Entry 1 of "print_not":fparam x integer Number: 0	size: 4	offset: 4
+
+			END OF TABLE FOR SCOPE function scope "print_not"
+
+Table Entry 2 of "Global":func main -> void : 	size: 36	return type size: 0
+
+			BEGINNING OF TABLE FOR:  function scope "main"
+
+			Table Entry 1 of "main":litval	size: 4	offset: 4	 value: 0	name: literal105
+
+			Table Entry 2 of "main":litval	size: 4	offset: 8	 value: 0	name: literal103
+
+			Table Entry 3 of "main":litval	size: 4	offset: 12	 value: function value	name: literal104
+
+			Table Entry 4 of "main":litval	size: 4	offset: 16	 value: 0	name: literal109
+
+			Table Entry 5 of "main":litval	size: 0	offset: 20	 value: function value	name: literal102
+
+			Table Entry 6 of "main":litval	size: 4	offset: 20	 value: function value	name: literal107
+
+			Table Entry 7 of "main":litval	size: 4	offset: 24	 value: 1	name: literal108
+
+			Table Entry 8 of "main":litval	size: 4	offset: 28	 value: 0	name: literal106
+
+			Table Entry 9 of "main":litval	size: 4	offset: 32	 value: 3	name: literal101
+
+			Table Entry 10 of "main":litval	size: 0	offset: 36	 value: function value	name: literal100
+
+			END OF TABLE FOR SCOPE function scope "main"
+
+Table Entry 3 of "Global":func x_or_not_y -> integer : x integer,y integer	size: 16	return type size: 4
+
+			BEGINNING OF TABLE FOR:  function scope "x_or_not_y"
+
+			Table Entry 1 of "x_or_not_y":fparam x integer Number: 1	size: 4	offset: 4
+
+			Table Entry 2 of "x_or_not_y":fparam y integer Number: 0	size: 4	offset: 8
+
+			Table Entry 3 of "x_or_not_y":tempvar	size: 4	offset: 12	name: temp100	
+
+			END OF TABLE FOR SCOPE function scope "x_or_not_y"
+
+END OF TABLE FOR SCOPE global scope "Global"
+

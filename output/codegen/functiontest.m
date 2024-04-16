@@ -15,18 +15,33 @@ addi r14,r14,8
 sw 12(r14),r13
 lw r2,8(r14)
 lw r1, 12(r14)
-add r3,r1,r2 %s operation add performed 
+add r3,r1,r2
 sw 24(r14),r3
 lw r2,20(r14)
 lw r1, 24(r14)
-add r3,r1,r2 %s operation add performed 
+add r3,r1,r2
 sw 16(r14),r3
 lw r1,16(r14)
 sw 4(r14),r1
+addi r14,r14,-8
+jl r15,return3
+addi r14,r14,8
+addi r14,r14,-8
+jl r15,return2
+addi r14,r14,8
+addi r14,r14,-8
+jl r15,return1
+addi r14,r14,8
 lw r13, 4(r14)
 addi r14,r14,-8
 jl r15, write
 addi r14,r14, 8
+addi r1,r0,0
+lw r2, 4(r14)
+sw parameterstorage(r1),r2
+addi r14,r14,-24
+jl r15,rec
+addi r14,r14,24
 lw r15, 0(r14)
 jr r15
 
@@ -49,6 +64,18 @@ lw r13, 4(r14)
 addi r14,r14,-8
 jl r15, write
 addi r14,r14, 8
+addi r3,r0,1 
+sw 16(r14),r3
+lw r4,16(r14)
+lw r3, 4(r14)
+sub r5,r3,r4
+sw 20(r14),r5
+addi r1,r0,0
+lw r2, 20(r14)
+sw parameterstorage(r1),r2
+addi r14,r14,-24
+jl r15,rec
+addi r14,r14,24
 j endif100
 else100
 endif100

@@ -1,0 +1,60 @@
+PROG eof
+REPTPROG0 eof
+STRUCTORIMPLORFUNC REPTPROG0 eof
+FUNCDEF REPTPROG0 eof
+FUNCHEAD FUNCBODY REPTPROG0 eof
+func id lpar FPARAMS rpar arrow RETURNTYPE FUNCBODY REPTPROG0 eof
+func id lpar id colon TYPE REPTFPARAMS3 REPTFPARAMS4 rpar arrow RETURNTYPE FUNCBODY REPTPROG0 eof
+func id lpar id colon integer REPTFPARAMS3 REPTFPARAMS4 rpar arrow RETURNTYPE FUNCBODY REPTPROG0 eof
+func id lpar id colon integer REPTFPARAMS4 rpar arrow RETURNTYPE FUNCBODY REPTPROG0 eof
+func id lpar id colon integer rpar arrow RETURNTYPE FUNCBODY REPTPROG0 eof
+func id lpar id colon integer rpar arrow void FUNCBODY REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr VARDECLORSTAT REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr STATEMENT REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar EXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar ARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar TERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar FACTOR RIGHTRECTERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id FACTOR2 REPTVARIABLEORFUNCTIONCALL RIGHTRECTERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id REPTVARIABLEORFUNCTIONCALL RIGHTRECTERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id RIGHTRECTERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id ADDOP TERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id plus TERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id plus FACTOR RIGHTRECTERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id plus intlit RIGHTRECTERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id plus intlit RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id plus intlit OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id plus intlit rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id plus intlit rpar semi rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id plus intlit rpar semi rcubr STRUCTORIMPLORFUNC REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id plus intlit rpar semi rcubr FUNCDEF REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id plus intlit rpar semi rcubr FUNCHEAD FUNCBODY REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id plus intlit rpar semi rcubr func id lpar FPARAMS rpar arrow RETURNTYPE FUNCBODY REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id plus intlit rpar semi rcubr func id lpar rpar arrow RETURNTYPE FUNCBODY REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id plus intlit rpar semi rcubr func id lpar rpar arrow void FUNCBODY REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id plus intlit rpar semi rcubr func id lpar rpar arrow void lcubr REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id plus intlit rpar semi rcubr func id lpar rpar arrow void lcubr VARDECLORSTAT REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id plus intlit rpar semi rcubr func id lpar rpar arrow void lcubr STATEMENT REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id plus intlit rpar semi rcubr func id lpar rpar arrow void lcubr write lpar EXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id plus intlit rpar semi rcubr func id lpar rpar arrow void lcubr write lpar ARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id plus intlit rpar semi rcubr func id lpar rpar arrow void lcubr write lpar TERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id plus intlit rpar semi rcubr func id lpar rpar arrow void lcubr write lpar FACTOR RIGHTRECTERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id plus intlit rpar semi rcubr func id lpar rpar arrow void lcubr write lpar id FACTOR2 REPTVARIABLEORFUNCTIONCALL RIGHTRECTERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id plus intlit rpar semi rcubr func id lpar rpar arrow void lcubr write lpar id lpar APARAMS rpar REPTVARIABLEORFUNCTIONCALL RIGHTRECTERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id plus intlit rpar semi rcubr func id lpar rpar arrow void lcubr write lpar id lpar EXPR REPT_APARAMS1 rpar REPTVARIABLEORFUNCTIONCALL RIGHTRECTERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id plus intlit rpar semi rcubr func id lpar rpar arrow void lcubr write lpar id lpar ARITHEXPR OPTRELEXPR REPT_APARAMS1 rpar REPTVARIABLEORFUNCTIONCALL RIGHTRECTERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id plus intlit rpar semi rcubr func id lpar rpar arrow void lcubr write lpar id lpar TERM RIGHTRECARITHEXPR OPTRELEXPR REPT_APARAMS1 rpar REPTVARIABLEORFUNCTIONCALL RIGHTRECTERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id plus intlit rpar semi rcubr func id lpar rpar arrow void lcubr write lpar id lpar FACTOR RIGHTRECTERM RIGHTRECARITHEXPR OPTRELEXPR REPT_APARAMS1 rpar REPTVARIABLEORFUNCTIONCALL RIGHTRECTERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id plus intlit rpar semi rcubr func id lpar rpar arrow void lcubr write lpar id lpar intlit RIGHTRECTERM RIGHTRECARITHEXPR OPTRELEXPR REPT_APARAMS1 rpar REPTVARIABLEORFUNCTIONCALL RIGHTRECTERM RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id plus intlit rpar semi rcubr func id lpar rpar arrow void lcubr write lpar id lpar intlit RIGHTRECARITHEXPR OPTRELEXPR REPT_APARAMS1 rpar REPTVARIABLEORFUNCTIONCALL RIGHTRECARITHEXPR OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id plus intlit rpar semi rcubr func id lpar rpar arrow void lcubr write lpar id lpar intlit OPTRELEXPR REPT_APARAMS1 rpar REPTVARIABLEORFUNCTIONCALL OPTRELEXPR rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id plus intlit rpar semi rcubr func id lpar rpar arrow void lcubr write lpar id lpar intlit REPT_APARAMS1 rpar REPTVARIABLEORFUNCTIONCALL rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id plus intlit rpar semi rcubr func id lpar rpar arrow void lcubr write lpar id lpar intlit rpar REPTVARIABLEORFUNCTIONCALL rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id plus intlit rpar semi rcubr func id lpar rpar arrow void lcubr write lpar id lpar intlit rpar rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id plus intlit rpar semi rcubr func id lpar rpar arrow void lcubr write lpar id lpar intlit rpar rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id plus intlit rpar semi rcubr func id lpar rpar arrow void lcubr write lpar id lpar intlit rpar rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id plus intlit rpar semi rcubr func id lpar rpar arrow void lcubr write lpar id lpar intlit rpar rpar semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id plus intlit rpar semi rcubr func id lpar rpar arrow void lcubr write lpar id lpar intlit rpar rpar semi rcubr REPTPROG0 eof
+func id lpar id colon integer rpar arrow void lcubr write lpar id plus intlit rpar semi rcubr func id lpar rpar arrow void lcubr write lpar id lpar intlit rpar rpar semi rcubr eof

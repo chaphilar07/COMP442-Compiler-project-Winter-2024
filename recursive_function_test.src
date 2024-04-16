@@ -1,0 +1,22 @@
+func countdown(x:integer)->void{
+  if(x>0) then {
+   write(x);
+   countdown(x-1);
+  }else{
+  //Do nothing.
+  }; 
+  }
+
+  func countup(x:integer,n:integer)->void{
+    if(x<=n)then{
+        write(x);
+        countup(x+1,n);
+      }else{
+        //Do nothing.
+        };
+    }
+
+func main()->void{
+    countdown(20);
+    countup(0,20);
+  }

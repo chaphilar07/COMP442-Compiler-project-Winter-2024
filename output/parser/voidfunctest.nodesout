@@ -1,0 +1,7 @@
+Leaf token created of type identifier and value returnsvoid 
+Leaf token created of type type and value void 
+Leaf token created of type intnum and value 0 
+Aggregate node of type funcdef list and value of (null) with 1 childen 
+Aggregate node of type impldeflist and value of (null) with 0 childen 
+Aggregate node of type structdecl list and value of (null) with 0 childen 
+Aggregate node of type prog and value of (null) with 3 childen 

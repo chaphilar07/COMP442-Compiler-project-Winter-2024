@@ -309,7 +309,7 @@ void print_errors(FILE *out, ErrorArray *err) {
     free((void *)err->errors[i].msg);
   }
 
-  fprintf(out, "End of Error Report, total of %d errors found.\n",
+  fprintf(out, "End of Error Report, total of %d errors/warnings found.\n",
           err->currentSize);
 
   free(err);

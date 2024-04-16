@@ -1,0 +1,24 @@
+BEGINNING OF TABLE FOR:  global scope "Global"
+
+Table Entry 1 of "Global":func main -> void : 	size: 16	return type size: 0
+
+			BEGINNING OF TABLE FOR:  function scope "main"
+
+			Table Entry 1 of "main":var x integer	size: 4	offset: 4
+
+			Table Entry 2 of "main":litval	size: 4	offset: 8	 value: function value	name: literal102
+
+			Table Entry 3 of "main":litval	size: 4	offset: 12	 value: 1	name: literal101
+
+			END OF TABLE FOR SCOPE function scope "main"
+
+Table Entry 2 of "Global":func return_negative -> integer : 	size: 8	return type size: 4
+
+			BEGINNING OF TABLE FOR:  function scope "return_negative"
+
+			Table Entry 1 of "return_negative":litval	size: 4	offset: 4	 value: 1	name: literal100
+
+			END OF TABLE FOR SCOPE function scope "return_negative"
+
+END OF TABLE FOR SCOPE global scope "Global"
+

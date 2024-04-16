@@ -1,0 +1,3 @@
+func returnsvoid()->void{
+    return(0); //Should not return a value semantic error.
+  }

@@ -1,0 +1,8 @@
+[invalidchar, @, 1]
+[invalidchar, #, 1]
+[invalidchar, $, 1]
+[invalidchar, ', 1]
+[invalidchar, \, 1]
+[invalidchar, ~, 1]
+[invalidchar, _, 18]
+[invalidchar, _, 20]

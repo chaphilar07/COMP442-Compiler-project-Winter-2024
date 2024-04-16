@@ -1,0 +1,25 @@
+digraph AST {
+node [shape=record];
+node [fontname=Sans];charset= " UTF-8" splines=true splines=spline rankdir =LR
+167[label="prog | (null)"];
+167 -> 166
+167 -> 165
+167 -> 164
+164[label="funcdef list | (null)"];
+164 -> 160
+160[label="funcdef | (null)"];
+160 -> 158
+160 -> 153
+160 -> 152
+160 -> 151
+151[label="identifier | returnsvoid"];
+152[label="fparams list | (null)"];
+153[label="type | void"];
+158[label="funcbody | (null)"];
+158 -> 157
+157[label="return | (null)"];
+157 -> 155
+155[label="intnum | 0"];
+165[label="impldeflist | (null)"];
+166[label="structdecl list | (null)"];
+}

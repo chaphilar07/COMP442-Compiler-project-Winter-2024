@@ -1,0 +1,14 @@
+func print_not(x:integer)->void{
+    write(!x);
+  }
+
+func x_or_not_y(x:integer,y:integer)->integer{
+    return(x|(!y));
+  }
+
+func main()->void{
+    print_not(3);
+    print_not(0);
+    write(x_or_not_y(0,0));//1
+    write(x_or_not_y(0,1));//0
+  }

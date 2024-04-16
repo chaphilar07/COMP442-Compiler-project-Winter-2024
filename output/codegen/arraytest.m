@@ -32,27 +32,27 @@ addi r1,r0,1
 sw 268(r14),r1
 lw r2,124(r14)
 lw r1, 268(r14)
-add r3,r1,r2 %s operation add performed 
+add r3,r1,r2
 sw 164(r14),r3
 lw r2,392(r14)
 lw r1, 164(r14)
-add r3,r1,r2 %s operation add performed 
+add r3,r1,r2
 sw 116(r14),r3
 lw r2,144(r14)
 lw r1, 116(r14)
-add r3,r1,r2 %s operation add performed 
+add r3,r1,r2
 sw 308(r14),r3
 lw r2,212(r14)
 lw r1, 308(r14)
-add r3,r1,r2 %s operation add performed 
+add r3,r1,r2
 sw 236(r14),r3
 lw r2,204(r14)
 lw r1, 236(r14)
-add r3,r1,r2 %s operation add performed 
+add r3,r1,r2
 sw 112(r14),r3
 lw r2,276(r14)
 lw r1, 112(r14)
-add r3,r1,r2 %s operation add performed 
+add r3,r1,r2
 sw 368(r14),r3
 lw r1,368(r14)
 sw 92(r14),r1
@@ -73,7 +73,7 @@ addi r1,r0,1
 sw 380(r14),r1
 lw r2,380(r14)
 lw r1, 316(r14)
-add r3,r1,r2 %s operation add performed 
+add r3,r1,r2
 sw 220(r14),r3
 addi r1,r0,12 %s accumulator register is r1 
 lw r2,316(r14)
@@ -110,7 +110,7 @@ lw r4, indexstorage(r4) %s HERE1!!
 add r4,r14,r4
 lw r2, 0(r4)
 lw r1, 92(r14)
-add r3,r1,r2 %s operation add performed 
+add r3,r1,r2
 sw 372(r14),r3
 lw r1,372(r14)
 sw 92(r14),r1
@@ -118,7 +118,7 @@ addi r1,r0,1
 sw 324(r14),r1
 lw r2,324(r14)
 lw r1, 316(r14)
-add r3,r1,r2 %s operation add performed 
+add r3,r1,r2
 sw 312(r14),r3
 lw r1,312(r14)
 sw 316(r14),r1
@@ -172,28 +172,28 @@ addi r4,r0,16
 lw r4, indexstorage(r4) %s HERE2 !!!
 add r4,r14,r4
 lw r1, 0(r4)
-add r3,r1,r2 %s operation add performed 
+add r3,r1,r2
 sw 160(r14),r3
 addi r4,r0,12
 lw r4, indexstorage(r4) %s HERE1!!
 add r4,r14,r4
 lw r2, 0(r4)
 lw r1, 160(r14)
-add r3,r1,r2 %s operation add performed 
+add r3,r1,r2
 sw 228(r14),r3
 addi r4,r0,8
 lw r4, indexstorage(r4) %s HERE1!!
 add r4,r14,r4
 lw r2, 0(r4)
 lw r1, 228(r14)
-add r3,r1,r2 %s operation add performed 
+add r3,r1,r2
 sw 360(r14),r3
 addi r4,r0,4
 lw r4, indexstorage(r4) %s HERE1!!
 add r4,r14,r4
 lw r2, 0(r4)
 lw r1, 360(r14)
-add r3,r1,r2 %s operation add performed 
+add r3,r1,r2
 sw 108(r14),r3
 lw r1,108(r14)
 sw 92(r14),r1
@@ -253,7 +253,7 @@ addi r5,r0,4
 lw r5, indexstorage(r5) %s HERE2 !!!
 add r5,r14,r5
 lw r2, 0(r5)
-mul r4,r2,r3 %s operation mul performed 
+mul r4,r2,r3
 sw 100(r14),r4
 addi r2,r0,12 %s accumulator register is r2 
 addi r3,r0,0 
@@ -268,7 +268,7 @@ addi r5,r0,4
 lw r5, indexstorage(r5) %s HERE2 !!!
 add r5,r14,r5
 lw r2, 0(r5)
-add r4,r2,r3 %s operation add performed 
+add r4,r2,r3
 sw 152(r14),r4
 lw r2,152(r14)
 muli r2,r2,4
@@ -280,7 +280,7 @@ addi r4,r0,4
 lw r4, indexstorage(r4) %s HERE2 !!!
 add r4,r14,r4
 lw r1, 0(r4)
-mul r3,r1,r2 %s operation mul performed 
+mul r3,r1,r2
 sw 300(r14),r3
 lw r1,300(r14)
 sw 92(r14),r1
@@ -309,15 +309,15 @@ addi r14,r14,8
 sw 128(r14),r13
 lw r2,396(r14)
 lw r1, 128(r14)
-add r3,r1,r2 %s operation add performed 
+add r3,r1,r2
 sw 356(r14),r3
 lw r2,340(r14)
 lw r1, 356(r14)
-add r3,r1,r2 %s operation add performed 
+add r3,r1,r2
 sw 168(r14),r3
 lw r2,172(r14)
 lw r1, 168(r14)
-add r3,r1,r2 %s operation add performed 
+add r3,r1,r2
 sw 240(r14),r3
 lw r1,240(r14)
 sw 92(r14),r1
@@ -356,22 +356,22 @@ addi r2,r0,1
 sw 272(r14),r2
 lw r3,200(r14)
 lw r2, 272(r14)
-add r4,r2,r3 %s operation add performed 
+add r4,r2,r3
 sw 296(r14),r4
 lw r3,136(r14)
 lw r2, 296(r14)
-add r4,r2,r3 %s operation add performed 
+add r4,r2,r3
 sw 224(r14),r4
 lw r3,4(r14)
 lw r2, 224(r14)
-add r4,r2,r3 %s operation add performed 
+add r4,r2,r3
 sw 156(r14),r4
 addi r5,r0,4
 lw r5, indexstorage(r5) %s HERE1!!
 add r5,r14,r5
 lw r3, 0(r5)
 lw r2, 156(r14)
-add r4,r2,r3 %s operation add performed 
+add r4,r2,r3
 sw 104(r14),r4
 lw r2,104(r14)
 muli r2,r2,4
@@ -436,28 +436,28 @@ addi r5,r0,16
 lw r5, indexstorage(r5) %s HERE2 !!!
 add r5,r14,r5
 lw r2, 0(r5)
-add r4,r2,r3 %s operation add performed 
+add r4,r2,r3
 sw 216(r14),r4
 addi r5,r0,12
 lw r5, indexstorage(r5) %s HERE1!!
 add r5,r14,r5
 lw r3, 0(r5)
 lw r2, 216(r14)
-add r4,r2,r3 %s operation add performed 
+add r4,r2,r3
 sw 148(r14),r4
 addi r5,r0,8
 lw r5, indexstorage(r5) %s HERE1!!
 add r5,r14,r5
 lw r3, 0(r5)
 lw r2, 148(r14)
-add r4,r2,r3 %s operation add performed 
+add r4,r2,r3
 sw 96(r14),r4
 addi r5,r0,4
 lw r5, indexstorage(r5) %s HERE1!!
 add r5,r14,r5
 lw r3, 0(r5)
 lw r2, 96(r14)
-add r4,r2,r3 %s operation add performed 
+add r4,r2,r3
 sw 348(r14),r4
 lw r2,348(r14)
 muli r2,r2,4
@@ -503,7 +503,7 @@ addi r2,r0,1
 sw 252(r14),r2
 lw r3,252(r14)
 lw r2, 316(r14)
-add r4,r2,r3 %s operation add performed 
+add r4,r2,r3
 sw 288(r14),r4
 lw r2,288(r14)
 sw 316(r14),r2
@@ -539,7 +539,7 @@ addi r2,r0,1
 sw 320(r14),r2
 lw r3,320(r14)
 lw r2, 316(r14)
-add r4,r2,r3 %s operation add performed 
+add r4,r2,r3
 sw 304(r14),r4
 lw r2,304(r14)
 sw 316(r14),r2
@@ -557,6 +557,8 @@ sw 4(r14),r2
 lw r13,4(r14)
 lw r15, 0(r14)
 jr r15
+lw r15, 0(r14)
+jr r15
 
 
 align
@@ -565,6 +567,8 @@ sw 0(r14),r15
 addi r2,r0,3 
 sw 4(r14),r2
 lw r13,4(r14)
+lw r15, 0(r14)
+jr r15
 lw r15, 0(r14)
 jr r15
 
@@ -577,6 +581,8 @@ sw 4(r14),r2
 lw r13,4(r14)
 lw r15, 0(r14)
 jr r15
+lw r15, 0(r14)
+jr r15
 
 
 align
@@ -585,6 +591,8 @@ sw 0(r14),r15
 addi r2,r0,1 
 sw 4(r14),r2
 lw r13,4(r14)
+lw r15, 0(r14)
+jr r15
 lw r15, 0(r14)
 jr r15
 

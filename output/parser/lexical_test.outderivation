@@ -1,0 +1,15 @@
+PROG eof
+REPTPROG0 eof
+STRUCTORIMPLORFUNC REPTPROG0 eof
+FUNCDEF REPTPROG0 eof
+FUNCHEAD FUNCBODY REPTPROG0 eof
+func id lpar FPARAMS rpar arrow RETURNTYPE FUNCBODY REPTPROG0 eof
+func id lpar id colon TYPE REPTFPARAMS3 REPTFPARAMS4 rpar arrow RETURNTYPE FUNCBODY REPTPROG0 eof
+func id lpar id colon integer REPTFPARAMS3 REPTFPARAMS4 rpar arrow RETURNTYPE FUNCBODY REPTPROG0 eof
+func id lpar id colon integer REPTFPARAMS3 REPTFPARAMS4 rpar arrow void FUNCBODY REPTPROG0 eof
+func id lpar id colon integer REPTFPARAMS3 REPTFPARAMS4 rpar arrow void lcubr REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer REPTFPARAMS3 REPTFPARAMS4 rpar arrow void lcubr VARDECLORSTAT REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer REPTFPARAMS3 REPTFPARAMS4 rpar arrow void lcubr VARDECL REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer REPTFPARAMS3 REPTFPARAMS4 rpar arrow void lcubr let id colon TYPE REPTVARDECL4 semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer REPTFPARAMS3 REPTFPARAMS4 rpar arrow void lcubr let id colon integer REPTVARDECL4 semi REPTFUNCBODY1 rcubr REPTPROG0 eof
+func id lpar id colon integer REPTFPARAMS3 REPTFPARAMS4 rpar arrow void lcubr let id colon integer REPTVARDECL4 semi REPTFUNCBODY1 rcubr eof

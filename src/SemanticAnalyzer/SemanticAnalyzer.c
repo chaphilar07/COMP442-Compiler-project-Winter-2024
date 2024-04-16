@@ -13,6 +13,16 @@
 #include <string.h>
 
 /*
+ * This function will print the type information passed in correct format.
+ */
+void print_type(TypeInfo type1, FILE *out) {
+  fprintf(out, "Type: %s", type1.typeString);
+  for (int i = type1.numberofdims - 1; i >= 0; i++)
+    fprintf(out, "[%d]", type1.arraydims[i]);
+  fprintf(out, "\n");
+}
+
+/*
  * This function will check for a function's return type, if the return type is
  * not void we must ensure that there is a return statement and that it is the
  * last statement of the function
@@ -36,9 +46,20 @@ void check_for_return_statement_function(node *astnode, Scope *globalScope,
     if (astnode->children[0]->children[i]->type == ifnode) {
       node *if_node = astnode->children[0]->children[i];
 
-      for (int j = 0; j < if_node->numchildren; j++) {
-        if (if_node->children[j]->type == returnnode) {
-          return_node = if_node->children[j];
+      semantic_stack *stack = init_stack();
+
+      push_node(if_node, stack);
+
+      while (stack->size > 0) {
+        node *current = pop_node(stack);
+        if (current->type == returnnode) {
+          return_node = current;
+          break;
+        }
+        if (current->numchildren > 0) {
+          for (int i = 0; i < current->numchildren; i++) {
+            push_node(current->children[i], stack);
+          }
         }
       }
     }
@@ -61,67 +82,6 @@ void check_for_return_statement_function(node *astnode, Scope *globalScope,
     return; // Ok , we report this elsewhere.
   }
   return;
-}
-
-/*
- * This function will traverse the actual symbol tables and checks that the
- * varidable declarations in a class are not of a subclass type, if they are we
- * throw a semantic error.
- */
-void check_tables_for_circular_inheritance(Scope *globalScope,
-                                           ErrorArray *arr) {
-  if (!globalScope) {
-    return;
-  }
-  if (!arr) {
-    return;
-  }
-
-  Scope *scopePtr = globalScope;
-
-  // In the global scope we will only have class and function entries.
-  for (int i = 0; i < SIZE; i++) {
-    if (scopePtr->entries[i].tableType == CLASS_ENTRY) {
-      TableEntry classEntry = scopePtr->entries[i];
-      Scope *classScope = classEntry.data.classEntry.scope;
-
-      for (int i = 0; i < SIZE; i++) {
-        // Get the return type information of each entry and check if it is a
-        // class type.
-
-        TypeInfo memberInfo;
-        TableEntry memberEntry = classScope->entries[i];
-
-        if (memberEntry.tableType == VARIABLE_ENTRY)
-          memberInfo = memberEntry.data.varEntry.type;
-        else
-          memberInfo = memberEntry.data.funcEntry.returnType;
-
-        if (memberInfo.type == ID_TYPE) {
-
-          const char *classTypeString = memberInfo.typeString;
-
-          for (int i = 0; i < SIZE; i++) {
-
-            TableEntry classEntryCompare = globalScope->entries[i];
-
-            if (classEntryCompare.tableType == CLASS_ENTRY) {
-              for (int i = 0;
-                   i < classEntryCompare.data.classEntry.inheritsCount; i++) {
-                if (!strcmp(classTypeString, classEntryCompare.data.classEntry
-                                                 .inheritedScopes[i]
-                                                 ->scopeName)) {
-                  insert_error(arr,
-                               create_error(classEntry.data.classEntry.name,
-                                            err0001, -1));
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
 }
 
 /*
@@ -800,6 +760,7 @@ TypeInfo get_type_expression(node *astnode, ErrorArray *arr,
   if (astnode->type == notnode) {
     return get_type_expression(astnode->children[0], arr, globalScope);
   } else if (astnode->type == sign) {
+    fprintf(stderr, "Getting the type of %s", astnode->children[0]->value);
     return get_type_expression(
         astnode->children[0], arr,
         globalScope); // We get the type of the expression, the right child of
@@ -1375,28 +1336,27 @@ void second_pass_type_check(node *root, Scope *globalScope,
                current->type == relexpr) {
       get_type_expression(current, errors, current->scope);
 
-    } /* else if (current->type == returnnode) {
+    } else if (current->type == returnnode) {
 
-       node *returnValue = current->children[0];
-       // This is the type that we may receive.
-       TypeInfo returnTypeExpected = get_entry(returnValue->scope->parentScope,
-                                               returnValue->scope->scopeName)
-                                         ->data.funcEntry.returnType;
-       if (returnTypeExpected.type == VOID_TYPE) {
-         insert_error(errors, create_error(returnValue->scope->scopeName,
-                                           err1101, current->line));
-       }
+      node *returnValue = current->children[0];
+      // This is the type that we may receive.
+      TypeInfo returnTypeExpected = get_entry(returnValue->scope->parentScope,
+                                              returnValue->scope->scopeName)
+                                        ->data.funcEntry.returnType;
+      if (returnTypeExpected.type == VOID_TYPE) {
+        insert_error(errors, create_error(returnValue->scope->scopeName,
+                                          err1101, current->line));
+      }
 
-       // This is the type we actually get.
-       TypeInfo typeReturned =
-           get_type_expression(current->children[0], errors, globalScope);
+      // This is the type we actually get.
+      TypeInfo typeReturned =
+          get_type_expression(current->children[0], errors, globalScope);
 
-       if (!compare_type_info(typeReturned, returnTypeExpected)) {
-         insert_error(errors, create_error(returnTypeExpected.typeString,
-                                           err1102, current->line));
-       }
-     } */
-    else if (current->type == funccall) {
+      if (!compare_type_info(typeReturned, returnTypeExpected)) {
+        insert_error(errors, create_error(returnTypeExpected.typeString,
+                                          err1102, current->line));
+      }
+    } else if (current->type == funccall) {
       validate_functioncall(current, globalScope, errors);
     } else {
 

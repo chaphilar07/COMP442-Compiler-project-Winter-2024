@@ -1,0 +1,15 @@
+Leaf token created of type identifier and value increment 
+Leaf token created of type identifier and value x 
+Leaf token created of type type and value integer 
+Leaf token created of type type and value void 
+Leaf token created of type identifier and value x 
+Leaf token created of type addop and value + 
+Leaf token created of type intnum and value 1 
+Leaf token created of type identifier and value main 
+Leaf token created of type type and value void 
+Leaf token created of type identifier and value increment 
+Leaf token created of type intnum and value 1 
+Aggregate node of type funcdef list and value of (null) with 2 childen 
+Aggregate node of type impldeflist and value of (null) with 0 childen 
+Aggregate node of type structdecl list and value of (null) with 0 childen 
+Aggregate node of type prog and value of (null) with 3 childen 

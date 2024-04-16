@@ -14,7 +14,7 @@ Table Entry 1 of "Global":func main -> void : 	size: 32	return type size: 0
 
 			Table Entry 5 of "main":tempvar	size: 4	offset: 20	name: temp105	
 
-			Table Entry 6 of "main":litval	size: 4	offset: 24	 value: 10	name: literal106
+			Table Entry 6 of "main":litval	size: 4	offset: 24	 value: 100	name: literal106
 
 			Table Entry 7 of "main":var i integer	size: 4	offset: 28
 

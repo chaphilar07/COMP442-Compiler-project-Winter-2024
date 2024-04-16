@@ -2,19 +2,19 @@ align
 main
 sw 0(r14),r15
 addi r3,r0,3 
-sw 156(r14),r3
+sw 160(r14),r3
 addi r1,r0,0
-lw r2, 156(r14)
+lw r2, 160(r14)
 sw parameterstorage(r1),r2
 addi r3,r0,2 
-sw 236(r14),r3
+sw 240(r14),r3
 addi r1,r0,4
-lw r2, 236(r14)
+lw r2, 240(r14)
 sw parameterstorage(r1),r2
 addi r3,r0,1 
-sw 196(r14),r3
+sw 200(r14),r3
 addi r1,r0,8
-lw r2, 196(r14)
+lw r2, 200(r14)
 sw parameterstorage(r1),r2
 addi r14,r14,-44
 jl r15,complex_expression_with_relops
@@ -30,35 +30,35 @@ addi r1,r0,4
 lw r2, 44(r14)
 sw parameterstorage(r1),r2
 addi r3,r0,2 
-sw 252(r14),r3
+sw 256(r14),r3
 addi r1,r0,8
-lw r2, 252(r14)
+lw r2, 256(r14)
 sw parameterstorage(r1),r2
 addi r14,r14,-44
 jl r15,complex_expression_with_relops
 addi r14,r14,44
 addi r3,r0,0 
-sw 152(r14),r3
+sw 156(r14),r3
 addi r1,r0,0
-lw r2, 152(r14)
+lw r2, 156(r14)
 sw parameterstorage(r1),r2
 addi r3,r0,0 
-sw 140(r14),r3
+sw 144(r14),r3
 addi r1,r0,4
-lw r2, 140(r14)
+lw r2, 144(r14)
 sw parameterstorage(r1),r2
 addi r14,r14,-24
 jl r15,test_eq
 addi r14,r14,24
 addi r3,r0,1 
-sw 204(r14),r3
+sw 208(r14),r3
 addi r1,r0,0
-lw r2, 204(r14)
+lw r2, 208(r14)
 sw parameterstorage(r1),r2
 addi r3,r0,0 
-sw 244(r14),r3
+sw 248(r14),r3
 addi r1,r0,4
-lw r2, 244(r14)
+lw r2, 248(r14)
 sw parameterstorage(r1),r2
 addi r14,r14,-24
 jl r15,test_eq
@@ -82,22 +82,22 @@ addi r1,r0,0
 lw r2, 104(r14)
 sw parameterstorage(r1),r2
 addi r3,r0,1 
-sw 148(r14),r3
+sw 152(r14),r3
 addi r1,r0,4
-lw r2, 148(r14)
+lw r2, 152(r14)
 sw parameterstorage(r1),r2
 addi r14,r14,-24
 jl r15,test_eq
 addi r14,r14,24
 addi r3,r0,0 
-sw 144(r14),r3
+sw 148(r14),r3
 addi r1,r0,0
-lw r2, 144(r14)
+lw r2, 148(r14)
 sw parameterstorage(r1),r2
 addi r3,r0,0 
-sw 200(r14),r3
+sw 204(r14),r3
 addi r1,r0,4
-lw r2, 200(r14)
+lw r2, 204(r14)
 sw parameterstorage(r1),r2
 addi r14,r14,-24
 jl r15,test_neq
@@ -108,9 +108,9 @@ addi r1,r0,0
 lw r2, 36(r14)
 sw parameterstorage(r1),r2
 addi r3,r0,0 
-sw 240(r14),r3
+sw 244(r14),r3
 addi r1,r0,4
-lw r2, 240(r14)
+lw r2, 244(r14)
 sw parameterstorage(r1),r2
 addi r14,r14,-24
 jl r15,test_neq
@@ -121,9 +121,9 @@ addi r1,r0,0
 lw r2, 92(r14)
 sw parameterstorage(r1),r2
 addi r3,r0,1 
-sw 232(r14),r3
+sw 236(r14),r3
 addi r1,r0,4
-lw r2, 232(r14)
+lw r2, 236(r14)
 sw parameterstorage(r1),r2
 addi r14,r14,-24
 jl r15,test_neq
@@ -147,9 +147,9 @@ addi r1,r0,0
 lw r2, 60(r14)
 sw parameterstorage(r1),r2
 addi r3,r0,0 
-sw 188(r14),r3
+sw 192(r14),r3
 addi r1,r0,4
-lw r2, 188(r14)
+lw r2, 192(r14)
 sw parameterstorage(r1),r2
 addi r14,r14,-24
 jl r15,test_gt
@@ -160,9 +160,9 @@ addi r1,r0,0
 lw r2, 76(r14)
 sw parameterstorage(r1),r2
 addi r3,r0,0 
-sw 128(r14),r3
+sw 132(r14),r3
 addi r1,r0,4
-lw r2, 128(r14)
+lw r2, 132(r14)
 sw parameterstorage(r1),r2
 addi r14,r14,-24
 jl r15,test_gt
@@ -173,22 +173,22 @@ addi r1,r0,0
 lw r2, 24(r14)
 sw parameterstorage(r1),r2
 addi r3,r0,1 
-sw 132(r14),r3
+sw 136(r14),r3
 addi r1,r0,4
-lw r2, 132(r14)
+lw r2, 136(r14)
 sw parameterstorage(r1),r2
 addi r14,r14,-24
 jl r15,test_gt
 addi r14,r14,24
 addi r3,r0,1 
-sw 224(r14),r3
+sw 228(r14),r3
 addi r1,r0,0
-lw r2, 224(r14)
+lw r2, 228(r14)
 sw parameterstorage(r1),r2
 addi r3,r0,1 
-sw 192(r14),r3
+sw 196(r14),r3
 addi r1,r0,4
-lw r2, 192(r14)
+lw r2, 196(r14)
 sw parameterstorage(r1),r2
 addi r14,r14,-24
 jl r15,test_gt
@@ -199,9 +199,9 @@ addi r1,r0,0
 lw r2, 80(r14)
 sw parameterstorage(r1),r2
 addi r3,r0,0 
-sw 176(r14),r3
+sw 180(r14),r3
 addi r1,r0,4
-lw r2, 176(r14)
+lw r2, 180(r14)
 sw parameterstorage(r1),r2
 addi r14,r14,-24
 jl r15,test_lt
@@ -225,9 +225,9 @@ addi r1,r0,0
 lw r2, 28(r14)
 sw parameterstorage(r1),r2
 addi r3,r0,1 
-sw 220(r14),r3
+sw 224(r14),r3
 addi r1,r0,4
-lw r2, 220(r14)
+lw r2, 224(r14)
 sw parameterstorage(r1),r2
 addi r14,r14,-24
 jl r15,test_lt
@@ -238,17 +238,17 @@ addi r1,r0,0
 lw r2, 64(r14)
 sw parameterstorage(r1),r2
 addi r3,r0,1 
-sw 124(r14),r3
+sw 128(r14),r3
 addi r1,r0,4
-lw r2, 124(r14)
+lw r2, 128(r14)
 sw parameterstorage(r1),r2
 addi r14,r14,-24
 jl r15,test_lt
 addi r14,r14,24
 addi r3,r0,0 
-sw 212(r14),r3
+sw 216(r14),r3
 addi r1,r0,0
-lw r2, 212(r14)
+lw r2, 216(r14)
 sw parameterstorage(r1),r2
 addi r3,r0,0 
 sw 8(r14),r3
@@ -264,17 +264,17 @@ addi r1,r0,0
 lw r2, 84(r14)
 sw parameterstorage(r1),r2
 addi r3,r0,0 
-sw 136(r14),r3
+sw 140(r14),r3
 addi r1,r0,4
-lw r2, 136(r14)
+lw r2, 140(r14)
 sw parameterstorage(r1),r2
 addi r14,r14,-24
 jl r15,test_leq
 addi r14,r14,24
 addi r3,r0,0 
-sw 184(r14),r3
+sw 188(r14),r3
 addi r1,r0,0
-lw r2, 184(r14)
+lw r2, 188(r14)
 sw parameterstorage(r1),r2
 addi r3,r0,1 
 sw 56(r14),r3
@@ -290,9 +290,9 @@ addi r1,r0,0
 lw r2, 20(r14)
 sw parameterstorage(r1),r2
 addi r3,r0,1 
-sw 228(r14),r3
+sw 232(r14),r3
 addi r1,r0,4
-lw r2, 228(r14)
+lw r2, 232(r14)
 sw parameterstorage(r1),r2
 addi r14,r14,-24
 jl r15,test_leq
@@ -303,17 +303,17 @@ addi r1,r0,0
 lw r2, 72(r14)
 sw parameterstorage(r1),r2
 addi r3,r0,0 
-sw 116(r14),r3
+sw 120(r14),r3
 addi r1,r0,4
-lw r2, 116(r14)
+lw r2, 120(r14)
 sw parameterstorage(r1),r2
 addi r14,r14,-24
 jl r15,test_geq
 addi r14,r14,24
 addi r3,r0,1 
-sw 216(r14),r3
+sw 220(r14),r3
 addi r1,r0,0
-lw r2, 216(r14)
+lw r2, 220(r14)
 sw parameterstorage(r1),r2
 addi r3,r0,0 
 sw 12(r14),r3
@@ -324,14 +324,14 @@ addi r14,r14,-24
 jl r15,test_geq
 addi r14,r14,24
 addi r3,r0,0 
-sw 180(r14),r3
+sw 184(r14),r3
 addi r1,r0,0
-lw r2, 180(r14)
+lw r2, 184(r14)
 sw parameterstorage(r1),r2
 addi r3,r0,1 
-sw 172(r14),r3
+sw 176(r14),r3
 addi r1,r0,4
-lw r2, 172(r14)
+lw r2, 176(r14)
 sw parameterstorage(r1),r2
 addi r14,r14,-24
 jl r15,test_geq
@@ -342,17 +342,17 @@ addi r1,r0,0
 lw r2, 52(r14)
 sw parameterstorage(r1),r2
 addi r3,r0,1 
-sw 120(r14),r3
+sw 124(r14),r3
 addi r1,r0,4
-lw r2, 120(r14)
+lw r2, 124(r14)
 sw parameterstorage(r1),r2
 addi r14,r14,-24
 jl r15,test_geq
 addi r14,r14,24
 addi r3,r0,3 
-sw 168(r14),r3
+sw 172(r14),r3
 addi r1,r0,0
-lw r2, 168(r14)
+lw r2, 172(r14)
 sw parameterstorage(r1),r2
 addi r3,r0,2 
 sw 108(r14),r3
@@ -360,9 +360,9 @@ addi r1,r0,4
 lw r2, 108(r14)
 sw parameterstorage(r1),r2
 addi r3,r0,1 
-sw 160(r14),r3
+sw 164(r14),r3
 addi r1,r0,8
-lw r2, 160(r14)
+lw r2, 164(r14)
 sw parameterstorage(r1),r2
 addi r14,r14,-44
 jl r15,complex_expression_with_relops
@@ -373,27 +373,27 @@ addi r1,r0,0
 lw r2, 48(r14)
 sw parameterstorage(r1),r2
 addi r3,r0,2 
-sw 164(r14),r3
+sw 168(r14),r3
 addi r1,r0,4
-lw r2, 164(r14)
+lw r2, 168(r14)
 sw parameterstorage(r1),r2
 addi r3,r0,1 
-sw 208(r14),r3
+sw 212(r14),r3
 addi r1,r0,8
-lw r2, 208(r14)
+lw r2, 212(r14)
 sw parameterstorage(r1),r2
 addi r14,r14,-44
 jl r15,complex_expression_with_relops
 addi r14,r14,44
 addi r3,r0,3 
-sw 112(r14),r3
+sw 116(r14),r3
 addi r1,r0,0
-lw r2, 112(r14)
+lw r2, 116(r14)
 sw parameterstorage(r1),r2
 addi r3,r0,2 
-sw 248(r14),r3
+sw 252(r14),r3
 addi r1,r0,4
-lw r2, 248(r14)
+lw r2, 252(r14)
 sw parameterstorage(r1),r2
 addi r3,r0,1 
 sw 40(r14),r3
@@ -780,9 +780,9 @@ jr r15
 
 entry
 addi r14,r0,topaddr
-addi r14,r14,-256
+addi r14,r14,-260
 jl r15,main
-addi r14,r14,256
+addi r14,r14,260
 hlt
 
 

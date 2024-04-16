@@ -1,0 +1,10 @@
+func return_negative()->integer{
+    return(-1);
+  }
+
+func main()->void{
+  let x: integer;
+  x=-1;
+  write(x);
+    write(return_negative());
+  }

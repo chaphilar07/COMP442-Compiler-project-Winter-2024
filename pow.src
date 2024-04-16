@@ -5,7 +5,8 @@ func pow(x: integer, p: integer)->integer{
    i=0;
    j=x;
 
-   if(p==1) then {
+
+   if(i==1) then {
     return(x);
     }else {
       while(i<p){
@@ -18,7 +19,7 @@ func pow(x: integer, p: integer)->integer{
 
 func main()->void{
   let i: integer;
-  while(i<10){
+  while(i<100){
     write(pow(2,i));
     i=i+1;
     };

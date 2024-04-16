@@ -20,7 +20,7 @@ Leaf token created of type identifier and value z
 Leaf token created of type addop and value + 
 Leaf token created of type identifier and value x 
 Leaf token created of type identifier and value another_complex_expression 
-Leaf token created of type type and value void 
+Leaf token created of type type and value integer 
 Leaf token created of type intnum and value 1 
 Leaf token created of type addop and value + 
 Leaf token created of type intnum and value 2 
