@@ -31,7 +31,7 @@ testlexer:
 
 
 parser:
-	$(CC) $(CLAGS) -g src/lexer/lexer.c src/utils/utils.c src/parser/parser.c src/parser/parsedriver.c -o $(PARSETEST)
+	$(CC) $(CFLAGS) -g src/lexer/lexer.c src/utils/utils.c src/parser/parser.c src/parser/parsedriver.c -o $(PARSETEST)
 
 testparser:
 	$(CC) $(CFLAGS) src/lexer/lexer.c src/utils/utils.c src/parser/parser.c src/parser/parsedriver.c -o $(PARSETEST)
