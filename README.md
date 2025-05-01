@@ -21,8 +21,8 @@ Note the output for the AST's etc are all in the output directory in their respe
 The actual source code for each of the parts is placed in their respective subdirectories inside of the src directory.
 
 
-NOTE THE CODE IS A BIT OF A MESS! THE MAIN DIRECOTRY
+NOTE THE CODE IS A BIT OF A MESS! 
 
-- But if you follow the directions of the readme this code will compile and then we can run the resulting moon machine code.
+- But if you follow the directions of the readme this code will compile and then we can run the resulting moon machine code and view all lexical,syntactical and semantic errors that were produced.
 
 
