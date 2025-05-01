@@ -2,32 +2,32 @@ align
 main
 sw 0(r14),r15
 addi r3,r0,3 
-sw 8(r14),r3
+sw 4(r14),r3
 addi r1,r0,0
-lw r2, 8(r14)
+lw r2, 4(r14)
 sw parameterstorage(r1),r2
 addi r3,r0,3 
-sw 4(r14),r3
+sw 12(r14),r3
 addi r1,r0,4
-lw r2, 4(r14)
+lw r2, 12(r14)
 sw parameterstorage(r1),r2
 addi r14,r14,-16
 jl r15,add_two
 addi r14,r14,16
-sw 12(r14),r13
-lw r13, 12(r14)
+sw 8(r14),r13
+lw r13, 8(r14)
 addi r14,r14,-8
 jl r15, write
 addi r14,r14, 8
 addi r3,r0,3 
-sw 8(r14),r3
+sw 4(r14),r3
 addi r1,r0,0
-lw r2, 8(r14)
+lw r2, 4(r14)
 sw parameterstorage(r1),r2
 addi r3,r0,3 
-sw 4(r14),r3
+sw 12(r14),r3
 addi r1,r0,4
-lw r2, 4(r14)
+lw r2, 12(r14)
 sw parameterstorage(r1),r2
 addi r14,r14,-16
 jl r15,add_two
@@ -50,6 +50,8 @@ lw r1, 4(r14)
 add r3,r1,r2
 sw 12(r14),r3
 lw r13,12(r14)
+lw r15, 0(r14)
+jr r15
 lw r15, 0(r14)
 jr r15
 

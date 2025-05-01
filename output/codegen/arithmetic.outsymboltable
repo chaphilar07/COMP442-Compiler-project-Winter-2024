@@ -4,11 +4,11 @@ Table Entry 1 of "Global":func main -> void : 	size: 16	return type size: 0
 
 			BEGINNING OF TABLE FOR:  function scope "main"
 
-			Table Entry 1 of "main":litval	size: 4	offset: 4	 value: 3	name: literal102
+			Table Entry 1 of "main":litval	size: 4	offset: 4	 value: 3	name: literal1000001
 
-			Table Entry 2 of "main":litval	size: 4	offset: 8	 value: 3	name: literal101
+			Table Entry 2 of "main":litval	size: 4	offset: 8	 value: function value	name: literal1000000
 
-			Table Entry 3 of "main":litval	size: 4	offset: 12	 value: function value	name: literal100
+			Table Entry 3 of "main":litval	size: 4	offset: 12	 value: 3	name: literal1000002
 
 			END OF TABLE FOR SCOPE function scope "main"
 
@@ -18,9 +18,9 @@ Table Entry 2 of "Global":func add_two -> integer : x integer,y integer	size: 16
 
 			Table Entry 1 of "add_two":fparam x integer Number: 1	size: 4	offset: 4
 
-			Table Entry 2 of "add_two":fparam y integer Number: 0	size: 4	offset: 8
+			Table Entry 2 of "add_two":tempvar size: 4 offset: 12	name: temp1000000	
 
-			Table Entry 3 of "add_two":tempvar	size: 4	offset: 12	name: temp100	
+			Table Entry 3 of "add_two":fparam y integer Number: 0	size: 4	offset: 8
 
 			END OF TABLE FOR SCOPE function scope "add_two"
 

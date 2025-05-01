@@ -8,11 +8,11 @@ Table Entry 1 of "Global":func main -> void : 	size: 32	return type size: 0
 
 			Table Entry 2 of "main":litval	size: 4	offset: 8	 value: 1	name: literal1000005
 
-			Table Entry 3 of "main":tempvar	size: 4	offset: 12	name: temp1000004	
+			Table Entry 3 of "main":tempvar size: 4 offset: 12	name: temp1000004	
 
 			Table Entry 4 of "main":var i integer	size: 4	offset: 16
 
-			Table Entry 5 of "main":tempvar	size: 4	offset: 20	name: temp1000005	
+			Table Entry 5 of "main":tempvar size: 4 offset: 20	name: temp1000005	
 
 			Table Entry 6 of "main":litval	size: 4	offset: 24	 value: function value	name: literal1000007
 
@@ -26,17 +26,17 @@ Table Entry 2 of "Global":func fib -> integer : x integer	size: 52	return type s
 
 			Table Entry 1 of "fib":fparam x integer Number: 0	size: 4	offset: 4
 
-			Table Entry 2 of "fib":tempvar	size: 4	offset: 8	name: temp1000003	
+			Table Entry 2 of "fib":tempvar size: 4 offset: 8	name: temp1000003	
 
 			Table Entry 3 of "fib":litval	size: 4	offset: 12	 value: 2	name: literal1000001
 
 			Table Entry 4 of "fib":var j integer	size: 4	offset: 16
 
-			Table Entry 5 of "fib":tempvar	size: 4	offset: 20	name: temp1000000	
+			Table Entry 5 of "fib":tempvar size: 4 offset: 20	name: temp1000000	
 
 			Table Entry 6 of "fib":litval	size: 4	offset: 24	 value: function value	name: literal1000000
 
-			Table Entry 7 of "fib":tempvar	size: 4	offset: 28	name: temp1000001	
+			Table Entry 7 of "fib":tempvar size: 4 offset: 28	name: temp1000001	
 
 			Table Entry 8 of "fib":litval	size: 4	offset: 32	 value: 1	name: literal1000003
 
@@ -46,7 +46,7 @@ Table Entry 2 of "Global":func fib -> integer : x integer	size: 52	return type s
 
 			Table Entry 11 of "fib":litval	size: 4	offset: 44	 value: function value	name: literal1000002
 
-			Table Entry 12 of "fib":tempvar	size: 4	offset: 48	name: temp1000002	
+			Table Entry 12 of "fib":tempvar size: 4 offset: 48	name: temp1000002	
 
 			END OF TABLE FOR SCOPE function scope "fib"
 
