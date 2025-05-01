@@ -13,7 +13,7 @@ Run the command:
 
  ./COMPILER target.src
 
-And this will produce an executable for the moon machine as well as several logging files and the AST output.
+And this will produce an executable for the moon machine (target.m) as well as several logging files and the AST output.
 
 Note the output for the AST's etc are all in the output directory in their respective folders, the exception to this is logging information about the symbol table and the code generation that will all be produced in the main directory.
 
